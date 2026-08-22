@@ -15,8 +15,8 @@ import {
   Radio,
   QrCode,
   Lock,
-  MessageCircle,
 } from "lucide-react";
+import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { formatCurrency } from "@/lib/utils";
 
 type EditionTier = "classic" | "metal" | "atelier";
@@ -568,12 +568,12 @@ export default function OrderPage() {
 
             <div className="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
               <a
-                href={`https://wa.me/919999999999?text=Hello%20NXC%20Verse%20Concierge,%20I%20just%20placed%20order%20${orderId}%20for%20${name}.`}
+                href={`https://wa.me/919561248677?text=Hello%20NXC%20Verse%20Concierge,%20I%20just%20placed%20order%20${orderId}%20for%20${name}.`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-6 py-3 rounded-xl bg-[#25D366] text-black font-sans font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-lg btn-interactive"
               >
-                <MessageCircle className="w-4 h-4" />
+                <WhatsAppIcon className="w-4 h-4 text-black" color="#000000" />
                 <span>Connect with Concierge</span>
               </a>
 

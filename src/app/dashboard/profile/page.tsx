@@ -28,7 +28,7 @@ export default function ProfileEditorPage() {
   const [website, setWebsite] = useState("https://nxcverse.in");
   const [location, setLocation] = useState("Mumbai, India");
   const [avatarUrl, setAvatarUrl] = useState(
-    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80"
+    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80"
   );
 
   const [links, setLinks] = useState<ProfileLink[]>([

@@ -1,8 +1,9 @@
 import React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
-import { ArrowUpRight, MessageCircle } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { PhoenixEmblem } from "@/components/3d/PhoenixSvg";
+import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 
 export function FinalCta() {
   return (
@@ -42,7 +43,7 @@ export function FinalCta() {
             rel="noopener noreferrer"
             className="h-12 px-6 rounded-full bg-[#0E0E12] border border-[#25D366]/40 hover:border-[#25D366] text-[#25D366] hover:text-white flex items-center gap-2 text-xs font-mono tracking-wider transition-all duration-300 hover:shadow-[0_0_25px_rgba(37,211,102,0.35)] btn-interactive"
           >
-            <MessageCircle className="w-4 h-4" /> WhatsApp Concierge
+            <WhatsAppIcon className="w-4 h-4 text-[#25D366]" color="#25D366" /> WhatsApp Concierge
           </a>
         </div>
 

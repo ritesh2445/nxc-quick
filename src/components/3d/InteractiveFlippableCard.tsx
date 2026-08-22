@@ -192,7 +192,7 @@ export function InteractiveFlippableCard({
 
       {/* 3D Perspective Flip Container */}
       <div
-        className="w-[300px] h-[480px] sm:w-[330px] sm:h-[520px] md:w-[340px] md:h-[530px] cursor-pointer group relative z-10"
+        className="w-[280px] h-[450px] sm:w-[320px] sm:h-[510px] md:w-[340px] md:h-[530px] cursor-pointer group relative z-10"
         style={{ perspective: "1200px" }}
         onClick={toggleFlip}
         onMouseMove={handleMouseMove}

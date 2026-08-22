@@ -264,7 +264,7 @@ insertProfile.run(
   "Founder & Chief Executive",
   "NXC Verse",
   "Designing tactile luxury hardware and next-generation sovereign digital identities for modern visionaries.",
-  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80",
   null,
   "+91 98765 43210",
   "ritesh@nxcverse.in",

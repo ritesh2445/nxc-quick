@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { downloadVCard } from "@/lib/vcf";
-import { Phone, Mail, Globe, ArrowDownToLine, Check, Share2, ShieldCheck, Linkedin, Instagram, MessageCircle } from "lucide-react";
+import { Phone, Mail, Globe, ArrowDownToLine, Check, Share2, ShieldCheck, Linkedin, Instagram } from "lucide-react";
+import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 
 export function LiveProfilePreview() {
   const [downloaded, setDownloaded] = useState(false);
@@ -18,7 +19,7 @@ export function LiveProfilePreview() {
     email: "nxcbadge@gmail.com",
     website: "https://nxcverse.in",
     profileUrl: "https://nxcverse.in/@ritesh",
-    avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80",
+    avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80",
   };
 
   const handleSaveContact = () => {
@@ -85,9 +86,9 @@ export function LiveProfilePreview() {
               href="https://wa.me/919561248677"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-[2px] bg-[#18181C] border border-[#25D366]/40 hover:border-[#25D366] text-[#25D366] text-xs font-mono tracking-wider transition-all hover:shadow-[0_0_15px_rgba(37,211,102,0.3)]"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-[2px] bg-[#18181C] border border-[#25D366]/40 hover:border-[#25D366] text-[#25D366] text-xs font-mono tracking-wider transition-all hover:shadow-[0_0_15px_rgba(37,211,102,0.3)] btn-interactive"
             >
-              <MessageCircle className="w-4 h-4" /> WhatsApp Us
+              <WhatsAppIcon className="w-4 h-4 text-[#25D366]" color="#25D366" /> WhatsApp Us
             </a>
           </div>
         </div>
@@ -175,7 +176,7 @@ export function LiveProfilePreview() {
                   rel="noreferrer"
                   className="p-2 rounded-[2px] bg-[#111114] border border-[#25D366]/40 hover:border-[#25D366] flex flex-col items-center gap-1 transition-colors text-[#25D366]"
                 >
-                  <MessageCircle className="w-3.5 h-3.5" />
+                  <WhatsAppIcon className="w-3.5 h-3.5" color="#25D366" />
                   <span className="font-sans text-[9px]">WhatsApp</span>
                 </a>
               </div>
@@ -200,7 +201,7 @@ export function LiveProfilePreview() {
                   className="w-full px-3 py-2 rounded-[2px] bg-[#111114] border border-[#2A2A32] flex items-center justify-between text-xs text-text-secondary hover:text-white hover:border-[#25D366]/60 transition-colors group"
                 >
                   <span className="flex items-center gap-2">
-                    <MessageCircle className="w-3.5 h-3.5 text-[#25D366]" /> WhatsApp
+                    <WhatsAppIcon className="w-3.5 h-3.5 text-[#25D366]" color="#25D366" /> WhatsApp
                   </span>
                   <span className="font-mono text-[9px] text-text-tertiary">+91 9561248677</span>
                 </a>

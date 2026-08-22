@@ -14,8 +14,8 @@ import {
   ShoppingBag,
   ArrowUpRight,
   User,
-  MessageCircle,
 } from "lucide-react";
+import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { cn } from "@/lib/utils";
 
 export function SiteNav() {
@@ -188,13 +188,13 @@ export function SiteNav() {
             </Link>
 
             <a
-              href="https://wa.me/919999999999?text=Hello%20NXC%20Verse%20Concierge,%20I%20would%20like%20to%20order%20a%20custom%20metal%20card."
+              href="https://wa.me/919561248677?text=Hello%20NXC%20Verse%20Concierge,%20I%20would%20like%20to%20order%20a%20custom%20metal%20card."
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 py-2 text-xs font-mono text-[#00A2FF] hover:text-[#80D0FF] tracking-wider"
+              className="flex items-center justify-center gap-2 py-2 text-xs font-mono text-[#00A2FF] hover:text-[#80D0FF] tracking-wider btn-interactive"
             >
-              <MessageCircle className="w-3.5 h-3.5 text-[#25D366]" />
-              <span>WhatsApp VIP Concierge (+91)</span>
+              <WhatsAppIcon className="w-4 h-4 text-[#25D366]" color="#25D366" />
+              <span>WhatsApp VIP Concierge (+91 9561248677)</span>
             </a>
           </div>
         </div>

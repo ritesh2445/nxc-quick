@@ -22,9 +22,9 @@ import {
   ExternalLink,
   Radio,
   Heart,
-  MessageCircle,
   Sparkles,
 } from "lucide-react";
+import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 
 interface ProfileData {
   id: string;
@@ -175,7 +175,7 @@ export function DigitalProfileView({ profile }: { profile: ProfileData }) {
       case "youtube":
         return <Youtube className="w-4 h-4 text-[#FF0000]" />;
       case "whatsapp":
-        return <MessageCircle className="w-4 h-4 text-[#25D366]" />;
+        return <WhatsAppIcon className="w-4 h-4 text-[#25D366]" color="#25D366" />;
       default:
         return <Globe className="w-4 h-4 text-[#0099FF]" />;
     }
@@ -348,7 +348,7 @@ export function DigitalProfileView({ profile }: { profile: ProfileData }) {
               onClick={() => trackEvent("whatsapp_click")}
               className="p-3.5 rounded-2xl bg-[#25D366]/10 border border-[#25D366]/30 hover:border-[#25D366] flex flex-col items-center gap-1.5 transition-all group btn-interactive shadow-[0_0_15px_rgba(37,211,102,0.15)]"
             >
-              <MessageCircle className="w-4 h-4 text-[#25D366]" />
+              <WhatsAppIcon className="w-4 h-4 text-[#25D366]" color="#25D366" />
               <span className="font-sans text-[10px] text-[#25D366] font-medium uppercase tracking-wider">
                 WhatsApp
               </span>
