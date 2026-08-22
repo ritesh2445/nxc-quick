@@ -4,6 +4,8 @@ import { formatDate } from "@/lib/utils";
 import { Users, CreditCard, ShoppingBag, Activity, ShieldCheck, Database, Radio } from "lucide-react";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminOverviewPage() {
   const data = await getAdminOverview();
   const { metrics, recentUsers, recentCards, recentOrders } = data;

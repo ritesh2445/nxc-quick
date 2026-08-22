@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/Button";
 import { ShoppingBag, Package, Check, Download, ExternalLink } from "lucide-react";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 export default async function OrdersPage() {
   const data = await getUserDashboardData("usr_ritesh");
   const orders = data?.orders || [];

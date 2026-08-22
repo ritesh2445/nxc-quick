@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
+export const dynamic = "force-dynamic";
+
 export default async function DashboardPage() {
   // Query primary customer account data
   const data = await getUserDashboardData("usr_ritesh");

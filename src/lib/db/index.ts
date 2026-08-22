@@ -31,8 +31,9 @@ const globalForDb = globalThis as unknown as {
 };
 
 function initSqlite(): Database.Database {
-  const instance = new Database(dbPath);
+  const instance = new Database(dbPath, { timeout: 10000 });
   try {
+    instance.pragma("busy_timeout = 10000");
     instance.pragma("journal_mode = WAL");
     instance.pragma("foreign_keys = ON");
   } catch {
@@ -46,9 +47,7 @@ function initSqlite(): Database.Database {
 }
 
 const sqlite = globalForDb.sqlite ?? initSqlite();
-if (process.env.NODE_ENV !== "production") {
-  globalForDb.sqlite = sqlite;
-}
+globalForDb.sqlite = sqlite;
 
 export const db = drizzle(sqlite, { schema });
 export * from "./schema";

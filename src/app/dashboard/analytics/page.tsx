@@ -3,6 +3,8 @@ import { getUserDashboardData } from "@/lib/db/queries";
 import { formatDate } from "@/lib/utils";
 import { BarChart3, TrendingUp, Globe2, Smartphone, Eye, ArrowDownToLine, Radio, QrCode } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export default async function AnalyticsPage() {
   const data = await getUserDashboardData("usr_ritesh");
   const stats = data?.stats || { totalViews: 14, totalSaves: 8, totalScans: 4, totalTaps: 9 };

@@ -20,13 +20,19 @@ export function formatCurrency(amount: number, currency: "INR" | "USD" = "INR"):
   }).format(amount);
 }
 
-export function formatDate(date: Date | number): string {
-  const d = typeof date === "number" ? new Date(date) : date;
-  return new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  }).format(d);
+export function formatDate(date: Date | number | string | null | undefined): string {
+  if (!date) return "—";
+  try {
+    const d = typeof date === "number" ? new Date(date) : date instanceof Date ? date : new Date(date);
+    if (isNaN(d.getTime())) return "—";
+    return new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    }).format(d);
+  } catch {
+    return "—";
+  }
 }
 
 export function cleanUsername(input: string): string {

@@ -99,10 +99,28 @@ export function ensureTablesAndSeed(sqlite: Database.Database) {
         engraving_title TEXT,
         amount INTEGER NOT NULL,
         currency TEXT NOT NULL DEFAULT 'INR',
-        status TEXT NOT NULL DEFAULT 'pending',
+        status TEXT NOT NULL DEFAULT 'paid',
         payment_gateway TEXT NOT NULL DEFAULT 'razorpay',
         payment_id TEXT,
         shipping_address TEXT,
+        created_at INTEGER NOT NULL,
+        updated_at INTEGER NOT NULL DEFAULT 0
+      );
+
+      CREATE TABLE IF NOT EXISTS card_designs (
+        id TEXT PRIMARY KEY,
+        slug TEXT NOT NULL UNIQUE,
+        name TEXT NOT NULL,
+        tier TEXT NOT NULL,
+        finish TEXT NOT NULL,
+        material TEXT NOT NULL,
+        description TEXT NOT NULL,
+        price_inr INTEGER NOT NULL,
+        price_usd INTEGER NOT NULL,
+        preview_image TEXT NOT NULL,
+        accent_hex TEXT NOT NULL DEFAULT '#C8C6C0',
+        is_available INTEGER NOT NULL DEFAULT 1,
+        sort_order INTEGER NOT NULL DEFAULT 0,
         created_at INTEGER NOT NULL
       );
 
@@ -114,8 +132,10 @@ export function ensureTablesAndSeed(sqlite: Database.Database) {
         visitor_ip TEXT,
         user_agent TEXT,
         referrer TEXT,
-        device_type TEXT,
-        country TEXT,
+        device TEXT,
+        browser TEXT,
+        country TEXT DEFAULT 'IN',
+        city TEXT,
         created_at INTEGER NOT NULL
       );
     `);
@@ -170,6 +190,47 @@ export function ensureTablesAndSeed(sqlite: Database.Database) {
       "active",
       now,
       now
+    );
+
+    sqlite.prepare(`
+      INSERT OR IGNORE INTO subscriptions (id, user_id, profile_id, tier, status, currency, amount, billing_cycle, start_date, end_date, auto_renew, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
+      "sub_ritesh_01",
+      "usr_ritesh",
+      "prof_ritesh",
+      "metal",
+      "active",
+      "INR",
+      1599,
+      "1_year",
+      now,
+      now + 365 * 24 * 60 * 60 * 1000,
+      1,
+      now
+    );
+
+    sqlite.prepare(`
+      INSERT OR IGNORE INTO orders (id, order_number, user_id, card_id, tier, finish, material, engraving_name, engraving_title, amount, currency, status, payment_gateway, payment_id, shipping_address, created_at, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `).run(
+      "ord_ritesh_01",
+      "NXC-260821-1001",
+      "usr_ritesh",
+      "crd_ritesh_01",
+      "Verse Metal",
+      "Pitch Black",
+      "mirror",
+      "Ritesh Martawar",
+      "Founder & CEO",
+      1599,
+      "INR",
+      "delivered",
+      "razorpay",
+      "pay_demo123",
+      "Mumbai, Maharashtra, India",
+      now - 86400000,
+      now - 86400000
     );
 
     // Insert Default Social Links
