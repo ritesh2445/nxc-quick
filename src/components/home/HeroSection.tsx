@@ -57,20 +57,20 @@ export function HeroSection() {
       />
 
       {/* 3. Main Hero Content Grid (Clean, Luxurious & Free of Clutter) */}
-      <div className="max-w-7xl mx-auto px-6 md:px-12 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center my-auto relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center my-auto relative z-10">
         
         {/* LEFT / CENTER-LEFT COLUMN: Master Typography & Action CTAs */}
-        <div className="lg:col-span-8 xl:col-span-7 space-y-7 md:space-y-8 text-left">
+        <div className="lg:col-span-8 xl:col-span-7 space-y-6 sm:space-y-7 md:space-y-8 text-left">
           {/* Eyebrow Pill */}
-          <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#0E0E12]/90 border border-white/[0.12] backdrop-blur-md shadow-inner">
-            <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
-            <span className="font-mono text-[10px] md:text-xs text-[#E2E0DC] tracking-[0.25em] uppercase font-semibold">
+          <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-[#0E0E12]/90 border border-white/[0.12] backdrop-blur-md shadow-inner max-w-full">
+            <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping shrink-0" />
+            <span className="font-mono text-[9px] min-[360px]:text-[10px] md:text-xs text-[#E2E0DC] tracking-[0.2em] sm:tracking-[0.25em] uppercase font-semibold truncate">
               AEROSPACE GRADE SMART HARDWARE
             </span>
           </div>
 
           {/* Master Headline */}
-          <h1 className="font-sans font-medium text-4xl sm:text-5xl md:text-6xl lg:text-[76px] text-white tracking-tightest leading-[1.04] drop-shadow-md">
+          <h1 className="font-sans font-medium text-3xl min-[380px]:text-4xl sm:text-5xl md:text-6xl lg:text-[76px] text-white tracking-tightest leading-[1.06] sm:leading-[1.04] drop-shadow-md break-words">
             Your identity.
             <br />
             <span className="text-[#E2E0DC] bg-gradient-to-r from-white via-[#E2E0DC] to-[#9CA8B8] bg-clip-text text-transparent">
@@ -79,22 +79,22 @@ export function HeroSection() {
           </h1>
 
           {/* Subtitle */}
-          <p className="font-sans text-sm sm:text-base md:text-lg text-[#9E9EA8] max-w-lg leading-relaxed font-normal">
+          <p className="font-sans text-xs sm:text-base md:text-lg text-[#9E9EA8] max-w-lg leading-relaxed font-normal">
             Aerospace-grade metallic business cards calibrated for 0.1-second contactless NFC transfer and paired with a permanent sovereign digital profile.
           </p>
 
           {/* Luxury Buttons with Electric Blue Glow & Click Interactions */}
-          <div className="flex flex-wrap items-center gap-3.5 pt-1">
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3.5 pt-1">
             {/* Primary Order Now Button */}
             <Link href="/order" className="btn-interactive">
-              <button className="px-7 py-3.5 rounded-full bg-gradient-to-r from-[#0055FF] via-[#0088FF] to-[#00A2FF] text-[#FFFFFF] font-sans font-bold text-xs md:text-sm tracking-[0.2em] uppercase flex items-center gap-2 shadow-[0_0_30px_rgba(0,120,255,0.45)] hover:shadow-[0_0_45px_rgba(0,150,255,0.7)]">
-                ACQUIRE CARD <ArrowUpRight className="w-4 h-4" />
+              <button className="px-5 sm:px-7 py-3 sm:py-3.5 rounded-full bg-gradient-to-r from-[#0055FF] via-[#0088FF] to-[#00A2FF] text-[#FFFFFF] font-sans font-bold text-[11px] sm:text-xs md:text-sm tracking-[0.18em] sm:tracking-[0.2em] uppercase flex items-center gap-1.5 sm:gap-2 shadow-[0_0_30px_rgba(0,120,255,0.45)] hover:shadow-[0_0_45px_rgba(0,150,255,0.7)]">
+                ACQUIRE CARD <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </button>
             </Link>
 
             {/* Secondary Design / Atelier Button */}
             <Link href="/customize" className="btn-interactive">
-              <button className="px-6 py-3.5 rounded-full bg-white/[0.05] hover:bg-white/[0.1] border border-white/20 hover:border-white/60 text-[#FFFFFF] font-sans font-medium text-xs md:text-sm tracking-wider uppercase flex items-center gap-2 backdrop-blur-md">
+              <button className="px-4 sm:px-6 py-3 sm:py-3.5 rounded-full bg-white/[0.05] hover:bg-white/[0.1] border border-white/20 hover:border-white/60 text-[#FFFFFF] font-sans font-medium text-[11px] sm:text-xs md:text-sm tracking-wider uppercase flex items-center gap-1.5 sm:gap-2 backdrop-blur-md">
                 CUSTOMIZE ATELIER
               </button>
             </Link>
@@ -102,23 +102,23 @@ export function HeroSection() {
             {/* 3D Interactive Inspection Pill */}
             <button
               onClick={() => setShow3DModal(true)}
-              className="px-4 py-3.5 rounded-full bg-[#0E0E14] border border-white/15 hover:border-[#0099FF]/60 text-[#E2E0DC] hover:text-white font-mono text-xs flex items-center gap-2 transition-all btn-interactive"
+              className="px-3.5 sm:px-4 py-3 sm:py-3.5 rounded-full bg-[#0E0E14] border border-white/15 hover:border-[#0099FF]/60 text-[#E2E0DC] hover:text-white font-mono text-[11px] sm:text-xs flex items-center gap-1.5 sm:gap-2 transition-all btn-interactive"
             >
               <Eye className="w-3.5 h-3.5 text-[#00A2FF]" /> 3D INSPECT
             </button>
           </div>
 
           {/* Press / Trust Bar */}
-          <div className="pt-6 md:pt-8">
-            <p className="font-mono text-[10px] md:text-[11px] text-[#62626E] uppercase tracking-[0.25em] mb-3.5 font-medium">
+          <div className="pt-4 sm:pt-6 md:pt-8">
+            <p className="font-mono text-[9px] sm:text-[10px] md:text-[11px] text-[#62626E] uppercase tracking-[0.2em] sm:tracking-[0.25em] mb-3 font-medium">
               FEATURED & TRUSTED BY VISIONARIES
             </p>
-            <div className="flex flex-wrap items-center gap-7 md:gap-9 text-[#82828E] opacity-75 hover:opacity-100 transition-opacity duration-300">
-              <span className="font-serif font-bold text-base md:text-lg tracking-wider text-[#A09E9A] hover:text-white transition-colors">Forbes</span>
-              <span className="font-sans font-extrabold text-sm md:text-base tracking-tighter text-[#A09E9A] hover:text-white transition-colors">TechCrunch</span>
-              <span className="font-sans font-bold text-xs md:text-sm tracking-wider text-[#A09E9A] hover:text-white uppercase transition-colors">YOURSTORY</span>
-              <span className="font-serif italic font-bold text-sm md:text-base tracking-wide text-[#A09E9A] hover:text-white transition-colors">Entrepreneur</span>
-              <span className="font-sans font-black text-sm md:text-base tracking-widest text-[#A09E9A] hover:text-white transition-colors">Inc.</span>
+            <div className="flex flex-wrap items-center gap-4 sm:gap-7 md:gap-9 text-[#82828E] opacity-75 hover:opacity-100 transition-opacity duration-300">
+              <span className="font-serif font-bold text-sm sm:text-base md:text-lg tracking-wider text-[#A09E9A] hover:text-white transition-colors">Forbes</span>
+              <span className="font-sans font-extrabold text-xs sm:text-sm md:text-base tracking-tighter text-[#A09E9A] hover:text-white transition-colors">TechCrunch</span>
+              <span className="font-sans font-bold text-[10px] sm:text-xs md:text-sm tracking-wider text-[#A09E9A] hover:text-white uppercase transition-colors">YOURSTORY</span>
+              <span className="font-serif italic font-bold text-xs sm:text-sm md:text-base tracking-wide text-[#A09E9A] hover:text-white transition-colors">Entrepreneur</span>
+              <span className="font-sans font-black text-xs sm:text-sm md:text-base tracking-widest text-[#A09E9A] hover:text-white transition-colors">Inc.</span>
             </div>
           </div>
         </div>

@@ -29,14 +29,14 @@ export function LiveProfilePreview() {
   };
 
   return (
-    <section className="w-full py-28 px-6 bg-[#0A0A0B] relative overflow-hidden">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+    <section className="w-full py-20 sm:py-28 px-4 sm:px-6 bg-[#0A0A0B] relative overflow-hidden">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
         {/* Left Column: Product Explanation */}
         <div className="lg:col-span-6 space-y-6 text-left">
           <span className="font-mono text-xs text-text-tertiary uppercase tracking-[0.25em]">
             THE DIGITAL IDENTITY
           </span>
-          <h2 className="font-sans font-medium text-3xl md:text-5xl text-[#F2F0EC] tracking-tight">
+          <h2 className="font-sans font-medium text-2xl sm:text-3xl md:text-5xl text-[#F2F0EC] tracking-tight">
             One tap.
             <br />
             <span className="font-display italic text-[#E2E0DC]">Your entire world unfolds.</span>
@@ -75,7 +75,7 @@ export function LiveProfilePreview() {
             </div>
           </div>
 
-          <div className="pt-4 flex flex-wrap items-center gap-4">
+          <div className="pt-4 flex flex-wrap items-center gap-3 sm:gap-4">
             <Link href="/@ritesh" target="_blank">
               <Button variant="outline" size="md">
                 VIEW FULL SCREEN DEMO
@@ -94,10 +94,10 @@ export function LiveProfilePreview() {
         </div>
 
         {/* Right Column: Realistic Smartphone Chassis Frame */}
-        <div className="lg:col-span-6 flex justify-center">
-          <div className="relative w-[320px] md:w-[350px] rounded-[36px] bg-[#141418] border-[6px] border-[#2A2A32] p-4 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.95)]">
+        <div className="lg:col-span-6 flex justify-center w-full">
+          <div className="relative w-full max-w-[320px] md:max-w-[350px] rounded-[32px] sm:rounded-[36px] bg-[#141418] border-[4px] sm:border-[6px] border-[#2A2A32] p-3 sm:p-4 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.95)] overflow-hidden">
             {/* Dynamic Island / Top Bezel Speaker */}
-            <div className="w-24 h-4 bg-[#0A0A0B] rounded-full mx-auto mb-4 border border-white/5" />
+            <div className="w-20 sm:w-24 h-3.5 sm:h-4 bg-[#0A0A0B] rounded-full mx-auto mb-3 sm:mb-4 border border-white/5" />
 
             {/* Inner Phone Screen */}
             <div className="rounded-[24px] bg-[#0A0A0B] border border-[#222228] p-5 space-y-5 text-center text-left">

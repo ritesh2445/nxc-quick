@@ -182,13 +182,13 @@ export function DigitalProfileView({ profile }: { profile: ProfileData }) {
   };
 
   return (
-    <div className="min-h-screen bg-[#000000] flex flex-col items-center justify-between py-10 px-4 select-none relative text-left overflow-x-hidden">
+    <div className="min-h-screen bg-[#000000] flex flex-col items-center justify-between py-8 sm:py-10 px-3 sm:px-4 select-none relative text-left overflow-x-hidden max-w-full">
       {/* Background Ambient Electric Blue Cybernetic Glows */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#0055FF]/15 rounded-full blur-[160px] pointer-events-none" />
-      <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-[#0033AA]/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#0055FF]/15 rounded-full blur-[160px] pointer-events-none overflow-hidden" />
+      <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-[#0033AA]/10 rounded-full blur-[140px] pointer-events-none overflow-hidden" />
 
       {/* Main Luxury Profile Container */}
-      <div className="w-full max-w-md bg-[#050508]/90 border border-white/[0.12] rounded-[32px] p-6 sm:p-8 space-y-6 shadow-[0_30px_90px_rgba(0,0,0,0.98),0_0_30px_rgba(0,120,255,0.15)] backdrop-blur-2xl relative z-10 my-auto">
+      <div className="w-full max-w-md bg-[#050508]/90 border border-white/[0.12] rounded-[28px] sm:rounded-[32px] p-4 sm:p-7 space-y-5 sm:space-y-6 shadow-[0_30px_90px_rgba(0,0,0,0.98),0_0_30px_rgba(0,120,255,0.15)] backdrop-blur-2xl relative z-10 my-auto overflow-hidden">
         {/* Top Header Row: Brand, Verification & Quick Actions */}
         <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
           <Link href="/" className="group flex items-center gap-2 btn-interactive">

@@ -50,19 +50,19 @@ export function FeaturesSection() {
   ];
 
   return (
-    <section id="features" className="w-full py-28 md:py-36 px-6 bg-[#000000] border-t border-white/[0.08] relative overflow-hidden text-left">
+    <section id="features" className="w-full py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-[#000000] border-t border-white/[0.08] relative overflow-hidden text-left">
       {/* Background ambient lighting */}
       <div className="absolute top-1/4 right-1/4 w-[600px] h-[600px] bg-white/[0.02] rounded-full blur-[180px] pointer-events-none" />
       <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[500px] bg-[#9CA8B8]/[0.02] rounded-full blur-[160px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto space-y-16 relative z-10">
+      <div className="max-w-7xl mx-auto space-y-12 sm:space-y-16 relative z-10">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-white/[0.08]">
           <div className="space-y-3 max-w-2xl">
             <span className="font-mono text-xs text-[#8E8E98] uppercase tracking-[0.25em] font-medium">
               CORE CAPABILITIES & ENGINEERING
             </span>
-            <h2 className="font-sans font-medium text-3xl md:text-5xl text-white tracking-tight">
+            <h2 className="font-sans font-medium text-2xl sm:text-3xl md:text-5xl text-white tracking-tight">
               Aerospace precision. Sovereign control.
             </h2>
             <p className="font-sans text-xs md:text-sm text-[#9E9EA8] leading-relaxed">
@@ -77,13 +77,13 @@ export function FeaturesSection() {
         </div>
 
         {/* 6 Feature Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8">
           {features.map((f, idx) => {
             const Icon = f.icon;
             return (
               <div
                 key={idx}
-                className="group relative bg-[#060608] hover:bg-[#0B0B0E] border border-white/[0.08] hover:border-white/25 rounded-[16px] p-7 md:p-8 flex flex-col justify-between transition-all duration-300 shadow-[0_20px_50px_rgba(0,0,0,0.8)] hover:shadow-[0_30px_70px_rgba(0,0,0,0.95)] hover:-translate-y-1.5"
+                className="group relative bg-[#060608] hover:bg-[#0B0B0E] border border-white/[0.08] hover:border-white/25 rounded-[16px] p-5 sm:p-7 md:p-8 flex flex-col justify-between transition-all duration-300 shadow-[0_20px_50px_rgba(0,0,0,0.8)] hover:shadow-[0_30px_70px_rgba(0,0,0,0.95)] hover:-translate-y-1.5 overflow-hidden"
               >
                 {/* Subtle top glare highlight */}
                 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

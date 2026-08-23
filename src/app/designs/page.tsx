@@ -95,7 +95,7 @@ export default function DesignsPage() {
     : designs.filter((d) => d.category === selectedCategory);
 
   return (
-    <div className="min-h-screen bg-[#000000] pt-24 pb-20 px-6 md:px-10 text-left">
+    <div className="min-h-screen bg-[#000000] pt-24 pb-20 px-4 sm:px-6 md:px-10 text-left overflow-x-hidden max-w-full">
       <div className="max-w-7xl mx-auto space-y-12">
         {/* Header */}
         <div className="space-y-4 max-w-3xl">

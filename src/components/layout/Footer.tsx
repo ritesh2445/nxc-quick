@@ -5,8 +5,8 @@ import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 
 export function Footer() {
   return (
-    <footer className="w-full bg-[#000000] border-t border-white/[0.08] pt-16 pb-12 text-left">
-      <div className="max-w-7xl mx-auto px-6 md:px-10">
+    <footer className="w-full bg-[#000000] border-t border-white/[0.08] pt-16 pb-12 text-left overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-16 border-b border-white/[0.08]">
           {/* Brand Col */}
           <div className="md:col-span-2 space-y-4">

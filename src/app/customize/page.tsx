@@ -129,7 +129,7 @@ export default function CustomizePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#000000] pt-24 pb-16 px-4 md:px-8 text-left">
+    <div className="min-h-screen bg-[#000000] pt-24 pb-16 px-4 sm:px-6 md:px-8 text-left overflow-x-hidden max-w-full">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Top Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">
@@ -176,7 +176,7 @@ export default function CustomizePage() {
         {/* 60 / 40 Configurator Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column (60%): Real-Time Dual-Sided Flippable 3D Card Scene */}
-          <div className="lg:col-span-7 bg-[#060608] border border-white/[0.12] rounded-[14px] p-6 sm:p-8 relative flex flex-col items-center justify-center min-h-[540px] lg:min-h-[640px] shadow-[0_30px_80px_rgba(0,0,0,0.95)]">
+          <div className="lg:col-span-7 bg-[#060608] border border-white/[0.12] rounded-[14px] p-4 sm:p-6 md:p-8 relative flex flex-col items-center justify-center min-h-[480px] sm:min-h-[540px] lg:min-h-[640px] shadow-[0_30px_80px_rgba(0,0,0,0.95)] overflow-hidden max-w-full">
             <DynamicHeroCardScene
               finish={state.finish}
               name={state.name || "YOUR NAME"}

@@ -7,18 +7,18 @@ import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 
 export function FinalCta() {
   return (
-    <section className="w-full py-36 px-6 bg-[#000000] border-t border-white/[0.08] relative overflow-hidden text-center select-none">
+    <section className="w-full py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-[#000000] border-t border-white/[0.08] relative overflow-hidden text-center select-none">
       {/* Background radial luxury glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[750px] bg-gradient-to-b from-white/[0.03] to-transparent rounded-full blur-[180px] pointer-events-none" />
 
-      <div className="max-w-4xl mx-auto space-y-10 relative z-10">
+      <div className="max-w-4xl mx-auto space-y-8 sm:space-y-10 relative z-10">
         {/* Subtle Watermark NXC Logo */}
-        <div className="w-20 h-24 mx-auto opacity-85 flex items-center justify-center">
+        <div className="w-16 sm:w-20 h-20 sm:h-24 mx-auto opacity-85 flex items-center justify-center">
           <PhoenixEmblem />
         </div>
 
         <div className="space-y-4">
-          <h2 className="font-sans font-medium text-4xl sm:text-5xl md:text-6xl text-white tracking-tight">
+          <h2 className="font-sans font-medium text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white tracking-tight">
             Make an impression that stays.
           </h2>
           <p className="font-sans text-sm md:text-base text-[#9E9EA8] max-w-lg mx-auto leading-relaxed">

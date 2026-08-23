@@ -111,18 +111,18 @@ export function PricingSection() {
   };
 
   return (
-    <section id="pricing" className="w-full py-28 px-6 bg-[#000000] relative">
+    <section id="pricing" className="w-full py-20 sm:py-28 px-4 sm:px-6 bg-[#000000] relative overflow-hidden">
       {/* Radial Spotlights */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-white/[0.02] rounded-full blur-[180px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto space-y-16 relative z-10">
+      <div className="max-w-7xl mx-auto space-y-12 sm:space-y-16 relative z-10">
         {/* Header & Currency Switcher */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/[0.08] pb-10">
           <div className="space-y-3 text-left">
             <span className="font-mono text-xs text-[#8E8E98] uppercase tracking-[0.25em] font-medium">
               ACQUISITION TIERS
             </span>
-            <h2 className="font-sans font-medium text-3xl md:text-5xl text-white tracking-tight">
+            <h2 className="font-sans font-medium text-2xl sm:text-3xl md:text-5xl text-white tracking-tight">
               Craftsmanship meets eternal identity.
             </h2>
             <p className="font-sans text-xs md:text-sm text-[#9E9EA8]">
@@ -152,13 +152,13 @@ export function PricingSection() {
         </div>
 
         {/* 3 Tier Product Panels */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
           {plans.map((p) => {
             const price = currency === "INR" ? p.priceInr : p.priceUsd;
             return (
               <div
                 key={p.tier}
-                className={`relative rounded-[20px] p-8 flex flex-col justify-between transition-all duration-300 ${
+                className={`relative rounded-[20px] p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 overflow-hidden ${
                   p.isPopular
                     ? "bg-[#0B0B0E] border-2 border-white/40 shadow-[0_30px_70px_rgba(0,0,0,0.98),0_0_30px_rgba(255,255,255,0.1),inset_0_1px_1px_rgba(255,255,255,0.3)] scale-[1.02]"
                     : "bg-[#060608] border border-white/[0.1] hover:border-white/25 shadow-[0_20px_50px_rgba(0,0,0,0.8)] hover:-translate-y-1"

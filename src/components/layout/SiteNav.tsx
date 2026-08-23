@@ -126,9 +126,9 @@ export function SiteNav() {
 
       {/* Full-Screen Glassmorphism Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-[#000000]/95 backdrop-blur-3xl lg:hidden flex flex-col justify-between p-6 sm:p-8 pt-24 animate-in fade-in duration-300">
+        <div className="fixed inset-0 z-40 bg-[#000000]/95 backdrop-blur-3xl lg:hidden flex flex-col justify-between p-6 sm:p-8 pt-24 animate-in fade-in duration-300 overflow-y-auto overflow-x-hidden max-w-full">
           {/* Ambient Electric Blue Glow */}
-          <div className="absolute top-1/4 right-0 w-80 h-80 bg-[#0066FF]/15 rounded-full blur-[140px] pointer-events-none" />
+          <div className="absolute top-1/4 right-0 w-80 h-80 bg-[#0066FF]/15 rounded-full blur-[140px] pointer-events-none overflow-hidden" />
 
           <div className="space-y-3 relative z-10">
             <span className="font-mono text-[10px] text-[#0099FF] uppercase tracking-[0.3em] font-semibold">

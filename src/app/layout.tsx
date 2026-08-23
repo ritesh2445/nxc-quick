@@ -39,10 +39,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark scroll-smooth">
-      <body className="bg-[#0A0A0B] text-[#F2F0EC] antialiased min-h-screen flex flex-col justify-between selection:bg-accent-silver/20 selection:text-white">
+    <html lang="en" className="dark scroll-smooth overflow-x-hidden max-w-full">
+      <body className="bg-[#0A0A0B] text-[#F2F0EC] antialiased min-h-screen flex flex-col justify-between selection:bg-accent-silver/20 selection:text-white overflow-x-hidden w-full max-w-full relative">
         <SiteNav />
-        <main className="flex-grow">{children}</main>
+        <main className="flex-grow w-full overflow-x-hidden">{children}</main>
         <Footer />
         <FloatingWhatsApp />
       </body>

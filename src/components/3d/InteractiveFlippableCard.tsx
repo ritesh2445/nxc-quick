@@ -186,13 +186,13 @@ export function InteractiveFlippableCard({
   }[normalizedFinish];
 
   return (
-    <div className="relative flex flex-col items-center justify-center select-none py-2">
+    <div className="relative flex flex-col items-center justify-center select-none py-2 max-w-full overflow-hidden">
       {/* Outer Ambient Glowing Halo */}
-      <div className={`absolute -inset-6 rounded-[36px] blur-3xl pointer-events-none transition-all duration-700 ${finishStyles.ambientGlow}`} />
+      <div className={`absolute inset-0 rounded-[28px] blur-2xl pointer-events-none transition-all duration-700 ${finishStyles.ambientGlow}`} />
 
       {/* 3D Perspective Flip Container */}
       <div
-        className="w-[280px] h-[450px] sm:w-[320px] sm:h-[510px] md:w-[340px] md:h-[530px] cursor-pointer group relative z-10"
+        className="w-[260px] h-[415px] min-[360px]:w-[280px] min-[360px]:h-[445px] sm:w-[320px] sm:h-[510px] md:w-[340px] md:h-[530px] max-w-full cursor-pointer group relative z-10"
         style={{ perspective: "1200px" }}
         onClick={toggleFlip}
         onMouseMove={handleMouseMove}
@@ -209,7 +209,7 @@ export function InteractiveFlippableCard({
           {/* SIDE 1: FRONT FACE (NXC Phoenix Logo & Metal Branding)     */}
           {/* ============================================================ */}
           <div
-            className={`absolute inset-0 w-full h-full rounded-[18px] p-7 flex flex-col justify-between overflow-hidden border ${finishStyles.border} ${finishStyles.glow} bg-gradient-to-br ${finishStyles.gradient}`}
+            className={`absolute inset-0 w-full h-full rounded-[18px] p-5 sm:p-7 flex flex-col justify-between overflow-hidden border ${finishStyles.border} ${finishStyles.glow} bg-gradient-to-br ${finishStyles.gradient}`}
             style={{
               backfaceVisibility: "hidden",
               WebkitBackfaceVisibility: "hidden",
@@ -274,7 +274,7 @@ export function InteractiveFlippableCard({
           {/* SIDE 2: BACK FACE (Name, Designation, Real QR Code)         */}
           {/* ============================================================ */}
           <div
-            className={`absolute inset-0 w-full h-full rounded-[18px] p-7 flex flex-col justify-between overflow-hidden border ${finishStyles.border} ${finishStyles.glow} bg-gradient-to-br ${finishStyles.gradient}`}
+            className={`absolute inset-0 w-full h-full rounded-[18px] p-5 sm:p-7 flex flex-col justify-between overflow-hidden border ${finishStyles.border} ${finishStyles.glow} bg-gradient-to-br ${finishStyles.gradient}`}
             style={{
               backfaceVisibility: "hidden",
               WebkitBackfaceVisibility: "hidden",
@@ -302,34 +302,34 @@ export function InteractiveFlippableCard({
             />
 
             {/* Top Bar: Company Name & NFC Chip UID */}
-            <div className="relative z-10 flex items-center justify-between pb-3 border-b border-black/10 dark:border-white/15">
-              <span className={`font-cinzel text-[11px] font-medium tracking-[0.25em] uppercase ${finishStyles.textPrimary}`}>
+            <div className="relative z-10 flex items-center justify-between pb-2.5 sm:pb-3 border-b border-black/10 dark:border-white/15">
+              <span className={`font-cinzel text-[10px] sm:text-[11px] font-medium tracking-[0.2em] sm:tracking-[0.25em] uppercase ${finishStyles.textPrimary}`}>
                 {company.toUpperCase()}
               </span>
-              <span className={`font-mono text-[10px] font-medium tracking-widest ${finishStyles.textSecondary}`}>
+              <span className={`font-mono text-[9px] sm:text-[10px] font-medium tracking-widest ${finishStyles.textSecondary}`}>
                 04:A2:8F:E1:99
               </span>
             </div>
 
             {/* Center Area: Name & Position FIRST (in 2 distinct lines), then Real Scannable QR Code Below */}
-            <div className="relative z-10 flex flex-col items-center text-center space-y-3.5 my-auto">
+            <div className="relative z-10 flex flex-col items-center text-center space-y-2.5 sm:space-y-3.5 my-auto">
               {/* Identity Personalization (Above QR - Two Lines Stacked) */}
-              <div className="space-y-1">
-                <h3 className={`font-cinzel text-xl sm:text-[23px] font-normal tracking-[0.18em] uppercase leading-tight ${finishStyles.textPrimary}`}>
+              <div className="space-y-0.5 sm:space-y-1">
+                <h3 className={`font-cinzel text-base min-[360px]:text-lg sm:text-[22px] font-normal tracking-[0.15em] sm:tracking-[0.18em] uppercase leading-tight ${finishStyles.textPrimary}`}>
                   {name.split(" ").map((word, idx) => (
                     <span key={idx} className="block">
                       {word}
                     </span>
                   ))}
                 </h3>
-                <p className={`font-tenor text-[11px] font-normal tracking-[0.24em] uppercase ${finishStyles.textSecondary}`}>
+                <p className={`font-tenor text-[10px] sm:text-[11px] font-normal tracking-[0.2em] sm:tracking-[0.24em] uppercase ${finishStyles.textSecondary}`}>
                   {designation}
                 </p>
               </div>
 
               {/* Real Scannable Precision QR Matrix (Below Name & Position) */}
-              <div className="p-2.5 bg-white rounded-[10px] shadow-[0_12px_36px_rgba(0,0,0,0.85)] border border-white/30">
-                <div className="w-28 h-28 sm:w-32 sm:h-32 relative flex items-center justify-center bg-white p-1">
+              <div className="p-2 sm:p-2.5 bg-white rounded-[10px] shadow-[0_12px_36px_rgba(0,0,0,0.85)] border border-white/30">
+                <div className="w-24 h-24 min-[360px]:w-28 min-[360px]:h-28 sm:w-32 sm:h-32 relative flex items-center justify-center bg-white p-0.5 sm:p-1">
                   {qrDataUrl ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img

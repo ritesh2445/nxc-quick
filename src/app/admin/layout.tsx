@@ -25,7 +25,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   ];
 
   return (
-    <div className="min-h-screen bg-[#070708] text-text-primary flex flex-col md:flex-row pt-16">
+    <div className="min-h-screen bg-[#070708] text-text-primary flex flex-col md:flex-row pt-16 overflow-x-hidden max-w-full">
       {/* Admin Sidebar */}
       <aside className="w-full md:w-64 bg-[#0E0E11] border-r border-[#2A2A32] flex flex-col justify-between shrink-0 p-4 md:p-6 text-left">
         <div className="space-y-6">
@@ -75,7 +75,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </aside>
 
       {/* Admin Content */}
-      <main className="flex-1 p-6 md:p-10 overflow-y-auto max-w-6xl mx-auto w-full">
+      <main className="flex-1 p-4 sm:p-6 md:p-10 overflow-y-auto overflow-x-hidden max-w-6xl mx-auto w-full max-w-full">
         {children}
       </main>
     </div>

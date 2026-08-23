@@ -10,7 +10,7 @@ import { FinalCta } from "@/components/home/FinalCta";
 
 export default function HomePage() {
   return (
-    <div className="w-full flex flex-col items-center">
+    <div className="w-full max-w-full flex flex-col items-center overflow-x-hidden">
       {/* 1. Hero Section with Cinematic Hero Image, Parallax & Non-overlapping Typography */}
       <HeroSection />
 

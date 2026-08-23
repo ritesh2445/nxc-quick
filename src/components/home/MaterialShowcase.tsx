@@ -107,7 +107,7 @@ export function MaterialShowcase() {
         {/* 2 Column Interactive Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           {/* Left Column: Interactive Dual-Sided Card Viewer */}
-          <div className="lg:col-span-7 relative bg-[#040406]/90 border border-white/[0.1] rounded-[24px] p-6 sm:p-8 flex flex-col items-center justify-center min-h-[540px] md:min-h-[620px] shadow-[0_30px_90px_rgba(0,0,0,0.98)] backdrop-blur-2xl">
+          <div className="lg:col-span-7 relative bg-[#040406]/90 border border-white/[0.1] rounded-[24px] p-4 sm:p-6 md:p-8 flex flex-col items-center justify-center min-h-[480px] sm:min-h-[540px] md:min-h-[620px] shadow-[0_30px_90px_rgba(0,0,0,0.98)] backdrop-blur-2xl overflow-hidden max-w-full">
             {/* Top Glowing Hairline Accent */}
             <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-[#0099FF]/60 to-transparent" />
 
