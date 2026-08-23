@@ -113,9 +113,8 @@ export function InteractiveFlippableCard({
       accentHex: "#000000",
       gradient: "from-[#7E8899] via-[#E2E8F2] via-[#A2ADC0] via-[#FFFFFF] via-[#C8D1E0] to-[#8E98AA]",
       shimmer: "rgba(255, 255, 255, 0.85)",
-      glow: "shadow-[0_30px_80px_rgba(0,0,0,0.95),0_0_35px_rgba(180,200,225,0.5),inset_0_2px_3px_rgba(255,255,255,0.95),inset_0_-2px_3px_rgba(0,0,0,0.35)]",
+      glow: "shadow-[0_30px_80px_rgba(0,0,0,0.95),inset_0_2px_3px_rgba(255,255,255,0.95),inset_0_-2px_3px_rgba(0,0,0,0.35)]",
       glaze: "from-white/[0.6] via-transparent to-black/[0.18]",
-      ambientGlow: "bg-white/[0.15]",
       logoFilter: "brightness-0 opacity-100",
       logoBlend: "multiply" as const,
     },
@@ -129,9 +128,8 @@ export function InteractiveFlippableCard({
       accentHex: "#F5D061",
       gradient: "from-[#1C1202] via-[#483006] via-[#94721A] via-[#ECC968] via-[#5A3F0C] via-[#1A1002] to-[#382607]",
       shimmer: "rgba(245, 208, 97, 0.55)",
-      glow: "shadow-[0_30px_80px_rgba(0,0,0,0.98),0_0_35px_rgba(245,208,97,0.45),inset_0_2px_3px_rgba(255,240,180,0.8),inset_0_-2px_3px_rgba(0,0,0,0.9)]",
+      glow: "shadow-[0_30px_80px_rgba(0,0,0,0.98),inset_0_2px_3px_rgba(255,240,180,0.8),inset_0_-2px_3px_rgba(0,0,0,0.9)]",
       glaze: "from-[#FFF2CC]/[0.45] via-transparent to-[#D8B466]/[0.25]",
-      ambientGlow: "bg-[#F5D061]/[0.12]",
       logoFilter: "sepia-[0.7] brightness-135 contrast-120 drop-shadow-[0_0_15px_rgba(245,208,97,0.7)]",
       logoBlend: "screen" as const,
     },
@@ -145,9 +143,8 @@ export function InteractiveFlippableCard({
       accentHex: "#FF2A55",
       gradient: "from-[#1C0005] via-[#4E020E] via-[#9E1026] via-[#F0264B] via-[#580312] via-[#180004] to-[#35010A]",
       shimmer: "rgba(255, 42, 85, 0.5)",
-      glow: "shadow-[0_30px_80px_rgba(0,0,0,0.98),0_0_35px_rgba(255,42,85,0.45),inset_0_2px_3px_rgba(255,180,195,0.8),inset_0_-2px_3px_rgba(0,0,0,0.9)]",
+      glow: "shadow-[0_30px_80px_rgba(0,0,0,0.98),inset_0_2px_3px_rgba(255,180,195,0.8),inset_0_-2px_3px_rgba(0,0,0,0.9)]",
       glaze: "from-white/[0.35] via-transparent to-[#FF2A55]/[0.3]",
-      ambientGlow: "bg-[#FF2A55]/[0.12]",
       logoFilter: "brightness-120 contrast-110 drop-shadow-[0_0_15px_rgba(255,100,130,0.7)]",
       logoBlend: "screen" as const,
     },
@@ -161,9 +158,8 @@ export function InteractiveFlippableCard({
       accentHex: "#FFFFFF",
       gradient: "from-[#000000] via-[#000000] to-[#000000]",
       shimmer: "rgba(255, 255, 255, 0.45)",
-      glow: "shadow-[0_30px_80px_rgba(0,0,0,0.98),0_0_25px_rgba(255,255,255,0.2),inset_0_1.5px_2px_rgba(255,255,255,0.45),inset_0_-2px_3px_rgba(0,0,0,0.95)]",
+      glow: "shadow-[0_30px_80px_rgba(0,0,0,0.98),inset_0_1.5px_2px_rgba(255,255,255,0.45),inset_0_-2px_3px_rgba(0,0,0,0.95)]",
       glaze: "from-white/[0.22] via-transparent to-white/[0.06]",
-      ambientGlow: "bg-white/[0.05]",
       logoFilter: "brightness-125 contrast-110 drop-shadow-[0_0_18px_rgba(255,255,255,0.7)]",
       logoBlend: "screen" as const,
     },
@@ -177,9 +173,8 @@ export function InteractiveFlippableCard({
       accentHex: "#0088FF",
       gradient: "from-[#020A18] via-[#08224E] via-[#0C387C] via-[#1457B8] via-[#0A2656] via-[#020A18] to-[#051630]",
       shimmer: "rgba(0, 140, 255, 0.6)",
-      glow: "shadow-[0_30px_80px_rgba(0,0,0,0.98),0_0_35px_rgba(0,120,255,0.45),inset_0_2px_3px_rgba(100,180,255,0.7),inset_0_-2px_3px_rgba(0,0,0,0.9)]",
+      glow: "shadow-[0_30px_80px_rgba(0,0,0,0.98),inset_0_2px_3px_rgba(100,180,255,0.7),inset_0_-2px_3px_rgba(0,0,0,0.9)]",
       glaze: "from-white/[0.35] via-transparent to-[#0088FF]/[0.3]",
-      ambientGlow: "bg-[#0066FF]/[0.15]",
       logoFilter: "brightness-125 contrast-110 drop-shadow-[0_0_15px_rgba(100,180,255,0.7)]",
       logoBlend: "screen" as const,
     },
@@ -187,9 +182,6 @@ export function InteractiveFlippableCard({
 
   return (
     <div className="relative flex flex-col items-center justify-center select-none py-2 max-w-full overflow-hidden">
-      {/* Outer Ambient Glowing Halo */}
-      <div className={`absolute inset-0 rounded-[28px] blur-2xl pointer-events-none transition-all duration-700 ${finishStyles.ambientGlow}`} />
-
       {/* 3D Perspective Flip Container */}
       <div
         className="w-[260px] h-[415px] min-[360px]:w-[280px] min-[360px]:h-[445px] sm:w-[320px] sm:h-[510px] md:w-[340px] md:h-[530px] max-w-full cursor-pointer group relative z-10"
