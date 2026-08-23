@@ -14,16 +14,31 @@ export function middleware(request: NextRequest) {
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
 
   // 2. Custom Domain Mapping
-  // If request is from a custom domain (not nxcverse.in or localhost)
+  // If request is from a custom domain (not nxcverse.in, vercel.app, or localhost)
   const isDefaultDomain =
     cleanHost === "nxcverse.in" ||
     cleanHost === "www.nxcverse.in" ||
     cleanHost === "localhost" ||
     cleanHost === "127.0.0.1" ||
+    cleanHost.endsWith(".vercel.app") ||
+    cleanHost.includes("vercel.app") ||
     cleanHost.endsWith(".pages.dev") ||
     cleanHost.endsWith(".workers.dev");
 
-  if (!isDefaultDomain && !url.pathname.startsWith("/api") && !url.pathname.startsWith("/_next")) {
+  const isSystemRoute =
+    url.pathname.startsWith("/api") ||
+    url.pathname.startsWith("/_next") ||
+    url.pathname.startsWith("/dashboard") ||
+    url.pathname.startsWith("/admin") ||
+    url.pathname.startsWith("/login") ||
+    url.pathname.startsWith("/order") ||
+    url.pathname.startsWith("/customize") ||
+    url.pathname.startsWith("/designs") ||
+    url.pathname.startsWith("/assets") ||
+    url.pathname.startsWith("/icons") ||
+    url.pathname === "/favicon.ico";
+
+  if (!isDefaultDomain && !isSystemRoute) {
     // Rewrite hostname directly to custom domain resolver route
     url.pathname = `/_custom_domain/${cleanHost}${url.pathname}`;
     return NextResponse.rewrite(url);

@@ -36,8 +36,26 @@ function initDb() {
     const Database = require("better-sqlite3");
     const { drizzle } = require("drizzle-orm/better-sqlite3");
     const path = require("path");
+    const fs = require("fs");
 
-    const dbPath = path.resolve(process.cwd(), "nxcverse.db");
+    let dbPath = path.resolve(process.cwd(), "nxcverse.db");
+
+    // On Vercel / AWS Lambda serverless environments, use writable /tmp path
+    const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+    if (isServerless) {
+      const tmpPath = path.join("/tmp", "nxcverse.db");
+      try {
+        if (!fs.existsSync(tmpPath) && fs.existsSync(dbPath)) {
+          fs.copyFileSync(dbPath, tmpPath);
+        }
+        if (fs.existsSync(tmpPath)) {
+          dbPath = tmpPath;
+        }
+      } catch (e) {
+        console.warn("[DB] Could not copy to /tmp, using root path:", e);
+      }
+    }
+
     const sqlite = globalForDb.sqliteInstance ?? new Database(dbPath, { timeout: 10000 });
 
     try {
@@ -47,7 +65,11 @@ function initDb() {
     } catch {}
 
     // Ensure initial tables and demo seeds exist in local environment
-    ensureTablesAndSeed(sqlite);
+    try {
+      ensureTablesAndSeed(sqlite);
+    } catch (seedErr) {
+      console.warn("[DB] ensureTablesAndSeed notice:", seedErr);
+    }
 
     globalForDb.sqliteInstance = sqlite;
     return drizzle(sqlite, { schema });
