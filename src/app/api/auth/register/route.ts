@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getUserByEmail, createUserWithProfile, getProfileByUsername } from "@/lib/db/queries";
+import { getUserByEmail, createDigitalOnlyAccount, getProfileByUsername } from "@/lib/db/queries";
 import { hashPassword, createSessionToken, COOKIE_NAME } from "@/lib/auth";
 import { cookies } from "next/headers";
 
@@ -13,12 +13,12 @@ export async function POST(req: Request) {
 
     const existingUser = await getUserByEmail(email);
     if (existingUser) {
-      return NextResponse.json({ error: "An account with this email address already exists" }, { status: 400 });
+      return NextResponse.json({ error: "An account with this email address already exists. Please sign in." }, { status: 400 });
     }
 
-    // Sanitize username or generate fallback from name
+    // Sanitize username or generate clean handle from full name
     let desiredUsername = (username || fullName.toLowerCase().replace(/\s+/g, "_")).toLowerCase().trim().replace(/[^a-z0-9_]/g, "");
-    if (!desiredUsername || desiredUsername.length < 3) {
+    if (!desiredUsername || desiredUsername.length < 2) {
       desiredUsername = `user_${Math.floor(1000 + Math.random() * 9000)}`;
     }
 
@@ -29,7 +29,8 @@ export async function POST(req: Request) {
 
     const passwordHash = hashPassword(password);
 
-    const { user, profile } = await createUserWithProfile({
+    // Create Free Sovereign Digital Profile (No physical card created)
+    const { user, profile } = await createDigitalOnlyAccount({
       email,
       passwordHash,
       fullName,

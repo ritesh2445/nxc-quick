@@ -38,31 +38,31 @@ export function Modal({ isOpen, onClose, title, subtitle, children, maxWidth = "
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-[#0A0A0B]/85 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-[#000000]/85 backdrop-blur-md transition-opacity animate-in fade-in duration-200"
         onClick={onClose}
       />
 
       {/* Content Container */}
       <div
         className={cn(
-          "relative w-full bg-[#111114] border border-[#2A2A32] rounded-[4px] p-6 shadow-2xl z-10 animate-in fade-in zoom-in-95 duration-150 text-left",
+          "relative w-full bg-[#06060A]/95 border border-white/[0.12] rounded-2xl sm:rounded-3xl p-5 sm:p-6 shadow-[0_25px_70px_rgba(0,0,0,0.95)] z-10 animate-in fade-in zoom-in-95 duration-200 text-left max-h-[90vh] overflow-y-auto backdrop-blur-2xl",
           maxWidths[maxWidth]
         )}
       >
-        <div className="flex items-start justify-between pb-4 border-b border-[#2A2A32]">
+        <div className="flex items-start justify-between pb-3.5 border-b border-white/[0.08] gap-3">
           <div>
-            {title && <h3 className="font-display text-xl font-medium text-text-primary">{title}</h3>}
-            {subtitle && <p className="font-sans text-xs text-text-secondary mt-0.5">{subtitle}</p>}
+            {title && <h3 className="font-cinzel text-lg sm:text-xl font-medium text-white tracking-wide">{title}</h3>}
+            {subtitle && <p className="font-sans text-xs text-[#8E8E98] mt-0.5">{subtitle}</p>}
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded text-text-tertiary hover:text-text-primary hover:bg-[#18181C] transition-colors"
+            className="p-1.5 rounded-full bg-white/[0.04] text-[#8E8E98] hover:text-white hover:bg-white/10 border border-white/10 transition-colors shrink-0"
             aria-label="Close modal"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 

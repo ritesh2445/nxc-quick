@@ -1,53 +1,63 @@
-import Database from "better-sqlite3";
-import { drizzle } from "drizzle-orm/better-sqlite3";
 import * as schema from "./schema";
 import { ensureTablesAndSeed } from "./autoSeed";
-import path from "path";
-import fs from "fs";
 
-function getDatabasePath(): string {
-  // On Vercel / serverless runtimes, /tmp is the only writable directory
-  if (process.env.VERCEL) {
-    const tmpDbPath = path.join("/tmp", "nxcverse.db");
-    const sourceDbPath = path.join(process.cwd(), "nxcverse.db");
-
-    if (!fs.existsSync(tmpDbPath) && fs.existsSync(sourceDbPath)) {
-      try {
-        fs.copyFileSync(sourceDbPath, tmpDbPath);
-      } catch (e) {
-        console.warn("[DB] Could not copy source DB to /tmp, will initialize fresh:", e);
-      }
-    }
-    return tmpDbPath;
-  }
-
-  return path.resolve(process.cwd(), "nxcverse.db");
-}
-
-const dbPath = getDatabasePath();
-
-const globalForDb = globalThis as unknown as {
-  sqlite: Database.Database | undefined;
+// Types for D1 Database binding in Cloudflare Workers
+export type D1DatabaseBinding = {
+  prepare: (query: string) => any;
+  dump: () => Promise<ArrayBuffer>;
+  batch: (statements: any[]) => Promise<any[]>;
+  exec: (query: string) => Promise<any>;
 };
 
-function initSqlite(): Database.Database {
-  const instance = new Database(dbPath, { timeout: 10000 });
-  try {
-    instance.pragma("busy_timeout = 10000");
-    instance.pragma("journal_mode = WAL");
-    instance.pragma("foreign_keys = ON");
-  } catch {
-    // WAL fallback
+// Global cache to avoid multiple instances during dev hot-reloads
+const globalForDb = globalThis as unknown as {
+  dbInstance: any;
+  sqliteInstance: any;
+};
+
+function initDb() {
+  // Check if running inside Cloudflare Worker runtime with D1 binding
+  const cloudflareD1 =
+    (globalThis as any).DB ||
+    (globalThis as any).process?.env?.DB ||
+    (globalThis as any).__env__?.DB;
+
+  if (cloudflareD1) {
+    try {
+      const { drizzle } = require("drizzle-orm/d1");
+      return drizzle(cloudflareD1, { schema });
+    } catch (err) {
+      console.warn("[D1] Cloudflare D1 driver load error, falling back to local driver:", err);
+    }
   }
 
-  // Ensure tables and default demo records exist
-  ensureTablesAndSeed(instance);
+  // Local development / Node.js build runtime using SQLite
+  try {
+    const Database = require("better-sqlite3");
+    const { drizzle } = require("drizzle-orm/better-sqlite3");
+    const path = require("path");
 
-  return instance;
+    const dbPath = path.resolve(process.cwd(), "nxcverse.db");
+    const sqlite = globalForDb.sqliteInstance ?? new Database(dbPath, { timeout: 10000 });
+
+    try {
+      sqlite.pragma("busy_timeout = 10000");
+      sqlite.pragma("journal_mode = WAL");
+      sqlite.pragma("foreign_keys = ON");
+    } catch {}
+
+    // Ensure initial tables and demo seeds exist in local environment
+    ensureTablesAndSeed(sqlite);
+
+    globalForDb.sqliteInstance = sqlite;
+    return drizzle(sqlite, { schema });
+  } catch (err) {
+    console.error("[DB] Failed to initialize database driver:", err);
+    throw err;
+  }
 }
 
-const sqlite = globalForDb.sqlite ?? initSqlite();
-globalForDb.sqlite = sqlite;
+export const db = globalForDb.dbInstance ?? initDb();
+globalForDb.dbInstance = db;
 
-export const db = drizzle(sqlite, { schema });
 export * from "./schema";

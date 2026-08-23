@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/Button";
 import {
   Plus,
@@ -18,6 +18,8 @@ import {
   ShieldCheck,
   Globe,
   Radio,
+  Upload,
+  Zap,
 } from "lucide-react";
 
 interface ProfileLink {
@@ -32,8 +34,10 @@ interface ProfileLink {
 export default function ProfileEditorPage() {
   const [loading, setLoading] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [saved, setSaved] = useState(false);
   const [copiedUrl, setCopiedUrl] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Identity State
   const [username, setUsername] = useState("ritesh");
@@ -52,6 +56,7 @@ export default function ProfileEditorPage() {
   const [avatarUrl, setAvatarUrl] = useState(
     "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80"
   );
+  const [vipDirectMode, setVipDirectMode] = useState(false);
 
   const [links, setLinks] = useState<ProfileLink[]>([
     {
@@ -106,6 +111,7 @@ export default function ProfileEditorPage() {
           setEmail(data.profile.email || "");
           setWebsite(data.profile.website || "");
           setLocation(data.profile.location || "");
+          setVipDirectMode(!!data.profile.vipDirectMode);
           if (data.profile.avatarUrl) setAvatarUrl(data.profile.avatarUrl);
 
           // Fetch links
@@ -147,6 +153,32 @@ export default function ProfileEditorPage() {
     a.href = qrDataUrl;
     a.download = `NXC_${username}_Default_QR.png`;
     a.click();
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingAvatar(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("category", "profile");
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (data.url) {
+        setAvatarUrl(data.url);
+      }
+    } catch (err) {
+      console.error("Failed to upload avatar", err);
+    } finally {
+      setUploadingAvatar(false);
+    }
   };
 
   const handleAddLink = () => {
@@ -196,6 +228,7 @@ export default function ProfileEditorPage() {
           website,
           location,
           avatarUrl,
+          vipDirectMode,
           links,
         }),
       });
@@ -212,7 +245,7 @@ export default function ProfileEditorPage() {
   };
 
   return (
-    <div className="space-y-8 text-left max-w-5xl">
+    <div className="space-y-6 sm:space-y-8 text-left max-w-5xl">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">
         <div>
@@ -227,26 +260,22 @@ export default function ProfileEditorPage() {
           </p>
         </div>
 
-        <a href={`/@${username}`} target="_blank" rel="noopener noreferrer">
-          <Button variant="outline" size="sm" className="text-xs rounded-full border-white/20 hover:border-[#0088FF] text-white">
+        <a href={`/@${username}`} target="_blank" rel="noopener noreferrer" className="btn-interactive">
+          <Button variant="outline" size="sm" className="w-full sm:w-auto text-xs rounded-full border-white/20 hover:border-[#0088FF] text-white">
             <ExternalLink className="w-3.5 h-3.5 mr-1 text-[#00A2FF]" /> VIEW LIVE PROFILE
           </Button>
         </a>
       </div>
 
-      {/* ============================================================ */}
-      {/* PERMANENT SOVEREIGN IDENTIFIER & DEFAULT QR MATRIX BANNER    */}
-      {/* (Non-editable as requested to protect NFC routing)           */}
-      {/* ============================================================ */}
-      <div className="bg-[#060608] border border-white/[0.1] rounded-[20px] p-5 sm:p-7 shadow-[0_20px_60px_rgba(0,0,0,0.9)] relative overflow-hidden">
+      {/* Sovereign Identifier & QR Matrix */}
+      <div className="bg-[#060608] border border-white/[0.1] rounded-[20px] p-4 sm:p-7 shadow-[0_20px_60px_rgba(0,0,0,0.9)] relative overflow-hidden">
         <div className="absolute top-0 right-0 w-80 h-80 bg-[#0066FF]/10 rounded-full blur-[100px] pointer-events-none" />
 
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
-          {/* Left: Username Handle Info */}
+        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6 relative z-10">
           <div className="space-y-3 max-w-xl">
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="px-2.5 py-1 rounded-full bg-white/[0.06] border border-white/15 text-[10px] font-mono text-[#00A2FF] uppercase tracking-wider flex items-center gap-1.5">
-                <Lock className="w-3 h-3 text-[#00A2FF]" /> PERMANENT IDENTIFIER (LOCKED)
+                <Lock className="w-3 h-3 text-[#00A2FF]" /> PERMANENT IDENTIFIER
               </span>
               <span className="px-2 py-0.5 rounded-full bg-[#0055FF]/20 text-[10px] font-mono text-[#80D0FF]">
                 NON-EDITABLE
@@ -257,21 +286,20 @@ export default function ProfileEditorPage() {
               <p className="font-mono text-xl sm:text-2xl font-bold text-white tracking-tight">
                 @{username}
               </p>
-              <p className="font-mono text-xs text-[#8E8E98] mt-0.5">
+              <p className="font-mono text-xs text-[#8E8E98] mt-0.5 break-all">
                 https://nxcverse.in/@{username}
               </p>
             </div>
 
             <p className="font-sans text-xs text-[#9E9EA8] leading-relaxed">
-              Your unique sovereign handle and default hardware QR matrix are permanently assigned to this profile.
-              They are hardwired to your aerospace metal card's laser engraving and contactless NFC chip.
+              Your unique sovereign handle and default hardware QR matrix are permanently assigned to this profile, hardwired to your metal card's contactless NFC chip.
             </p>
 
-            <div className="flex items-center gap-3 pt-1">
+            <div className="pt-1">
               <button
                 type="button"
                 onClick={handleCopyUrl}
-                className="px-3.5 py-1.5 rounded-full bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-xs font-mono text-[#E2E0DC] hover:text-white flex items-center gap-1.5 transition-colors"
+                className="w-full sm:w-auto px-4 py-2 rounded-full bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-xs font-mono text-[#E2E0DC] hover:text-white flex items-center justify-center gap-1.5 transition-colors"
               >
                 {copiedUrl ? <Check className="w-3.5 h-3.5 text-[#00E5FF]" /> : <Copy className="w-3.5 h-3.5 text-[#00A2FF]" />}
                 <span>{copiedUrl ? "COPIED TO CLIPBOARD" : "COPY PUBLIC LINK"}</span>
@@ -279,10 +307,10 @@ export default function ProfileEditorPage() {
             </div>
           </div>
 
-          {/* Right: Default QR Code Display with Download */}
           <div className="bg-[#0A0A0E] border border-white/[0.1] rounded-[16px] p-4 flex flex-col items-center justify-center space-y-3 shrink-0 shadow-inner">
             <div className="p-2 bg-white rounded-[10px] shadow-lg">
               {qrDataUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={qrDataUrl}
                   alt={`NXC Verse Default QR Matrix for @${username}`}
@@ -313,9 +341,45 @@ export default function ProfileEditorPage() {
       </div>
 
       {/* Main Profile Form */}
-      <form onSubmit={handleSave} className="space-y-8">
+      <form onSubmit={handleSave} className="space-y-6 sm:space-y-8">
+        {/* VIP Direct Mode Switch Card */}
+        <div className="bg-[#060608] border border-white/[0.1] rounded-[20px] p-4 sm:p-7 space-y-3 shadow-lg backdrop-blur-xl">
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <Zap className="w-4 h-4 text-[#FFD700]" />
+                <h3 className="font-cinzel font-medium text-base text-white">
+                  VIP Direct Mode
+                </h3>
+                {vipDirectMode && (
+                  <span className="px-2 py-0.5 rounded-full bg-[#FFD700]/20 border border-[#FFD700]/40 text-[#FFD700] text-[9px] font-mono font-bold uppercase">
+                    ACTIVE
+                  </span>
+                )}
+              </div>
+              <p className="font-sans text-xs text-[#8E8E98] leading-relaxed max-w-2xl">
+                When enabled, visitors and NFC taps immediately download your contact vCard (.vcf) directly into their phonebook without displaying the web profile page.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setVipDirectMode(!vipDirectMode)}
+              className={`w-12 h-6 rounded-full transition-colors relative shrink-0 p-0.5 ${
+                vipDirectMode ? "bg-[#0088FF]" : "bg-white/20"
+              }`}
+            >
+              <div
+                className={`w-5 h-5 rounded-full bg-white transition-transform ${
+                  vipDirectMode ? "translate-x-6" : "translate-x-0"
+                }`}
+              />
+            </button>
+          </div>
+        </div>
+
         {/* Core Profile Attributes */}
-        <div className="bg-[#060608] border border-white/[0.08] rounded-[20px] p-6 sm:p-8 space-y-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
+        <div className="bg-[#060608] border border-white/[0.08] rounded-[20px] p-4 sm:p-7 md:p-8 space-y-5 sm:space-y-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
           <div className="border-b border-white/[0.08] pb-3">
             <h3 className="font-cinzel font-medium text-base text-white tracking-wide">
               Core Identity & Contact Information
@@ -325,7 +389,7 @@ export default function ProfileEditorPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             <div>
               <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1.5">
                 Full Name *
@@ -417,14 +481,32 @@ export default function ProfileEditorPage() {
 
             <div>
               <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1.5">
-                Avatar Photo URL
+                Avatar Photo (Cloudflare R2)
               </label>
-              <input
-                type="url"
-                value={avatarUrl}
-                onChange={(e) => setAvatarUrl(e.target.value)}
-                className="w-full bg-[#0E0E14] border border-white/[0.1] rounded-[12px] px-3.5 py-2.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF]"
-              />
+              <div className="flex items-center gap-2">
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  accept="image/*"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                />
+                <input
+                  type="text"
+                  value={avatarUrl}
+                  onChange={(e) => setAvatarUrl(e.target.value)}
+                  className="flex-1 bg-[#0E0E14] border border-white/[0.1] rounded-[12px] px-3.5 py-2.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF]"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploadingAvatar}
+                  className="px-3.5 py-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.1] border border-white/15 text-xs font-mono text-[#00A2FF] flex items-center gap-1.5 shrink-0"
+                >
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>{uploadingAvatar ? "..." : "Upload"}</span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -442,8 +524,8 @@ export default function ProfileEditorPage() {
         </div>
 
         {/* Connected Social & Portfolio Links */}
-        <div className="bg-[#060608] border border-white/[0.08] rounded-[20px] p-6 sm:p-8 space-y-4 shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
-          <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
+        <div className="bg-[#060608] border border-white/[0.08] rounded-[20px] p-4 sm:p-7 md:p-8 space-y-4 shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/[0.08] pb-3">
             <div>
               <h3 className="font-cinzel font-medium text-base text-white tracking-wide">
                 Connected Platforms & Social Links
@@ -452,114 +534,115 @@ export default function ProfileEditorPage() {
                 Add, reorder, or update your social media handles and custom portfolio buttons.
               </p>
             </div>
+
             <Button
               type="button"
               variant="outline"
               size="sm"
               onClick={handleAddLink}
-              className="text-xs rounded-full border-white/20 hover:border-[#0088FF] text-white"
+              className="rounded-full text-xs border-[#0088FF]/40 text-[#00E5FF] hover:bg-[#0088FF]/10 self-start sm:self-auto"
             >
-              <Plus className="w-3.5 h-3.5 mr-1" /> ADD LINK
+              <Plus className="w-3.5 h-3.5 mr-1" /> ADD NEW CHANNEL
             </Button>
           </div>
 
           <div className="space-y-3 pt-2">
-            {links.map((link, idx) => (
+            {links.map((link, index) => (
               <div
                 key={link.id}
-                className="p-4 rounded-[14px] bg-[#0E0E14] border border-white/[0.08] grid grid-cols-1 sm:grid-cols-12 gap-3 items-center"
+                className="bg-[#0E0E14] border border-white/[0.06] rounded-[14px] p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center gap-3 transition-all hover:border-white/20"
               >
-                {/* Platform select */}
-                <div className="sm:col-span-3">
-                  <select
-                    value={link.platform}
-                    onChange={(e) => handleUpdateLink(link.id, "platform", e.target.value)}
-                    className="w-full bg-[#060608] border border-white/[0.1] rounded-[10px] px-3 py-2 text-xs text-white focus:outline-none focus:border-[#0088FF]"
-                  >
-                    <option value="linkedin">LinkedIn</option>
-                    <option value="x">X / Twitter</option>
-                    <option value="instagram">Instagram</option>
-                    <option value="whatsapp">WhatsApp</option>
-                    <option value="github">GitHub</option>
-                    <option value="youtube">YouTube</option>
-                    <option value="website">Website</option>
-                    <option value="custom">Custom URL</option>
-                  </select>
-                </div>
-
-                {/* Label */}
-                <div className="sm:col-span-3">
-                  <input
-                    type="text"
-                    value={link.label}
-                    onChange={(e) => handleUpdateLink(link.id, "label", e.target.value)}
-                    placeholder="Button Label"
-                    className="w-full bg-[#060608] border border-white/[0.1] rounded-[10px] px-3 py-2 text-xs text-white focus:outline-none focus:border-[#0088FF]"
-                  />
-                </div>
-
-                {/* URL */}
-                <div className="sm:col-span-4">
-                  <input
-                    type="url"
-                    value={link.url}
-                    onChange={(e) => handleUpdateLink(link.id, "url", e.target.value)}
-                    placeholder="https://"
-                    className="w-full bg-[#060608] border border-white/[0.1] rounded-[10px] px-3 py-2 text-xs text-white focus:outline-none focus:border-[#0088FF] font-mono"
-                  />
-                </div>
-
-                {/* Controls */}
-                <div className="sm:col-span-2 flex items-center justify-end gap-1.5">
+                <div className="flex items-center gap-2 shrink-0">
                   <button
                     type="button"
-                    onClick={() => handleMoveLink(idx, "up")}
-                    disabled={idx === 0}
-                    className="p-1.5 text-[#8E8E98] hover:text-white disabled:opacity-20"
-                    title="Move up"
+                    onClick={() => handleMoveLink(index, "up")}
+                    disabled={index === 0}
+                    className="p-1.5 rounded-lg bg-white/[0.03] text-[#8E8E98] hover:text-white disabled:opacity-30"
                   >
                     <ArrowUp className="w-3.5 h-3.5" />
                   </button>
                   <button
                     type="button"
-                    onClick={() => handleMoveLink(idx, "down")}
-                    disabled={idx === links.length - 1}
-                    className="p-1.5 text-[#8E8E98] hover:text-white disabled:opacity-20"
-                    title="Move down"
+                    onClick={() => handleMoveLink(index, "down")}
+                    disabled={index === links.length - 1}
+                    className="p-1.5 rounded-lg bg-white/[0.03] text-[#8E8E98] hover:text-white disabled:opacity-30"
                   >
                     <ArrowDown className="w-3.5 h-3.5" />
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveLink(link.id)}
-                    className="p-1.5 text-[#8E8E98] hover:text-red-400 ml-1"
-                    title="Delete link"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
                 </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 flex-1">
+                  <div>
+                    <select
+                      value={link.platform}
+                      onChange={(e) => handleUpdateLink(link.id, "platform", e.target.value)}
+                      className="w-full bg-[#060608] border border-white/10 rounded-[10px] px-3 py-2 text-xs text-white focus:outline-none focus:border-[#0088FF]"
+                    >
+                      <option value="linkedin">LinkedIn</option>
+                      <option value="x">X / Twitter</option>
+                      <option value="instagram">Instagram</option>
+                      <option value="whatsapp">WhatsApp</option>
+                      <option value="github">GitHub</option>
+                      <option value="youtube">YouTube</option>
+                      <option value="website">Official Website</option>
+                      <option value="custom">Custom URL</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <input
+                      type="text"
+                      value={link.label}
+                      onChange={(e) => handleUpdateLink(link.id, "label", e.target.value)}
+                      placeholder="Display Label"
+                      className="w-full bg-[#060608] border border-white/10 rounded-[10px] px-3 py-2 text-xs text-white focus:outline-none focus:border-[#0088FF]"
+                    />
+                  </div>
+
+                  <div>
+                    <input
+                      type="url"
+                      value={link.url}
+                      onChange={(e) => handleUpdateLink(link.id, "url", e.target.value)}
+                      placeholder="https://"
+                      className="w-full bg-[#060608] border border-white/10 rounded-[10px] px-3 py-2 text-xs text-white focus:outline-none focus:border-[#0088FF] font-mono"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => handleRemoveLink(link.id)}
+                  className="p-2 rounded-lg bg-red-950/20 text-red-400 hover:bg-red-900/40 transition-colors self-end sm:self-center"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Save Bar */}
+        {/* Submit Bar */}
         <div className="flex items-center justify-between pt-4 border-t border-white/[0.08]">
-          <div>
-            {saved && (
-              <span className="inline-flex items-center gap-1.5 text-xs font-mono text-[#00E5FF] animate-in fade-in">
-                <Check className="w-4 h-4 text-[#00A2FF]" /> Changes successfully saved to sovereign record.
-              </span>
-            )}
-          </div>
+          {saved ? (
+            <div className="flex items-center gap-2 text-emerald-400 text-xs font-mono">
+              <Check className="w-4 h-4" />
+              <span>SAVED SUCCESSFULLY · CLOUD REFRESHED</span>
+            </div>
+          ) : (
+            <span className="text-[11px] font-sans text-[#7E7E8E]">
+              All changes sync instantaneously with your NFC card & cloud storage.
+            </span>
+          )}
+
           <Button
             type="submit"
             variant="primary"
             size="lg"
             isLoading={loading}
-            className="text-xs tracking-widest px-8 rounded-full shadow-[0_0_20px_rgba(0,120,255,0.4)]"
+            className="rounded-full text-xs font-bold tracking-widest uppercase px-8"
           >
-            <Save className="w-3.5 h-3.5 mr-1.5" /> SAVE PROFILE CHANGES
+            <Save className="w-3.5 h-3.5 mr-1.5" /> SAVE PROFILE
           </Button>
         </div>
       </form>

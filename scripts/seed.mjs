@@ -3,394 +3,286 @@ import path from "path";
 import fs from "fs";
 
 const dbPath = path.resolve(process.cwd(), "nxcverse.db");
+
+// If old development db exists, remove it for clean D1 slate
+if (fs.existsSync(dbPath)) {
+  try {
+    fs.unlinkSync(dbPath);
+    console.log("[Seed] Removed legacy development sqlite db for clean slate rebuild.");
+  } catch (e) {
+    console.log("[Seed] Notice: Rebuilding tables inside existing database.");
+  }
+}
+
 const sqlite = new Database(dbPath);
 
-console.log("Creating database schema and tables if not exists...");
+console.log("[Seed] Creating clean D1-compatible schema in database...");
 
-// Initialize tables
+sqlite.pragma("foreign_keys = OFF");
+
 sqlite.exec(`
-CREATE TABLE IF NOT EXISTS users (
-  id TEXT PRIMARY KEY,
-  email TEXT NOT NULL UNIQUE,
-  password_hash TEXT NOT NULL,
-  role TEXT NOT NULL DEFAULT 'customer',
-  created_at INTEGER NOT NULL,
-  updated_at INTEGER NOT NULL
-);
+  DROP TABLE IF EXISTS users;
+  DROP TABLE IF EXISTS profiles;
+  DROP TABLE IF EXISTS profile_links;
+  DROP TABLE IF EXISTS cards;
+  DROP TABLE IF EXISTS card_orders;
+  DROP TABLE IF EXISTS payments;
+  DROP TABLE IF EXISTS subscriptions;
+  DROP TABLE IF EXISTS contacts;
+  DROP TABLE IF EXISTS analytics_events;
+  DROP TABLE IF EXISTS custom_domains;
+  DROP TABLE IF EXISTS wallet_passes;
+  DROP TABLE IF EXISTS user_settings;
 
-CREATE TABLE IF NOT EXISTS profiles (
-  id TEXT PRIMARY KEY,
-  user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  username TEXT NOT NULL UNIQUE,
-  full_name TEXT NOT NULL,
-  designation TEXT NOT NULL,
-  company TEXT,
-  bio TEXT,
-  avatar_url TEXT,
-  logo_url TEXT,
-  phone TEXT,
-  email TEXT,
-  website TEXT,
-  location TEXT,
-  is_verified INTEGER NOT NULL DEFAULT 0,
-  is_public INTEGER NOT NULL DEFAULT 1,
-  custom_theme TEXT DEFAULT 'obsidian',
-  created_at INTEGER NOT NULL,
-  updated_at INTEGER NOT NULL
-);
+  CREATE TABLE users (
+    id TEXT PRIMARY KEY,
+    email TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    role TEXT DEFAULT 'customer' NOT NULL,
+    status TEXT DEFAULT 'active' NOT NULL,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL
+  );
+  CREATE INDEX users_email_idx ON users (email);
+  CREATE INDEX users_role_idx ON users (role);
 
-CREATE TABLE IF NOT EXISTS profile_links (
-  id TEXT PRIMARY KEY,
-  profile_id TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  platform TEXT NOT NULL,
-  label TEXT NOT NULL,
-  url TEXT NOT NULL,
-  icon TEXT,
-  sort_order INTEGER NOT NULL DEFAULT 0,
-  is_visible INTEGER NOT NULL DEFAULT 1,
-  click_count INTEGER NOT NULL DEFAULT 0,
-  created_at INTEGER NOT NULL
-);
+  CREATE TABLE profiles (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    username TEXT NOT NULL UNIQUE,
+    full_name TEXT NOT NULL,
+    designation TEXT NOT NULL,
+    company TEXT,
+    bio TEXT,
+    avatar_url TEXT,
+    logo_url TEXT,
+    phone TEXT,
+    email TEXT,
+    website TEXT,
+    location TEXT,
+    is_verified INTEGER DEFAULT 0 NOT NULL,
+    is_public INTEGER DEFAULT 1 NOT NULL,
+    custom_theme TEXT DEFAULT 'obsidian' NOT NULL,
+    vip_direct_mode INTEGER DEFAULT 0 NOT NULL,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL
+  );
+  CREATE INDEX profiles_username_idx ON profiles (username);
+  CREATE INDEX profiles_user_id_idx ON profiles (user_id);
 
-CREATE TABLE IF NOT EXISTS cards (
-  id TEXT PRIMARY KEY,
-  profile_id TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  variant TEXT NOT NULL,
-  finish TEXT NOT NULL,
-  material TEXT NOT NULL,
-  nfc_uid TEXT UNIQUE,
-  qr_slug TEXT NOT NULL UNIQUE,
-  custom_engraving TEXT,
-  logo_key TEXT,
-  show_qr INTEGER NOT NULL DEFAULT 1,
-  status TEXT NOT NULL DEFAULT 'active',
-  activated_at INTEGER,
-  created_at INTEGER NOT NULL
-);
+  CREATE TABLE profile_links (
+    id TEXT PRIMARY KEY,
+    profile_id TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    platform TEXT NOT NULL,
+    label TEXT NOT NULL,
+    url TEXT NOT NULL,
+    icon TEXT,
+    sort_order INTEGER DEFAULT 0 NOT NULL,
+    is_visible INTEGER DEFAULT 1 NOT NULL,
+    click_count INTEGER DEFAULT 0 NOT NULL,
+    created_at INTEGER NOT NULL
+  );
+  CREATE INDEX profile_links_profile_id_idx ON profile_links (profile_id);
 
-CREATE TABLE IF NOT EXISTS subscriptions (
-  id TEXT PRIMARY KEY,
-  user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  profile_id TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  tier TEXT NOT NULL,
-  status TEXT NOT NULL DEFAULT 'active',
-  currency TEXT NOT NULL DEFAULT 'INR',
-  amount INTEGER NOT NULL,
-  billing_cycle TEXT NOT NULL DEFAULT '1_year',
-  start_date INTEGER NOT NULL,
-  end_date INTEGER NOT NULL,
-  auto_renew INTEGER NOT NULL DEFAULT 1,
-  created_at INTEGER NOT NULL
-);
+  CREATE TABLE cards (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    profile_id TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    variant TEXT NOT NULL,
+    finish TEXT NOT NULL,
+    material TEXT NOT NULL,
+    nfc_uid TEXT UNIQUE,
+    qr_slug TEXT NOT NULL UNIQUE,
+    custom_engraving TEXT,
+    logo_key TEXT,
+    status TEXT DEFAULT 'active' NOT NULL,
+    is_activated INTEGER DEFAULT 1 NOT NULL,
+    activated_at INTEGER,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL
+  );
+  CREATE INDEX cards_nfc_uid_idx ON cards (nfc_uid);
+  CREATE INDEX cards_qr_slug_idx ON cards (qr_slug);
+  CREATE INDEX cards_user_id_idx ON cards (user_id);
+  CREATE INDEX cards_profile_id_idx ON cards (profile_id);
 
-CREATE TABLE IF NOT EXISTS card_designs (
-  id TEXT PRIMARY KEY,
-  slug TEXT NOT NULL UNIQUE,
-  name TEXT NOT NULL,
-  tier TEXT NOT NULL,
-  finish TEXT NOT NULL,
-  material TEXT NOT NULL,
-  description TEXT NOT NULL,
-  price_inr INTEGER NOT NULL,
-  price_usd INTEGER NOT NULL,
-  preview_image TEXT NOT NULL,
-  accent_hex TEXT NOT NULL DEFAULT '#C8C6C0',
-  is_available INTEGER NOT NULL DEFAULT 1,
-  sort_order INTEGER NOT NULL DEFAULT 0,
-  created_at INTEGER NOT NULL
-);
+  CREATE TABLE card_orders (
+    id TEXT PRIMARY KEY,
+    order_number TEXT NOT NULL UNIQUE,
+    user_id TEXT NOT NULL REFERENCES users(id),
+    card_id TEXT REFERENCES cards(id),
+    tier TEXT NOT NULL,
+    finish TEXT NOT NULL,
+    material TEXT NOT NULL,
+    engraving_name TEXT NOT NULL,
+    engraving_title TEXT,
+    amount INTEGER NOT NULL,
+    currency TEXT NOT NULL,
+    payment_gateway TEXT NOT NULL,
+    payment_id TEXT,
+    payment_status TEXT DEFAULT 'pending' NOT NULL,
+    order_status TEXT DEFAULT 'pending' NOT NULL,
+    shipping_address TEXT,
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL
+  );
+  CREATE INDEX card_orders_user_id_idx ON card_orders (user_id);
+  CREATE INDEX card_orders_order_number_idx ON card_orders (order_number);
+  CREATE INDEX card_orders_payment_status_idx ON card_orders (payment_status);
 
-CREATE TABLE IF NOT EXISTS orders (
-  id TEXT PRIMARY KEY,
-  order_number TEXT NOT NULL UNIQUE,
-  user_id TEXT NOT NULL REFERENCES users(id),
-  card_id TEXT,
-  tier TEXT NOT NULL,
-  finish TEXT NOT NULL,
-  material TEXT NOT NULL,
-  engraving_name TEXT NOT NULL,
-  engraving_title TEXT,
-  amount INTEGER NOT NULL,
-  currency TEXT NOT NULL,
-  status TEXT NOT NULL DEFAULT 'paid',
-  payment_gateway TEXT NOT NULL,
-  payment_id TEXT,
-  shipping_address TEXT,
-  created_at INTEGER NOT NULL,
-  updated_at INTEGER NOT NULL
-);
+  CREATE TABLE payments (
+    id TEXT PRIMARY KEY,
+    order_id TEXT NOT NULL REFERENCES card_orders(id) ON DELETE CASCADE,
+    user_id TEXT NOT NULL REFERENCES users(id),
+    gateway TEXT NOT NULL,
+    gateway_payment_id TEXT,
+    gateway_order_id TEXT,
+    amount INTEGER NOT NULL,
+    currency TEXT NOT NULL,
+    status TEXT DEFAULT 'initiated' NOT NULL,
+    raw_response TEXT,
+    created_at INTEGER NOT NULL
+  );
+  CREATE INDEX payments_order_id_idx ON payments (order_id);
+  CREATE INDEX payments_gateway_payment_id_idx ON payments (gateway_payment_id);
 
-CREATE TABLE IF NOT EXISTS analytics_events (
-  id TEXT PRIMARY KEY,
-  profile_id TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  event_type TEXT NOT NULL,
-  link_id TEXT,
-  referrer TEXT,
-  device TEXT,
-  browser TEXT,
-  country TEXT,
-  city TEXT,
-  created_at INTEGER NOT NULL
-);
+  CREATE TABLE subscriptions (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    profile_id TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    tier TEXT DEFAULT 'digital_free' NOT NULL,
+    status TEXT DEFAULT 'active' NOT NULL,
+    currency TEXT DEFAULT 'INR' NOT NULL,
+    amount INTEGER DEFAULT 0 NOT NULL,
+    billing_cycle TEXT DEFAULT 'lifetime' NOT NULL,
+    start_date INTEGER NOT NULL,
+    end_date INTEGER,
+    auto_renew INTEGER DEFAULT 0 NOT NULL,
+    created_at INTEGER NOT NULL
+  );
+  CREATE INDEX subscriptions_user_id_idx ON subscriptions (user_id);
+  CREATE INDEX subscriptions_status_idx ON subscriptions (status);
+
+  CREATE TABLE contacts (
+    id TEXT PRIMARY KEY,
+    profile_id TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    full_name TEXT NOT NULL,
+    email TEXT,
+    phone TEXT,
+    company TEXT,
+    designation TEXT,
+    message TEXT,
+    source TEXT DEFAULT 'profile_exchange' NOT NULL,
+    created_at INTEGER NOT NULL
+  );
+  CREATE INDEX contacts_profile_id_idx ON contacts (profile_id);
+  CREATE INDEX contacts_user_id_idx ON contacts (user_id);
+  CREATE INDEX contacts_created_at_idx ON contacts (created_at);
+
+  CREATE TABLE analytics_events (
+    id TEXT PRIMARY KEY,
+    profile_id TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    event_type TEXT NOT NULL,
+    link_id TEXT,
+    referrer TEXT,
+    device TEXT,
+    browser TEXT,
+    country TEXT,
+    city TEXT,
+    created_at INTEGER NOT NULL
+  );
+  CREATE INDEX analytics_profile_id_idx ON analytics_events (profile_id);
+  CREATE INDEX analytics_event_type_idx ON analytics_events (event_type);
+  CREATE INDEX analytics_created_at_idx ON analytics_events (created_at);
+
+  CREATE TABLE custom_domains (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    profile_id TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    domain TEXT NOT NULL UNIQUE,
+    verification_status TEXT DEFAULT 'pending' NOT NULL,
+    verification_token TEXT NOT NULL,
+    verified_at INTEGER,
+    created_at INTEGER NOT NULL
+  );
+  CREATE INDEX custom_domains_domain_idx ON custom_domains (domain);
+  CREATE INDEX custom_domains_user_id_idx ON custom_domains (user_id);
+
+  CREATE TABLE wallet_passes (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    profile_id TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    pass_type TEXT NOT NULL,
+    pass_serial_number TEXT NOT NULL UNIQUE,
+    auth_code TEXT,
+    updated_at INTEGER NOT NULL,
+    created_at INTEGER NOT NULL
+  );
+  CREATE INDEX wallet_passes_serial_idx ON wallet_passes (pass_serial_number);
+  CREATE INDEX wallet_passes_profile_id_idx ON wallet_passes (profile_id);
+
+  CREATE TABLE user_settings (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE UNIQUE,
+    notify_on_lead INTEGER DEFAULT 1 NOT NULL,
+    notify_on_vcf INTEGER DEFAULT 1 NOT NULL,
+    weekly_digest INTEGER DEFAULT 1 NOT NULL,
+    marketing_emails INTEGER DEFAULT 0 NOT NULL,
+    updated_at INTEGER NOT NULL
+  );
+  CREATE INDEX user_settings_user_id_idx ON user_settings (user_id);
 `);
 
-console.log("Seeding data...");
-
+console.log("[Seed] Seeding default developer records...");
 const now = Date.now();
-const oneYearLater = now + 365 * 24 * 60 * 60 * 1000;
-const twoYearsLater = now + 2 * 365 * 24 * 60 * 60 * 1000;
 
-// Seed Card Designs
-const designs = [
-  {
-    id: "des_obsidian",
-    slug: "obsidian-phoenix",
-    name: "Obsidian Phoenix Classic",
-    tier: "verse",
-    finish: "obsidian",
-    material: "matte",
-    description: "Deep obsidian matte metal body engraved with the signature silver phoenix emblem.",
-    price_inr: 999,
-    price_usd: 12,
-    preview_image: "/assets/cards/obsidian-phoenix.webp",
-    accent_hex: "#F2F0EC",
-    sort_order: 1,
-  },
-  {
-    id: "des_titanium",
-    slug: "brushed-titanium",
-    name: "Brushed Titanium Executive",
-    tier: "metal",
-    finish: "titanium",
-    material: "brushed",
-    description: "Cold aerospace-grade brushed titanium with laser-precision edge chamfering.",
-    price_inr: 1599,
-    price_usd: 20,
-    preview_image: "/assets/cards/titanium.webp",
-    accent_hex: "#8E9AAA",
-    sort_order: 2,
-  },
-  {
-    id: "des_atelier_noir",
-    slug: "atelier-noir",
-    name: "Atelier Noir Bespoke",
-    tier: "atelier",
-    finish: "obsidian",
-    material: "premium_metal",
-    description: "Hand-finished dark matte PVD with customized monogram micro-engraving and gold crest.",
-    price_inr: 2999,
-    price_usd: 38,
-    preview_image: "/assets/cards/atelier.webp",
-    accent_hex: "#D4B896",
-    sort_order: 3,
-  },
-  {
-    id: "des_mirror",
-    slug: "mirror-metal",
-    name: "Liquid Mirror Silver",
-    tier: "metal",
-    finish: "mirror",
-    material: "mirror",
-    description: "Electroplated high-specular mirror surface with obsidian screen-printed accents.",
-    price_inr: 1599,
-    price_usd: 20,
-    preview_image: "/assets/cards/mirror.webp",
-    accent_hex: "#C8C6C0",
-    sort_order: 4,
-  },
-  {
-    id: "des_midnight",
-    slug: "midnight-blue",
-    name: "Midnight Cobalt Deep",
-    tier: "metal",
-    finish: "midnight",
-    material: "brushed",
-    description: "Deep oceanic cobalt metal finish with frosted silver geometric accents.",
-    price_inr: 1599,
-    price_usd: 20,
-    preview_image: "/assets/cards/midnight.webp",
-    accent_hex: "#4F6B92",
-    sort_order: 5,
-  },
-  {
-    id: "des_carbon",
-    slug: "carbon-stealth",
-    name: "Forged Carbon Stealth",
-    tier: "atelier",
-    finish: "carbon",
-    material: "premium_metal",
-    description: "Ultra-rigid forged composite texture with matte obsidian titanium core.",
-    price_inr: 2999,
-    price_usd: 38,
-    preview_image: "/assets/cards/carbon.webp",
-    accent_hex: "#3A3A45",
-    sort_order: 6,
-  },
-];
+sqlite.prepare(`
+  INSERT INTO users (id, email, password_hash, role, status, created_at, updated_at)
+  VALUES ('usr_ritesh', 'ritesh@nxcverse.in', 'ritesh123', 'admin', 'active', ?, ?)
+`).run(now, now);
 
-const insertDesign = sqlite.prepare(`
-  INSERT OR REPLACE INTO card_designs (id, slug, name, tier, finish, material, description, price_inr, price_usd, preview_image, accent_hex, is_available, sort_order, created_at)
-  VALUES (@id, @slug, @name, @tier, @finish, @material, @description, @price_inr, @price_usd, @preview_image, @accent_hex, 1, @sort_order, ${now})
-`);
+sqlite.prepare(`
+  INSERT INTO profiles (id, user_id, username, full_name, designation, company, bio, avatar_url, phone, email, website, location, is_verified, is_public, custom_theme, vip_direct_mode, created_at, updated_at)
+  VALUES ('prof_ritesh', 'usr_ritesh', 'ritesh', 'Ritesh Martawar', 'Founder & Chief Executive', 'NXC Verse', 'Designing tactile luxury hardware and sovereign digital identities.', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80', '+91 95612 48677', 'nxcbadge@gmail.com', 'https://nxcverse.in', 'Mumbai, India', 1, 1, 'obsidian', 0, ?, ?)
+`).run(now, now);
 
-for (const d of designs) {
-  insertDesign.run(d);
-}
+sqlite.prepare(`
+  INSERT INTO profile_links (id, profile_id, platform, label, url, sort_order, is_visible, click_count, created_at)
+  VALUES 
+    ('lnk_1', 'prof_ritesh', 'linkedin', 'LinkedIn Profile', 'https://linkedin.com/in/ritesh-martawar', 0, 1, 14, ?),
+    ('lnk_2', 'prof_ritesh', 'x', 'X / Twitter', 'https://x.com/nxcverse', 1, 1, 9, ?),
+    ('lnk_3', 'prof_ritesh', 'instagram', 'Instagram', 'https://instagram.com/nxcverse.in', 2, 1, 19, ?),
+    ('lnk_4', 'prof_ritesh', 'website', 'NXC Verse Official', 'https://nxcverse.in', 3, 1, 32, ?)
+`).run(now, now, now, now);
 
-// Seed Users
-const insertUser = sqlite.prepare(`
-  INSERT OR REPLACE INTO users (id, email, password_hash, role, created_at, updated_at)
-  VALUES (?, ?, ?, ?, ?, ?)
-`);
+sqlite.prepare(`
+  INSERT INTO cards (id, user_id, profile_id, variant, finish, material, nfc_uid, qr_slug, custom_engraving, status, is_activated, activated_at, created_at, updated_at)
+  VALUES ('crd_1', 'usr_ritesh', 'prof_ritesh', 'metal', 'pitch_black', 'mirror', '04:A2:8F:E1:99:3B:80', 'ritesh', 'EDITION NO. 001/100', 'active', 1, ?, ?, ?)
+`).run(now, now, now);
 
-// Passwords for demo testing:
-insertUser.run("usr_ritesh", "ritesh@nxcverse.in", "ritesh123", "customer", now, now);
-insertUser.run("usr_aarav", "aarav@nxcverse.in", "aarav123", "customer", now, now);
-insertUser.run("usr_demo", "demo@nxcverse.in", "demo123", "customer", now, now);
-insertUser.run("usr_admin", "admin@nxcverse.in", "admin123", "admin", now, now);
+sqlite.prepare(`
+  INSERT INTO card_orders (id, order_number, user_id, card_id, tier, finish, material, engraving_name, engraving_title, amount, currency, payment_gateway, payment_id, payment_status, order_status, shipping_address, created_at, updated_at)
+  VALUES ('ord_1', 'NXC-ORD-882190', 'usr_ritesh', 'crd_1', 'metal', 'pitch_black', 'mirror', 'RITESH MARTAWAR', 'FOUNDER & CEO', 1599, 'INR', 'razorpay', 'pay_mock_123', 'paid', 'delivered', 'Worli Sea Face, Mumbai 400018', ?, ?)
+`).run(now, now);
 
-// Seed Profiles
-const insertProfile = sqlite.prepare(`
-  INSERT OR REPLACE INTO profiles (id, user_id, username, full_name, designation, company, bio, avatar_url, logo_url, phone, email, website, location, is_verified, is_public, custom_theme, created_at, updated_at)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-`);
+sqlite.prepare(`
+  INSERT INTO subscriptions (id, user_id, profile_id, tier, status, currency, amount, billing_cycle, start_date, end_date, auto_renew, created_at)
+  VALUES ('sub_1', 'usr_ritesh', 'prof_ritesh', 'metal', 'active', 'INR', 1599, 'lifetime', ?, NULL, 0, ?)
+`).run(now, now);
 
-insertProfile.run(
-  "prof_ritesh",
-  "usr_ritesh",
-  "ritesh",
-  "Ritesh Martawar",
-  "Founder & Chief Executive",
-  "NXC Verse",
-  "Designing tactile luxury hardware and next-generation sovereign digital identities for modern visionaries.",
-  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80",
-  null,
-  "+91 98765 43210",
-  "ritesh@nxcverse.in",
-  "https://nxcverse.in",
-  "Mumbai, India",
-  1,
-  1,
-  "obsidian",
-  now,
-  now
-);
+sqlite.prepare(`
+  INSERT INTO user_settings (id, user_id, notify_on_lead, notify_on_vcf, weekly_digest, marketing_emails, updated_at)
+  VALUES ('set_1', 'usr_ritesh', 1, 1, 1, 0, ?)
+`).run(now);
 
-insertProfile.run(
-  "prof_aarav",
-  "usr_aarav",
-  "aarav",
-  "Aarav Mehta",
-  "Founder · NXC Verse",
-  "NXC Verse",
-  "Building digital identity through technology, industrial design, and hyper-tactile metal hardware.",
-  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80",
-  null,
-  "+91 98200 12345",
-  "aarav@nxcverse.in",
-  "https://nxcverse.in",
-  "Bengaluru, India",
-  1,
-  1,
-  "obsidian",
-  now,
-  now
-);
+sqlite.prepare(`
+  INSERT INTO contacts (id, profile_id, user_id, full_name, email, phone, company, designation, message, source, created_at)
+  VALUES 
+    ('cnt_1', 'prof_ritesh', 'usr_ritesh', 'Aarav Sharma', 'aarav.sharma@apextech.io', '+91 98201 44521', 'ApexTech Ventures', 'Managing Partner', 'Met at Venture Capital Summit Mumbai. Interested in bulk enterprise cards.', 'profile_exchange', ?),
+    ('cnt_2', 'prof_ritesh', 'usr_ritesh', 'Priya Nair', 'priya.nair@quantumlux.com', '+91 98450 77123', 'Quantum Luxury Group', 'Head of Brand Strategy', 'Wants 20 custom serialized Atelier cards for leadership team.', 'profile_exchange', ?),
+    ('cnt_3', 'prof_ritesh', 'usr_ritesh', 'David Sterling', 'd.sterling@monolith.co', '+1 415 890 2234', 'Monolith Capital London', 'Chief Technology Officer', 'Exchanged contact via contactless NFC tap in Bangalore.', 'nfc_tap', ?)
+`).run(now - 3600000 * 2, now - 3600000 * 18, now - 3600000 * 48);
 
-insertProfile.run(
-  "prof_demo",
-  "usr_demo",
-  "demo",
-  "Julian Vance",
-  "Managing Partner",
-  "Vance & Co. Capital",
-  "Private equity investments in aerospace, high-frequency computing, and deep-tech hardware.",
-  "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop&q=80",
-  null,
-  "+1 (415) 890-2345",
-  "julian@vancecapital.com",
-  "https://vancecapital.com",
-  "San Francisco & London",
-  1,
-  1,
-  "titanium",
-  now,
-  now
-);
-
-// Seed Profile Links
-const insertLink = sqlite.prepare(`
-  INSERT OR REPLACE INTO profile_links (id, profile_id, platform, label, url, icon, sort_order, is_visible, click_count, created_at)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-`);
-
-// Ritesh links
-insertLink.run("lnk_r1", "prof_ritesh", "linkedin", "LinkedIn", "https://linkedin.com/in/ritesh-martawar", "linkedin", 0, 1, 142, now);
-insertLink.run("lnk_r2", "prof_ritesh", "x", "X / Twitter", "https://x.com/nxcverse", "x", 1, 1, 89, now);
-insertLink.run("lnk_r3", "prof_ritesh", "instagram", "Instagram", "https://instagram.com/nxcverse", "instagram", 2, 1, 64, now);
-insertLink.run("lnk_r4", "prof_ritesh", "website", "NXC Verse Official", "https://nxcverse.in", "globe", 3, 1, 210, now);
-
-// Aarav links
-insertLink.run("lnk_a1", "prof_aarav", "linkedin", "LinkedIn", "https://linkedin.com", "linkedin", 0, 1, 95, now);
-insertLink.run("lnk_a2", "prof_aarav", "x", "X / Twitter", "https://x.com", "x", 1, 1, 58, now);
-insertLink.run("lnk_a3", "prof_aarav", "instagram", "Instagram", "https://instagram.com", "instagram", 2, 1, 41, now);
-insertLink.run("lnk_a4", "prof_aarav", "github", "GitHub", "https://github.com", "github", 3, 1, 30, now);
-
-// Julian links
-insertLink.run("lnk_j1", "prof_demo", "linkedin", "LinkedIn Profile", "https://linkedin.com", "linkedin", 0, 1, 320, now);
-insertLink.run("lnk_j2", "prof_demo", "website", "Vance Portfolio", "https://vancecapital.com", "globe", 1, 1, 180, now);
-
-// Seed Cards
-const insertCard = sqlite.prepare(`
-  INSERT OR REPLACE INTO cards (id, profile_id, user_id, variant, finish, material, nfc_uid, qr_slug, custom_engraving, logo_key, show_qr, status, activated_at, created_at)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-`);
-
-insertCard.run("crd_ritesh", "prof_ritesh", "usr_ritesh", "atelier", "obsidian", "premium_metal", "04:A2:8F:E1:99:3B:80", "ritesh", "FOUNDER & CEO", "phoenix", 1, "active", now, now);
-insertCard.run("crd_aarav", "prof_aarav", "usr_aarav", "metal", "obsidian", "matte", "04:C5:12:44:0B:77:81", "aarav", "FOUNDER", "phoenix", 1, "active", now, now);
-insertCard.run("crd_demo", "prof_demo", "usr_demo", "metal", "titanium", "brushed", "04:77:E9:1A:4C:90:82", "demo", "MANAGING PARTNER", null, 1, "active", now, now);
-
-// Seed Subscriptions
-const insertSub = sqlite.prepare(`
-  INSERT OR REPLACE INTO subscriptions (id, user_id, profile_id, tier, status, currency, amount, billing_cycle, start_date, end_date, auto_renew, created_at)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-`);
-
-insertSub.run("sub_ritesh", "usr_ritesh", "prof_ritesh", "atelier", "active", "INR", 2999, "3_year", now, twoYearsLater, 1, now);
-insertSub.run("sub_aarav", "usr_aarav", "prof_aarav", "metal", "active", "INR", 1599, "2_year", now, twoYearsLater, 1, now);
-insertSub.run("sub_demo", "usr_demo", "prof_demo", "metal", "active", "USD", 20, "2_year", now, oneYearLater, 1, now);
-
-// Seed Orders
-const insertOrder = sqlite.prepare(`
-  INSERT OR REPLACE INTO orders (id, order_number, user_id, card_id, tier, finish, material, engraving_name, engraving_title, amount, currency, status, payment_gateway, payment_id, shipping_address, created_at, updated_at)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-`);
-
-insertOrder.run("ord_1", "NXC-260821-1001", "usr_ritesh", "crd_ritesh", "atelier", "obsidian", "premium_metal", "Ritesh Martawar", "Founder & CEO", 2999, "INR", "delivered", "razorpay", "pay_nxc_live_001", JSON.stringify({ street: "Marine Drive", city: "Mumbai", pincode: "400020", country: "India" }), now - 86400000 * 14, now);
-insertOrder.run("ord_2", "NXC-260821-1002", "usr_aarav", "crd_aarav", "metal", "obsidian", "matte", "Aarav Mehta", "Founder", 1599, "INR", "delivered", "razorpay", "pay_nxc_live_002", JSON.stringify({ street: "Indiranagar", city: "Bengaluru", pincode: "560038", country: "India" }), now - 86400000 * 7, now);
-insertOrder.run("ord_3", "NXC-260821-1003", "usr_demo", "crd_demo", "metal", "titanium", "brushed", "Julian Vance", "Managing Partner", 20, "USD", "shipped", "stripe", "pi_nxc_stripe_003", JSON.stringify({ street: "Market St", city: "San Francisco", pincode: "94103", country: "United States" }), now - 86400000 * 2, now);
-
-// Seed Analytics Events
-const insertEvent = sqlite.prepare(`
-  INSERT OR REPLACE INTO analytics_events (id, profile_id, event_type, link_id, referrer, device, browser, country, city, created_at)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-`);
-
-const events = [
-  ["evt_1", "prof_ritesh", "view", null, "https://nxcverse.in", "iPhone 15 Pro", "Safari", "India", "Mumbai", now - 3600000 * 2],
-  ["evt_2", "prof_ritesh", "nfc_tap", null, "NFC Card Tap", "iPhone 15 Pro", "Safari", "India", "Mumbai", now - 3600000 * 2],
-  ["evt_3", "prof_ritesh", "contact_save", null, "Profile Action", "iPhone 15 Pro", "Safari", "India", "Mumbai", now - 3600000 * 2],
-  ["evt_4", "prof_ritesh", "qr_scan", null, "Physical Card QR", "Samsung Galaxy S24", "Chrome", "India", "Delhi", now - 3600000 * 5],
-  ["evt_5", "prof_ritesh", "view", null, "https://linkedin.com", "MacBook Pro", "Chrome", "United States", "New York", now - 3600000 * 8],
-  ["evt_6", "prof_aarav", "view", null, "Direct NFC", "iPhone 14", "Safari", "India", "Bengaluru", now - 3600000 * 4],
-  ["evt_7", "prof_aarav", "contact_save", null, "Profile Action", "iPhone 14", "Safari", "India", "Bengaluru", now - 3600000 * 4],
-  ["evt_8", "prof_aarav", "qr_scan", null, "Physical Card QR", "Pixel 8", "Chrome", "United Kingdom", "London", now - 3600000 * 12],
-];
-
-for (const ev of events) {
-  insertEvent.run(...ev);
-}
-
-console.log("Database successfully seeded with realistic luxury profiles, cards, and analytics.");
-sqlite.close();
+sqlite.pragma("foreign_keys = ON");
+console.log("[Seed] Clean D1 schema created and seeded successfully.");

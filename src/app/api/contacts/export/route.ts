@@ -58,7 +58,7 @@ export async function GET(req: Request) {
           escape(c.company),
           escape(c.phone),
           escape(c.email),
-          escape(c.notes),
+          escape(c.message || (c as any).notes),
           escape(c.source),
           escape(dateStr),
         ].join(",")

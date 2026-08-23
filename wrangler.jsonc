@@ -1,0 +1,30 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "nxc-verse",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-02-15",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".open-next/assets"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "nxc-verse-db",
+      "database_id": "nxc-verse-db"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "STORAGE",
+      "bucket_name": "nxc-verse-storage"
+    }
+  ],
+  "vars": {
+    "APP_URL": "https://nxcverse.in",
+    "R2_BUCKET_NAME": "nxc-verse-storage"
+  }
+}

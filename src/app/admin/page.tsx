@@ -89,7 +89,7 @@ export default async function AdminOverviewPage() {
           </div>
 
           <div className="space-y-3">
-            {recentOrders.map((ord) => (
+            {recentOrders.map((ord: any) => (
               <div key={ord.id} className="p-3 rounded-[2px] bg-[#18181C] border border-[#2A2A32] flex items-center justify-between text-xs font-sans">
                 <div>
                   <p className="font-mono text-accent-silver font-medium">{ord.orderNumber}</p>
@@ -97,7 +97,7 @@ export default async function AdminOverviewPage() {
                 </div>
                 <div className="text-right">
                   <span className="font-mono text-[10px] text-[#6FCF97] uppercase px-2 py-0.5 rounded-[2px] bg-[#1A2E24] border border-[#26533D]">
-                    {ord.status}
+                    {ord.paymentStatus || ord.orderStatus || "paid"}
                   </span>
                   <p className="font-mono text-[10px] text-text-tertiary mt-1">{formatDate(ord.createdAt)}</p>
                 </div>
@@ -118,7 +118,7 @@ export default async function AdminOverviewPage() {
           </div>
 
           <div className="space-y-3">
-            {recentCards.map((c) => (
+            {recentCards.map((c: any) => (
               <div key={c.id} className="p-3 rounded-[2px] bg-[#18181C] border border-[#2A2A32] flex items-center justify-between text-xs font-sans">
                 <div>
                   <p className="font-mono text-accent-silver font-medium">{c.nfcUid || "UNASSIGNED CHIP"}</p>

@@ -16,6 +16,8 @@
 *.sqlite-journal
 *.db
 *.db-journal
+*.db-shm
+*.db-wal
 
 # Environment variables
 .env*.local

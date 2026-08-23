@@ -1,6 +1,6 @@
 import React from "react";
-import { notFound } from "next/navigation";
-import { getProfileByUsername, recordAnalyticsEvent } from "@/lib/db/queries";
+import { notFound, redirect } from "next/navigation";
+import { getProfileByUsername, recordAnalyticsEvent, getProfileLinks } from "@/lib/db/queries";
 import { DigitalProfileView } from "@/components/profile/DigitalProfileView";
 import type { Metadata } from "next";
 
@@ -30,6 +30,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `https://nxcverse.in/@${profile.username}`,
       images: profile.avatarUrl ? [{ url: profile.avatarUrl }] : [],
     },
+    twitter: {
+      card: "summary_large_image",
+      title: `${profile.fullName} — Sovereign Identity`,
+      description: profile.bio || `${profile.designation} at ${profile.company || "NXC Verse"}`,
+      images: profile.avatarUrl ? [profile.avatarUrl] : [],
+    },
   };
 }
 
@@ -42,12 +48,25 @@ export default async function PublicProfilePage({ params }: Props) {
     notFound();
   }
 
-  // Non-blocking fire-and-forget server analytics recording
+  // 1. VIP Direct Mode: If enabled, immediately trigger direct vCard download
+  if (profile.vipDirectMode) {
+    recordAnalyticsEvent({
+      profileId: profile.id,
+      eventType: "vcf_download",
+      referrer: "VIP Direct Mode Tap",
+    }).catch(() => {});
+
+    redirect(`/api/profile/${profile.username}/vcf`);
+  }
+
+  // 2. Normal View: Record view event and fetch live links
   recordAnalyticsEvent({
     profileId: profile.id,
     eventType: "view",
     referrer: "Direct/NFC",
   }).catch(() => {});
 
-  return <DigitalProfileView profile={profile} />;
+  const links = await getProfileLinks(profile.id);
+
+  return <DigitalProfileView profile={profile} initialLinks={links} />;
 }

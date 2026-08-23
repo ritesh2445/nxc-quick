@@ -56,13 +56,19 @@ interface ProfileData {
   } | null;
 }
 
-export function DigitalProfileView({ profile }: { profile: ProfileData }) {
+export interface DigitalProfileViewProps {
+  profile: any;
+  initialLinks?: any[];
+}
+
+export function DigitalProfileView({ profile, initialLinks }: DigitalProfileViewProps) {
   const [saved, setSaved] = useState(false);
   const [qrModalOpen, setQrModalOpen] = useState(false);
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
   const [likesCount, setLikesCount] = useState(42);
   const [isLiked, setIsLiked] = useState(false);
   const [floatingHearts, setFloatingHearts] = useState<Array<{ id: number; x: number }>>([]);
+  const effectiveLinks = initialLinks || profile.links || [];
 
   // Exchange Contact State
   const [exchangeModalOpen, setExchangeModalOpen] = useState(false);
@@ -423,13 +429,13 @@ export function DigitalProfileView({ profile }: { profile: ProfileData }) {
         </div>
 
         {/* Social / Connected Platforms List */}
-        {profile.links && profile.links.length > 0 && (
+        {effectiveLinks && effectiveLinks.length > 0 && (
           <div className="space-y-2 pt-2">
             <span className="font-mono text-[10px] text-[#80D0FF] uppercase tracking-[0.25em] block mb-2 font-semibold">
               CONNECTED CHANNELS
             </span>
             <div className="space-y-2">
-              {profile.links.map((link) => (
+              {effectiveLinks.map((link: any) => (
                 <a
                   key={link.id}
                   href={link.url}
@@ -453,9 +459,34 @@ export function DigitalProfileView({ profile }: { profile: ProfileData }) {
           </div>
         )}
 
+        {/* Digital Wallets (Apple Wallet & Google Wallet) */}
+        <div className="pt-3 border-t border-white/[0.08] space-y-2">
+          <span className="font-mono text-[10px] text-[#80D0FF] uppercase tracking-[0.25em] block mb-1 font-semibold">
+            DIGITAL WALLET PASSES
+          </span>
+          <div className="grid grid-cols-2 gap-2">
+            <a
+              href={`/api/wallet/apple/${profile.username}`}
+              download={`${profile.username}_apple_pass.json`}
+              className="p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-white/30 flex items-center justify-center gap-1.5 transition-all text-xs font-sans text-white hover:bg-white/[0.06] btn-interactive"
+            >
+              <span className="text-[13px]"></span>
+              <span className="text-[11px] font-medium">Apple Wallet</span>
+            </a>
+            <a
+              href={`/api/wallet/google/${profile.username}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-white/30 flex items-center justify-center gap-1.5 transition-all text-xs font-sans text-white hover:bg-white/[0.06] btn-interactive"
+            >
+              <span className="text-[11px] font-medium">Google Wallet</span>
+            </a>
+          </div>
+        </div>
+
         {/* Hardware Meta Pill */}
         {profile.card && (
-          <div className="pt-4 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-[#8E8E98]">
+          <div className="pt-3 border-t border-white/10 flex items-center justify-between text-[10px] font-mono text-[#8E8E98]">
             <span className="flex items-center gap-1.5 text-[#80D0FF]">
               <Radio className="w-3 h-3 text-[#00A2FF] animate-pulse" /> NFC {profile.card.finish.toUpperCase()}
             </span>

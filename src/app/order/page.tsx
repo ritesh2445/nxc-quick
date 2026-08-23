@@ -567,6 +567,13 @@ export default function OrderPage() {
             </div>
 
             <div className="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
+              <Link href="/dashboard">
+                <button className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-[#0055FF] to-[#0088FF] text-white font-sans font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,140,255,0.4)] btn-interactive">
+                  <Sparkles className="w-4 h-4" />
+                  <span>Access Client Dashboard</span>
+                </button>
+              </Link>
+
               <a
                 href={`https://wa.me/919561248677?text=Hello%20NXC%20Verse%20Concierge,%20I%20just%20placed%20order%20${orderId}%20for%20${name}.`}
                 target="_blank"
@@ -574,12 +581,12 @@ export default function OrderPage() {
                 className="px-6 py-3 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-sans font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-md btn-interactive"
               >
                 <WhatsAppIcon className="w-4 h-4 text-white" color="#FFFFFF" />
-                <span>Connect with Concierge</span>
+                <span>Connect Concierge</span>
               </a>
 
               <Link href="/">
                 <button className="w-full sm:w-auto px-6 py-3 rounded-xl bg-white/[0.06] border border-white/20 text-white font-sans font-medium text-xs tracking-wider uppercase hover:bg-white/10 btn-interactive">
-                  Return to Home
+                  Return Home
                 </button>
               </Link>
             </div>

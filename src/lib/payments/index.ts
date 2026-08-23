@@ -1,5 +1,5 @@
 export interface CreateOrderParams {
-  tier: "verse" | "metal" | "atelier";
+  tier: "verse" | "classic" | "metal" | "atelier";
   currency: "INR" | "USD";
   amount: number;
   customerEmail: string;
