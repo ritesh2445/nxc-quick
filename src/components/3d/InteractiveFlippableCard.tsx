@@ -123,9 +123,9 @@ export function InteractiveFlippableCard({
       name: "Gold",
       bg: "bg-[#181002]",
       border: "border-[#F5D061]/90",
-      textPrimary: "text-[#FFFBE8] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] font-normal",
-      textSecondary: "text-[#F5D061] font-normal",
-      accentHex: "#F5D061",
+      textPrimary: "text-[#FFFFFF] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] font-normal",
+      textSecondary: "text-[#FFFFFF] font-normal",
+      accentHex: "#FFFFFF",
       gradient: "from-[#1C1202] via-[#483006] via-[#94721A] via-[#ECC968] via-[#5A3F0C] via-[#1A1002] to-[#382607]",
       shimmer: "rgba(245, 208, 97, 0.55)",
       glow: "shadow-[0_30px_80px_rgba(0,0,0,0.98),inset_0_2px_3px_rgba(255,240,180,0.8),inset_0_-2px_3px_rgba(0,0,0,0.9)]",
@@ -139,8 +139,8 @@ export function InteractiveFlippableCard({
       bg: "bg-[#180004]",
       border: "border-[#FF2A55]/90",
       textPrimary: "text-[#FFFFFF] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] font-normal",
-      textSecondary: "text-[#FF4D70] font-normal",
-      accentHex: "#FF2A55",
+      textSecondary: "text-[#FFFFFF] font-normal",
+      accentHex: "#FFFFFF",
       gradient: "from-[#1C0005] via-[#4E020E] via-[#9E1026] via-[#F0264B] via-[#580312] via-[#180004] to-[#35010A]",
       shimmer: "rgba(255, 42, 85, 0.5)",
       glow: "shadow-[0_30px_80px_rgba(0,0,0,0.98),inset_0_2px_3px_rgba(255,180,195,0.8),inset_0_-2px_3px_rgba(0,0,0,0.9)]",
@@ -181,7 +181,7 @@ export function InteractiveFlippableCard({
   }[normalizedFinish];
 
   return (
-    <div className="relative flex flex-col items-center justify-center select-none py-2 max-w-full overflow-hidden">
+    <div className="relative flex flex-col items-center justify-center select-none py-4 px-2 max-w-full overflow-visible">
       {/* 3D Perspective Flip Container */}
       <div
         className="w-[260px] h-[415px] min-[360px]:w-[280px] min-[360px]:h-[445px] sm:w-[320px] sm:h-[510px] md:w-[340px] md:h-[530px] max-w-full cursor-pointer group relative z-10"

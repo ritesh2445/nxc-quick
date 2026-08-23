@@ -162,7 +162,7 @@ export default function OrderPage() {
         {step === "configure" && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
             {/* Left Column: Live 3D Dual-Sided Flippable Card View */}
-            <div className="lg:col-span-6 sticky top-28 bg-[#040406]/90 border border-white/[0.1] rounded-[20px] p-4 sm:p-6 md:p-8 flex flex-col items-center justify-center min-h-[480px] sm:min-h-[520px] md:min-h-[620px] shadow-[0_25px_70px_rgba(0,0,0,0.95)] backdrop-blur-xl overflow-hidden max-w-full">
+            <div className="lg:col-span-6 sticky top-28 bg-[#040406]/90 border border-white/[0.1] rounded-[20px] p-4 sm:p-6 md:p-8 flex flex-col items-center justify-center min-h-[480px] sm:min-h-[520px] md:min-h-[620px] shadow-[0_25px_70px_rgba(0,0,0,0.95)] backdrop-blur-xl max-w-full">
               {/* Electric Blue Top Accent */}
               <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-[#0099FF]/60 to-transparent" />
 

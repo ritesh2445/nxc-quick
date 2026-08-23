@@ -176,7 +176,7 @@ export default function CustomizePage() {
         {/* 60 / 40 Configurator Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column (60%): Real-Time Dual-Sided Flippable 3D Card Scene */}
-          <div className="lg:col-span-7 bg-[#060608] border border-white/[0.12] rounded-[14px] p-4 sm:p-6 md:p-8 relative flex flex-col items-center justify-center min-h-[480px] sm:min-h-[540px] lg:min-h-[640px] shadow-[0_30px_80px_rgba(0,0,0,0.95)] overflow-hidden max-w-full">
+          <div className="lg:col-span-7 bg-[#060608] border border-white/[0.12] rounded-[14px] p-4 sm:p-6 md:p-8 relative flex flex-col items-center justify-center min-h-[480px] sm:min-h-[540px] lg:min-h-[640px] shadow-[0_30px_80px_rgba(0,0,0,0.95)] max-w-full">
             <DynamicHeroCardScene
               finish={state.finish}
               name={state.name || "YOUR NAME"}

@@ -136,7 +136,7 @@ export default function DesignsPage() {
             >
               <div className="space-y-6">
                 {/* Dual-Sided Card Frame */}
-                <div className="relative w-full bg-[#000000] border border-white/[0.08] rounded-[10px] overflow-hidden flex items-center justify-center p-4">
+                <div className="relative w-full bg-[#000000] border border-white/[0.08] rounded-[10px] flex items-center justify-center p-4">
                   <DynamicHeroCardScene
                     finish={d.finish}
                     name="RITESH MARTAWAR"
