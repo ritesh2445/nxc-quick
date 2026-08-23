@@ -108,17 +108,25 @@ export function HeroSection() {
             </button>
           </div>
 
-          {/* Press / Trust Bar */}
+          {/* Engineering & Hardware Standards Bar */}
           <div className="pt-4 sm:pt-6 md:pt-8">
-            <p className="font-mono text-[9px] sm:text-[10px] md:text-[11px] text-[#62626E] uppercase tracking-[0.2em] sm:tracking-[0.25em] mb-3 font-medium">
-              FEATURED & TRUSTED BY VISIONARIES
+            <p className="font-mono text-[9px] sm:text-[10px] md:text-[11px] text-[#70707C] uppercase tracking-[0.2em] sm:tracking-[0.25em] mb-3 font-medium flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#00A2FF] animate-pulse" />
+              BUILT ON MODERN STANDARDS & COMPLIANCE
             </p>
-            <div className="flex flex-wrap items-center gap-4 sm:gap-7 md:gap-9 text-[#82828E] opacity-75 hover:opacity-100 transition-opacity duration-300">
-              <span className="font-serif font-bold text-sm sm:text-base md:text-lg tracking-wider text-[#A09E9A] hover:text-white transition-colors">Forbes</span>
-              <span className="font-sans font-extrabold text-xs sm:text-sm md:text-base tracking-tighter text-[#A09E9A] hover:text-white transition-colors">TechCrunch</span>
-              <span className="font-sans font-bold text-[10px] sm:text-xs md:text-sm tracking-wider text-[#A09E9A] hover:text-white uppercase transition-colors">YOURSTORY</span>
-              <span className="font-serif italic font-bold text-xs sm:text-sm md:text-base tracking-wide text-[#A09E9A] hover:text-white transition-colors">Entrepreneur</span>
-              <span className="font-sans font-black text-xs sm:text-sm md:text-base tracking-widest text-[#A09E9A] hover:text-white transition-colors">Inc.</span>
+            <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 text-xs">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/10 text-[#D0D0DC] font-mono text-[10px] sm:text-[11px] hover:border-white/30 transition-colors">
+                <span className="text-[#00A2FF]">✦</span> NFC ISO 14443A
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/10 text-[#D0D0DC] font-mono text-[10px] sm:text-[11px] hover:border-white/30 transition-colors">
+                <span className="text-[#00A2FF]">✦</span> iOS & Android Ready
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/10 text-[#D0D0DC] font-mono text-[10px] sm:text-[11px] hover:border-white/30 transition-colors">
+                <span className="text-[#00A2FF]">✦</span> 256-Bit Encrypted
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/10 text-[#D0D0DC] font-mono text-[10px] sm:text-[11px] hover:border-white/30 transition-colors">
+                <span className="text-[#00A2FF]">✦</span> Zero App Needed
+              </div>
             </div>
           </div>
         </div>
