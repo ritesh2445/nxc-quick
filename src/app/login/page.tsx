@@ -226,6 +226,24 @@ export default function LoginPage() {
 
         {/* Card Box */}
         <div className="bg-[#050508]/90 border border-white/[0.1] rounded-[24px] p-5 sm:p-8 shadow-[0_30px_90px_rgba(0,0,0,0.98)] backdrop-blur-2xl space-y-6">
+          {/* Instant 1-Click Demo Entry */}
+          <Link
+            href="/dashboard"
+            className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-[#0055FF] via-[#0088FF] to-[#00A2FF] text-white font-sans font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(0,140,255,0.45)] hover:shadow-[0_0_35px_rgba(0,160,255,0.7)] transition-all btn-interactive"
+          >
+            <Sparkles className="w-4 h-4" />
+            <span>EXPLORE LIVE DEMO CONSOLE (1-CLICK)</span>
+            <ArrowRight className="w-3.5 h-3.5 ml-0.5" />
+          </Link>
+
+          <div className="relative flex py-0.5 items-center">
+            <div className="flex-grow border-t border-white/10" />
+            <span className="flex-shrink mx-3 text-[10px] font-mono text-[#62626E] uppercase tracking-wider">
+              OR LOGIN TO YOUR ACCOUNT
+            </span>
+            <div className="flex-grow border-t border-white/10" />
+          </div>
+
           {/* Mode Switcher */}
           <div className="grid grid-cols-2 p-1 rounded-full bg-white/[0.04] border border-white/[0.08]">
             <button

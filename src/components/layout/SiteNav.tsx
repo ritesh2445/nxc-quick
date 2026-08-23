@@ -23,11 +23,13 @@ export function SiteNav() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
-  // Hide SiteNav entirely on dashboard / admin / login — those are fully standalone pages
-  const isConsoleRoute =
+  // Hide SiteNav entirely on dashboard / admin / login / public digital profiles (@username)
+  const isStandaloneRoute =
     pathname.startsWith("/dashboard") ||
     pathname.startsWith("/admin") ||
-    pathname.startsWith("/login");
+    pathname.startsWith("/login") ||
+    pathname.startsWith("/@") ||
+    (pathname !== "/" && pathname !== "/order" && !pathname.startsWith("/api"));
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 15);
@@ -56,8 +58,8 @@ export function SiteNav() {
     { name: "PRICING", href: "/#pricing", icon: ShieldCheck },
   ];
 
-  // Return null on console routes — dashboard layout takes full control
-  if (isConsoleRoute) return null;
+  // Return null on console and profile routes — those have dedicated presentation
+  if (isStandaloneRoute) return null;
 
   return (
     <>
@@ -101,13 +103,13 @@ export function SiteNav() {
 
           {/* Right Actions */}
           <div className="flex items-center gap-2.5 sm:gap-3">
-            {/* Sign In to Console — visible on desktop */}
+            {/* 1-Click View Demo Console — visible on desktop */}
             <Link
-              href="/login"
+              href="/dashboard"
               className="hidden md:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.1] border border-white/15 text-[10px] font-sans font-medium tracking-wider text-[#D0D0DC] hover:text-white transition-all btn-interactive"
             >
               <LayoutDashboard className="w-3 h-3 text-[#00A2FF]" />
-              <span>CLIENT CONSOLE</span>
+              <span>VIEW DEMO</span>
             </Link>
 
             <Link href="/order" className="hidden sm:inline-block btn-interactive">
@@ -166,15 +168,15 @@ export function SiteNav() {
             })}
           </div>
 
-          {/* Bottom: Sign In to Console + WhatsApp */}
+          {/* Bottom: View Demo Console + Order Card + WhatsApp */}
           <div className="relative z-10 pt-5 border-t border-white/[0.08] space-y-3">
             <Link
-              href="/login"
+              href="/dashboard"
               onClick={() => setMobileMenuOpen(false)}
               className="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#0044DD] via-[#0066FF] to-[#0099FF] text-white font-sans font-bold text-sm tracking-wider shadow-[0_0_24px_rgba(0,100,255,0.45)] btn-interactive"
             >
               <LayoutDashboard className="w-4 h-4" />
-              <span>SIGN IN TO CLIENT CONSOLE</span>
+              <span>VIEW DEMO CONSOLE (1-CLICK)</span>
             </Link>
 
             <Link

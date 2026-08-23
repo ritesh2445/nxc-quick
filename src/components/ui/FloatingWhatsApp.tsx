@@ -1,10 +1,23 @@
 "use client";
 
 import React, { useState } from "react";
+import { usePathname } from "next/navigation";
 import { WhatsAppIcon } from "./WhatsAppIcon";
 
 export function FloatingWhatsApp() {
   const [showTooltip, setShowTooltip] = useState(false);
+  const pathname = usePathname();
+
+  // Hide on standalone profile and console routes
+  if (
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/login") ||
+    pathname.startsWith("/@") ||
+    (pathname !== "/" && pathname !== "/order" && !pathname.startsWith("/api"))
+  ) {
+    return null;
+  }
 
   return (
     <aside aria-label="WhatsApp Concierge" className="fixed bottom-6 right-6 z-50 flex items-center gap-3">

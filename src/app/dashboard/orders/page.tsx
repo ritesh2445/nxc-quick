@@ -12,7 +12,7 @@ export default async function OrdersPage() {
   const orders = data?.orders || [];
 
   return (
-    <div className="space-y-6 sm:space-y-8 text-left max-w-5xl">
+    <div className="space-y-6 text-left">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">
         <div>

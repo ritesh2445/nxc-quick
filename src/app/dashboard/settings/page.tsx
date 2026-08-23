@@ -98,7 +98,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="space-y-6 sm:space-y-8 text-left max-w-4xl">
+    <div className="space-y-6 text-left">
       {/* Header */}
       <div className="pb-6 border-b border-white/[0.08]">
         <span className="font-mono text-xs text-[#00A2FF] uppercase tracking-[0.25em] font-semibold flex items-center gap-1.5">

@@ -459,30 +459,6 @@ export function DigitalProfileView({ profile, initialLinks }: DigitalProfileView
           </div>
         )}
 
-        {/* Digital Wallets (Apple Wallet & Google Wallet) */}
-        <div className="pt-3 border-t border-white/[0.08] space-y-2">
-          <span className="font-mono text-[10px] text-[#80D0FF] uppercase tracking-[0.25em] block mb-1 font-semibold">
-            DIGITAL WALLET PASSES
-          </span>
-          <div className="grid grid-cols-2 gap-2">
-            <a
-              href={`/api/wallet/apple/${profile.username}`}
-              download={`${profile.username}_apple_pass.json`}
-              className="p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-white/30 flex items-center justify-center gap-1.5 transition-all text-xs font-sans text-white hover:bg-white/[0.06] btn-interactive"
-            >
-              <span className="text-[13px]"></span>
-              <span className="text-[11px] font-medium">Apple Wallet</span>
-            </a>
-            <a
-              href={`/api/wallet/google/${profile.username}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-white/30 flex items-center justify-center gap-1.5 transition-all text-xs font-sans text-white hover:bg-white/[0.06] btn-interactive"
-            >
-              <span className="text-[11px] font-medium">Google Wallet</span>
-            </a>
-          </div>
-        </div>
 
         {/* Hardware Meta Pill */}
         {profile.card && (
