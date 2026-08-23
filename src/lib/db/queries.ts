@@ -1,6 +1,164 @@
 import { db } from "./index";
-import { users, profiles, profileLinks, cards, subscriptions, cardDesigns, orders, analyticsEvents } from "./schema";
+import { users, profiles, profileLinks, cards, subscriptions, cardDesigns, orders, analyticsEvents, contacts } from "./schema";
 import { eq, desc, and, sql } from "drizzle-orm";
+
+export async function getUserByEmail(email: string) {
+  const normalized = email.toLowerCase().trim();
+  return db.select().from(users).where(eq(users.email, normalized)).get();
+}
+
+export async function getUserById(id: string) {
+  return db.select().from(users).where(eq(users.id, id)).get();
+}
+
+export async function createUserWithProfile(data: {
+  email: string;
+  passwordHash: string;
+  fullName: string;
+  username: string;
+  designation?: string;
+  company?: string;
+  phone?: string;
+}) {
+  const normalizedEmail = data.email.toLowerCase().trim();
+  const normalizedUsername = data.username.toLowerCase().trim().replace(/[^a-z0-9_]/g, "");
+  const now = new Date();
+
+  const userId = `usr_${Math.random().toString(36).substring(2, 10)}`;
+  const profileId = `prof_${Math.random().toString(36).substring(2, 10)}`;
+  const cardId = `crd_${Math.random().toString(36).substring(2, 10)}`;
+  const subId = `sub_${Math.random().toString(36).substring(2, 10)}`;
+
+  // 1. Insert User
+  const newUser = db.insert(users).values({
+    id: userId,
+    email: normalizedEmail,
+    passwordHash: data.passwordHash,
+    role: "customer",
+    createdAt: now,
+    updatedAt: now,
+  }).returning().get();
+
+  // 2. Insert Profile
+  const newProfile = db.insert(profiles).values({
+    id: profileId,
+    userId,
+    username: normalizedUsername,
+    fullName: data.fullName,
+    designation: data.designation || "Executive Member",
+    company: data.company || "NXC Sovereign Network",
+    bio: "Sovereign digital identity powered by aerospace-grade tactile hardware.",
+    avatarUrl: `https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80`,
+    phone: data.phone || null,
+    email: normalizedEmail,
+    website: "https://nxcverse.in",
+    location: "Global",
+    isVerified: true,
+    isPublic: true,
+    customTheme: "obsidian",
+    createdAt: now,
+    updatedAt: now,
+  }).returning().get();
+
+  // 3. Assign Default Permanent Hardware Card with Default QR Slug
+  db.insert(cards).values({
+    id: cardId,
+    profileId,
+    userId,
+    variant: "metal",
+    finish: "pitch_black",
+    material: "mirror",
+    nfcUid: `04:${Math.random().toString(16).substring(2, 4).toUpperCase()}:${Math.random().toString(16).substring(2, 4).toUpperCase()}:${Math.random().toString(16).substring(2, 4).toUpperCase()}:99`,
+    qrSlug: normalizedUsername,
+    customEngraving: `FOUNDER NO. ${Math.floor(100 + Math.random() * 900)}`,
+    logoKey: "phoenix",
+    showQr: true,
+    status: "active",
+    activatedAt: now,
+    createdAt: now,
+  }).run();
+
+  // 4. Assign Default Active Subscription
+  db.insert(subscriptions).values({
+    id: subId,
+    userId,
+    profileId,
+    tier: "metal",
+    status: "active",
+    currency: "INR",
+    amount: 1599,
+    billingCycle: "1_year",
+    startDate: now,
+    endDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+    autoRenew: true,
+    createdAt: now,
+  }).run();
+
+  // 5. Default Social Links
+  db.insert(profileLinks).values({
+    id: `lnk_${Math.random().toString(36).substring(2, 10)}`,
+    profileId,
+    platform: "website",
+    label: "Sovereign Link",
+    url: `https://nxcverse.in/@${normalizedUsername}`,
+    icon: "globe",
+    sortOrder: 0,
+    isVisible: true,
+    clickCount: 0,
+    createdAt: now,
+  }).run();
+
+  return { user: newUser, profile: newProfile };
+}
+
+export async function getContactsByUserId(userId: string) {
+  return db
+    .select()
+    .from(contacts)
+    .where(eq(contacts.userId, userId))
+    .orderBy(desc(contacts.createdAt))
+    .all();
+}
+
+export async function getContactsByProfileId(profileId: string) {
+  return db
+    .select()
+    .from(contacts)
+    .where(eq(contacts.profileId, profileId))
+    .orderBy(desc(contacts.createdAt))
+    .all();
+}
+
+export async function createContact(data: {
+  profileId: string;
+  userId: string;
+  fullName: string;
+  email?: string | null;
+  phone?: string | null;
+  company?: string | null;
+  designation?: string | null;
+  notes?: string | null;
+  source?: "profile_exchange" | "manual" | "nfc_tap";
+}) {
+  const id = `cnt_${Math.random().toString(36).substring(2, 10)}`;
+  return db.insert(contacts).values({
+    id,
+    profileId: data.profileId,
+    userId: data.userId,
+    fullName: data.fullName,
+    email: data.email || null,
+    phone: data.phone || null,
+    company: data.company || null,
+    designation: data.designation || null,
+    notes: data.notes || null,
+    source: data.source || "profile_exchange",
+    createdAt: new Date(),
+  }).returning().get();
+}
+
+export async function deleteContact(id: string, userId: string) {
+  return db.delete(contacts).where(and(eq(contacts.id, id), eq(contacts.userId, userId))).run();
+}
 
 export async function getProfileByUsername(username: string) {
   const normalized = username.toLowerCase().trim();

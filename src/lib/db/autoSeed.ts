@@ -2,12 +2,46 @@ import type Database from "better-sqlite3";
 
 export function ensureTablesAndSeed(sqlite: Database.Database) {
   try {
+    // Always ensure contacts table exists even on existing databases
+    sqlite.exec(`
+      CREATE TABLE IF NOT EXISTS contacts (
+        id TEXT PRIMARY KEY,
+        profile_id TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+        user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        full_name TEXT NOT NULL,
+        email TEXT,
+        phone TEXT,
+        company TEXT,
+        designation TEXT,
+        notes TEXT,
+        source TEXT NOT NULL DEFAULT 'profile_exchange',
+        created_at INTEGER NOT NULL
+      );
+      CREATE INDEX IF NOT EXISTS contact_profile_id_idx ON contacts(profile_id);
+      CREATE INDEX IF NOT EXISTS contact_user_id_idx ON contacts(user_id);
+      CREATE INDEX IF NOT EXISTS contact_created_at_idx ON contacts(created_at);
+    `);
+
     // Check if profiles table exists
     const checkTable = sqlite
       .prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='profiles'")
       .get();
 
-    if (checkTable) return;
+    if (checkTable) {
+      // Seed default contacts if empty
+      const existingContacts = sqlite.prepare("SELECT count(*) as c FROM contacts WHERE user_id = 'usr_ritesh'").get() as { c: number };
+      if (existingContacts.c === 0) {
+        const now = Date.now();
+        const insertContact = sqlite.prepare(`
+          INSERT INTO contacts (id, profile_id, user_id, full_name, email, phone, company, designation, notes, source, created_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `);
+        insertContact.run("cnt_1", "prof_ritesh", "usr_ritesh", "Aarav Sharma", "aarav.sharma@apextech.io", "+91 98201 44521", "ApexTech Ventures", "Managing Partner", "Met at Venture Capital Summit Mumbai. Interested in bulk enterprise cards.", "profile_exchange", now - 3600000 * 2);
+        insertContact.run("cnt_2", "prof_ritesh", "usr_ritesh", "Priya Nair", "priya.nair@quantumlux.com", "+91 98450 77123", "Quantum Luxury Group", "Head of Brand Strategy", "Wants 20 custom serialized Atelier cards for leadership team.", "profile_exchange", now - 3600000 * 18);
+        insertContact.run("cnt_3", "prof_ritesh", "usr_ritesh", "David Sterling", "d.sterling@monolith.co", "+1 415 890 2234", "Monolith Capital London", "Chief Technology Officer", "Exchanged contact via contactless NFC tap in Bangalore.", "nfc_tap", now - 3600000 * 48);
+      }
+      return;
+    }
 
     console.log("[DB] Initializing SQLite tables on fresh environment...");
 
@@ -244,8 +278,18 @@ export function ensureTablesAndSeed(sqlite: Database.Database) {
     insertLink.run("lnk_3", "prof_ritesh", "linkedin", "LinkedIn Profile", "https://linkedin.com/in/ritesh-martawar", "linkedin", 2, 1, 35, now);
     insertLink.run("lnk_4", "prof_ritesh", "website", "NXC Verse Official", "https://nxcverse.in", "globe", 3, 1, 80, now);
 
+    // Insert Sample Contacts
+    const insertContact = sqlite.prepare(`
+      INSERT OR IGNORE INTO contacts (id, profile_id, user_id, full_name, email, phone, company, designation, notes, source, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+    insertContact.run("cnt_1", "prof_ritesh", "usr_ritesh", "Aarav Sharma", "aarav.sharma@apextech.io", "+91 98201 44521", "ApexTech Ventures", "Managing Partner", "Met at Venture Capital Summit Mumbai. Interested in bulk enterprise cards.", "profile_exchange", now - 3600000 * 2);
+    insertContact.run("cnt_2", "prof_ritesh", "usr_ritesh", "Priya Nair", "priya.nair@quantumlux.com", "+91 98450 77123", "Quantum Luxury Group", "Head of Brand Strategy", "Wants 20 custom serialized Atelier cards for leadership team.", "profile_exchange", now - 3600000 * 18);
+    insertContact.run("cnt_3", "prof_ritesh", "usr_ritesh", "David Sterling", "d.sterling@monolith.co", "+1 415 890 2234", "Monolith Capital London", "Chief Technology Officer", "Exchanged contact via contactless NFC tap in Bangalore.", "nfc_tap", now - 3600000 * 48);
+
     console.log("[DB] Fresh environment seeded successfully.");
   } catch (err) {
     console.error("[DB] Auto-seed error:", err);
   }
 }
+

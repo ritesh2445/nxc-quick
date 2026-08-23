@@ -143,3 +143,22 @@ export const analyticsEvents = sqliteTable("analytics_events", {
   index("analytics_profile_time_idx").on(table.profileId, table.createdAt),
   index("analytics_event_type_idx").on(table.eventType),
 ]);
+
+export const contacts = sqliteTable("contacts", {
+  id: text("id").primaryKey(),
+  profileId: text("profile_id").notNull().references(() => profiles.id, { onDelete: "cascade" }),
+  userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  fullName: text("full_name").notNull(),
+  email: text("email"),
+  phone: text("phone"),
+  company: text("company"),
+  designation: text("designation"),
+  notes: text("notes"),
+  source: text("source", { enum: ["profile_exchange", "manual", "nfc_tap"] }).default("profile_exchange").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+}, (table) => [
+  index("contact_profile_id_idx").on(table.profileId),
+  index("contact_user_id_idx").on(table.userId),
+  index("contact_created_at_idx").on(table.createdAt),
+]);
+

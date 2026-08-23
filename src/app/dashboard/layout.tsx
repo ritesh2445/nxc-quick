@@ -1,11 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   User,
+  Users,
   CreditCard,
   BarChart3,
   ShoppingBag,
@@ -13,20 +14,43 @@ import {
   ExternalLink,
   Shield,
   Sparkles,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [username, setUsername] = useState("ritesh");
+
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.profile?.username) {
+          setUsername(data.profile.username);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const navItems = [
     { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
     { label: "Profile Editor", href: "/dashboard/profile", icon: User },
+    { label: "Contacts & Leads", href: "/dashboard/contacts", icon: Users },
     { label: "Card & NFC", href: "/dashboard/card", icon: CreditCard },
     { label: "Analytics", href: "/dashboard/analytics", icon: BarChart3 },
     { label: "Orders", href: "/dashboard/orders", icon: ShoppingBag },
     { label: "Settings", href: "/dashboard/settings", icon: Settings },
   ];
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+      router.push("/login");
+      router.refresh();
+    } catch {}
+  };
 
   return (
     <div className="min-h-screen bg-[#000000] text-white flex flex-col md:flex-row pt-16 relative overflow-x-hidden">
@@ -71,14 +95,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </nav>
         </div>
 
-        {/* Bottom Profile Links & Admin shortcut */}
+        {/* Bottom Profile Links, Admin shortcut & Logout */}
         <div className="pt-6 border-t border-white/[0.08] space-y-2.5 mt-6">
           <Link
-            href="/@ritesh"
+            href={`/@${username}`}
             target="_blank"
             className="flex items-center justify-between px-4 py-2.5 rounded-full bg-white/[0.03] border border-white/10 text-xs font-sans text-[#D0D0DC] hover:text-white hover:border-[#0099FF]/50 transition-all btn-interactive"
           >
-            <span className="truncate font-medium">View Live Profile</span>
+            <span className="truncate font-medium">Live @{username}</span>
             <ExternalLink className="w-3.5 h-3.5 text-[#00A2FF]" />
           </Link>
 
@@ -89,6 +113,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Shield className="w-3.5 h-3.5" />
             <span>Admin Terminal</span>
           </Link>
+
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-2 px-4 py-2 rounded-full text-[11px] font-mono text-[#70707C] hover:text-red-400 hover:bg-red-950/20 transition-colors btn-interactive"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span>Sign Out</span>
+          </button>
         </div>
       </aside>
 

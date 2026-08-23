@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import confetti from "canvas-confetti";
 import { Modal } from "@/components/ui/Modal";
+import { Button } from "@/components/ui/Button";
 import { downloadVCard } from "@/lib/vcf";
 import {
   Phone,
@@ -62,6 +63,16 @@ export function DigitalProfileView({ profile }: { profile: ProfileData }) {
   const [likesCount, setLikesCount] = useState(42);
   const [isLiked, setIsLiked] = useState(false);
   const [floatingHearts, setFloatingHearts] = useState<Array<{ id: number; x: number }>>([]);
+
+  // Exchange Contact State
+  const [exchangeModalOpen, setExchangeModalOpen] = useState(false);
+  const [exchangeName, setExchangeName] = useState("");
+  const [exchangePhone, setExchangePhone] = useState("");
+  const [exchangeEmail, setExchangeEmail] = useState("");
+  const [exchangeCompany, setExchangeCompany] = useState("");
+  const [exchangeNotes, setExchangeNotes] = useState("");
+  const [isExchanging, setIsExchanging] = useState(false);
+  const [exchangeSent, setExchangeSent] = useState(false);
 
   const trackEvent = (eventType: string, linkId?: string) => {
     fetch("/api/analytics/event", {
@@ -133,6 +144,55 @@ export function DigitalProfileView({ profile }: { profile: ProfileData }) {
     } catch {}
 
     setTimeout(() => setSaved(false), 3000);
+  };
+
+  const handleExchangeSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!exchangeName) return;
+    setIsExchanging(true);
+
+    try {
+      const res = await fetch("/api/contacts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: exchangeName,
+          phone: exchangePhone,
+          email: exchangeEmail,
+          company: exchangeCompany,
+          notes: exchangeNotes,
+          profileId: profile.id,
+          username: profile.username,
+          source: "profile_exchange",
+        }),
+      });
+
+      if (res.ok) {
+        setExchangeSent(true);
+        trackEvent("contact_exchange");
+        try {
+          confetti({
+            particleCount: 50,
+            spread: 70,
+            origin: { y: 0.6 },
+            colors: ["#00A2FF", "#00FFCC", "#FFFFFF"],
+          });
+        } catch {}
+        setTimeout(() => {
+          setExchangeModalOpen(false);
+          setExchangeSent(false);
+          setExchangeName("");
+          setExchangePhone("");
+          setExchangeEmail("");
+          setExchangeCompany("");
+          setExchangeNotes("");
+        }, 3000);
+      }
+    } catch (err) {
+      console.error("Exchange failed", err);
+    } finally {
+      setIsExchanging(false);
+    }
   };
 
   const handleOpenQr = async () => {
@@ -292,23 +352,33 @@ export function DigitalProfileView({ profile }: { profile: ProfileData }) {
           </div>
         </div>
 
-        {/* Primary 1-Click Save Contact Action (Porcelain Gloss Pill) */}
-        <button
-          onClick={handleSaveContact}
-          className="w-full py-4 rounded-full bg-gradient-to-r from-[#FFFBE8] via-[#FFFFFF] to-[#E8DFC8] text-black font-sans font-bold text-xs tracking-[0.2em] uppercase shadow-[0_10px_35px_rgba(255,255,255,0.25)] hover:shadow-[0_10px_45px_rgba(255,255,255,0.45)] flex items-center justify-center gap-2 btn-interactive"
-        >
-          {saved ? (
-            <>
-              <Check className="w-4 h-4 text-[#008800]" />
-              <span>CONTACT SAVED TO PHONE (.VCF)</span>
-            </>
-          ) : (
-            <>
-              <ArrowDownToLine className="w-4 h-4" />
-              <span>SAVE CONTACT</span>
-            </>
-          )}
-        </button>
+        {/* Primary 1-Click Save Contact & Exchange Contact Action Buttons */}
+        <div className="space-y-2.5">
+          <button
+            onClick={handleSaveContact}
+            className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#FFFBE8] via-[#FFFFFF] to-[#E8DFC8] text-black font-sans font-bold text-xs tracking-[0.2em] uppercase shadow-[0_10px_35px_rgba(255,255,255,0.25)] hover:shadow-[0_10px_45px_rgba(255,255,255,0.45)] flex items-center justify-center gap-2 btn-interactive"
+          >
+            {saved ? (
+              <>
+                <Check className="w-4 h-4 text-[#008800]" />
+                <span>SAVED TO PHONE (.VCF)</span>
+              </>
+            ) : (
+              <>
+                <ArrowDownToLine className="w-4 h-4" />
+                <span>SAVE CONTACT (.VCF)</span>
+              </>
+            )}
+          </button>
+
+          <button
+            onClick={() => setExchangeModalOpen(true)}
+            className="w-full py-3 rounded-full bg-white/[0.04] hover:bg-[#0055FF]/15 border border-[#0099FF]/40 hover:border-[#0099FF] text-[#00E5FF] font-sans font-medium text-xs tracking-[0.18em] uppercase flex items-center justify-center gap-2 transition-all btn-interactive shadow-[0_0_15px_rgba(0,140,255,0.15)]"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-[#00A2FF]" />
+            <span>EXCHANGE CONTACT WITH {profile.fullName.split(" ")[0].toUpperCase()}</span>
+          </button>
+        </div>
 
         {/* Direct Action Grid (Call, Email, WhatsApp) */}
         <div className="grid grid-cols-3 gap-2.5 pt-1">
@@ -407,6 +477,118 @@ export function DigitalProfileView({ profile }: { profile: ProfileData }) {
           Tap metal card or scan QR to connect instantaneously.
         </p>
       </div>
+
+      {/* Exchange Contact Modal */}
+      <Modal
+        isOpen={exchangeModalOpen}
+        onClose={() => setExchangeModalOpen(false)}
+        title={`Connect with ${profile.fullName}`}
+        subtitle="Share your contact information directly to their sovereign address book"
+      >
+        {exchangeSent ? (
+          <div className="py-8 text-center space-y-3">
+            <div className="w-12 h-12 rounded-full bg-[#00A2FF]/20 border border-[#00A2FF] text-[#00E5FF] flex items-center justify-center mx-auto">
+              <Check className="w-6 h-6" />
+            </div>
+            <h3 className="font-cinzel text-base font-medium text-white">
+              Contact Sent Successfully
+            </h3>
+            <p className="font-sans text-xs text-[#9E9EA8]">
+              {profile.fullName} has received your contact card in their private dashboard.
+            </p>
+          </div>
+        ) : (
+          <form onSubmit={handleExchangeSubmit} className="space-y-4 text-left">
+            <div>
+              <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1">
+                Your Full Name *
+              </label>
+              <input
+                type="text"
+                required
+                value={exchangeName}
+                onChange={(e) => setExchangeName(e.target.value)}
+                placeholder="e.g. Vikram Malhotra"
+                className="w-full bg-[#0E0E14] border border-white/[0.1] rounded-[10px] px-3.5 py-2.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF]"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1">
+                  Phone Number
+                </label>
+                <input
+                  type="tel"
+                  value={exchangePhone}
+                  onChange={(e) => setExchangePhone(e.target.value)}
+                  placeholder="+91 98765 43210"
+                  className="w-full bg-[#0E0E14] border border-white/[0.1] rounded-[10px] px-3.5 py-2.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF]"
+                />
+              </div>
+              <div>
+                <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  value={exchangeEmail}
+                  onChange={(e) => setExchangeEmail(e.target.value)}
+                  placeholder="vikram@apex.io"
+                  className="w-full bg-[#0E0E14] border border-white/[0.1] rounded-[10px] px-3.5 py-2.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF]"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1">
+                Company / Organization
+              </label>
+              <input
+                type="text"
+                value={exchangeCompany}
+                onChange={(e) => setExchangeCompany(e.target.value)}
+                placeholder="Apex Capital"
+                className="w-full bg-[#0E0E14] border border-white/[0.1] rounded-[10px] px-3.5 py-2.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1">
+                Note / Message
+              </label>
+              <textarea
+                rows={2}
+                value={exchangeNotes}
+                onChange={(e) => setExchangeNotes(e.target.value)}
+                placeholder="Great connecting with you today..."
+                className="w-full bg-[#0E0E14] border border-white/[0.1] rounded-[10px] p-3 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF]"
+              />
+            </div>
+
+            <div className="pt-2 flex justify-end gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setExchangeModalOpen(false)}
+                className="text-xs"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="primary"
+                size="sm"
+                isLoading={isExchanging}
+                className="text-xs tracking-wider"
+              >
+                SEND MY CONTACT
+              </Button>
+            </div>
+          </form>
+        )}
+      </Modal>
 
       {/* QR Code Modal */}
       <Modal

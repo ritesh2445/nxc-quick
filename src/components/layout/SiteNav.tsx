@@ -90,18 +90,17 @@ export function SiteNav() {
             })}
           </nav>
 
-          {/* Right: Order Now CTA & Mobile Hamburger Toggle */}
-          <div className="flex items-center gap-3">
-            <Link href="/order" className="hidden sm:inline-block btn-interactive">
-              <button className="px-5 py-2 rounded-full bg-gradient-to-r from-[#0055FF] via-[#0088FF] to-[#00A2FF] text-[10px] font-sans font-bold tracking-[0.22em] text-white uppercase transition-all duration-300 shadow-[0_0_20px_rgba(0,120,255,0.4)] hover:shadow-[0_0_30px_rgba(0,150,255,0.7)] flex items-center gap-1.5">
-                <ShoppingBag className="w-3 h-3" />
-                <span>ORDER NOW</span>
-              </button>
+          {/* Right: Order Now CTA, Sign In & Mobile Hamburger Toggle */}
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <Link href="/login" className="hidden md:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.1] border border-white/15 text-[10px] font-sans font-medium tracking-wider text-[#D0D0DC] hover:text-white transition-all btn-interactive">
+              <User className="w-3 h-3 text-[#00A2FF]" />
+              <span>SIGN IN</span>
             </Link>
 
-            <Link href="/customize" className="hidden md:inline-block btn-interactive">
-              <button className="px-4 py-2 rounded-full bg-white/[0.04] border border-white/20 hover:border-white/60 text-[10px] font-sans font-medium tracking-[0.2em] text-white hover:bg-white/10 transition-all duration-300">
-                ATELIER
+            <Link href="/order" className="hidden sm:inline-block btn-interactive">
+              <button className="px-4 sm:px-5 py-2 rounded-full bg-gradient-to-r from-[#0055FF] via-[#0088FF] to-[#00A2FF] text-[10px] font-sans font-bold tracking-[0.22em] text-white uppercase transition-all duration-300 shadow-[0_0_20px_rgba(0,120,255,0.4)] hover:shadow-[0_0_30px_rgba(0,150,255,0.7)] flex items-center gap-1.5">
+                <ShoppingBag className="w-3 h-3" />
+                <span>ORDER NOW</span>
               </button>
             </Link>
 
@@ -162,6 +161,17 @@ export function SiteNav() {
 
           {/* Bottom CTAs & Concierge */}
           <div className="space-y-3 pt-6 border-t border-white/10 relative z-10">
+            <Link
+              href="/login"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block w-full"
+            >
+              <button className="w-full py-3 rounded-xl bg-white/[0.04] border border-white/15 text-white font-sans font-semibold text-xs tracking-[0.2em] uppercase hover:bg-white/10 transition-all flex items-center justify-center gap-2 btn-interactive">
+                <User className="w-4 h-4 text-[#00A2FF]" />
+                <span>CLIENT CONSOLE SIGN IN</span>
+              </button>
+            </Link>
+
             <Link
               href="/order"
               onClick={() => setMobileMenuOpen(false)}
