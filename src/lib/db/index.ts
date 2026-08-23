@@ -27,6 +27,9 @@ function createNullDb(): any {
     {},
     {
       get(_target, prop) {
+        if (prop === "then") return undefined; // Never treat stub as a thenable/Promise
+        if (prop === "toJSON") return () => null;
+        if (typeof prop === "symbol") return undefined;
         // Terminal methods that queries call at the end of the chain
         if (prop === "get") return () => null;
         if (prop === "all") return () => [];
