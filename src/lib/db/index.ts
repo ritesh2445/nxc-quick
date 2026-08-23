@@ -15,8 +15,33 @@ const globalForDb = globalThis as unknown as {
   sqliteInstance: any;
 };
 
-function initDb() {
-  // Check if running inside Cloudflare Worker runtime with D1 binding
+/**
+ * A safe no-op stub returned when no real DB driver is available
+ * (e.g. better-sqlite3 native binary missing on Vercel serverless).
+ * Every method returns an object that mimics Drizzle's chainable query API
+ * and ultimately produces an empty result, letting all query functions fall
+ * through to their hard-coded demo-data fallbacks.
+ */
+function createNullDb(): any {
+  const stub: any = new Proxy(
+    {},
+    {
+      get(_target, prop) {
+        // Terminal methods that queries call at the end of the chain
+        if (prop === "get") return () => null;
+        if (prop === "all") return () => [];
+        if (prop === "run") return () => ({ rowsAffected: 0 });
+        if (prop === "execute") return () => ({ rowsAffected: 0 });
+        // Everything else — return a proxy that keeps the chain going
+        return () => stub;
+      },
+    }
+  );
+  return stub;
+}
+
+function initDb(): any {
+  // 1. Cloudflare D1 binding
   const cloudflareD1 =
     (globalThis as any).DB ||
     (globalThis as any).process?.env?.DB ||
@@ -31,7 +56,7 @@ function initDb() {
     }
   }
 
-  // Local development / Node.js build runtime using SQLite
+  // 2. Local / serverless SQLite via better-sqlite3
   try {
     const Database = require("better-sqlite3");
     const { drizzle } = require("drizzle-orm/better-sqlite3");
@@ -74,12 +99,15 @@ function initDb() {
     globalForDb.sqliteInstance = sqlite;
     return drizzle(sqlite, { schema });
   } catch (err) {
-    console.error("[DB] Failed to initialize database driver:", err);
-    throw err;
+    // better-sqlite3 is unavailable (Vercel serverless, Edge, etc.)
+    // Return a safe no-op stub so all query functions fall through to their
+    // hard-coded demo-data fallbacks instead of crashing the entire page.
+    console.warn("[DB] SQLite driver unavailable — using null stub (demo data will be served):", err);
+    return createNullDb();
   }
 }
 
-export const db = globalForDb.dbInstance ?? initDb();
+export const db: any = globalForDb.dbInstance ?? initDb();
 globalForDb.dbInstance = db;
 
 export * from "./schema";
