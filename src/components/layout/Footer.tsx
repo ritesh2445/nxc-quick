@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { Instagram, Mail } from "lucide-react";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
+import { BrandLogo } from "@/components/layout/BrandLogo";
 
 export function Footer() {
   return (
@@ -10,11 +11,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10 pb-16 border-b border-white/[0.08]">
           {/* Brand Col */}
           <div className="md:col-span-2 space-y-4">
-            <Link href="/" className="flex items-center gap-3">
-              <span className="font-sans font-bold text-xl tracking-[0.25em] text-white">
-                NXC <span className="font-light text-[#E2E0DC]">VERSE</span>
-              </span>
-            </Link>
+            <BrandLogo size="md" />
             <p className="font-sans text-xs text-[#9E9EA8] leading-relaxed max-w-sm">
               Crafting premium NFC and QR visiting cards forged in aerospace-grade metal, paired with a permanent sovereign digital profile.
             </p>

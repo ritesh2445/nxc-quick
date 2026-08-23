@@ -16,6 +16,7 @@ import {
   User,
 } from "lucide-react";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
+import { BrandLogo } from "@/components/layout/BrandLogo";
 import { cn } from "@/lib/utils";
 
 export function SiteNav() {
@@ -63,16 +64,8 @@ export function SiteNav() {
         <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#0088FF]/30 to-transparent opacity-80 pointer-events-none" />
 
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          {/* Left: Brand Wordmark with Electric Blue Core Dot */}
-          <Link
-            href="/"
-            className="group flex items-center gap-2.5 focus:outline-none btn-interactive"
-          >
-            <div className="w-2.5 h-2.5 rounded-full bg-[#0099FF] shadow-[0_0_10px_#0099FF] group-hover:scale-125 transition-transform duration-300" />
-            <span className="font-cinzel font-semibold text-lg md:text-xl tracking-[0.25em] text-white group-hover:text-white transition-colors">
-              NXC <span className="font-light text-[#E2E0DC]">VERSE</span>
-            </span>
-          </Link>
+          {/* Left: Brand Wordmark with Transparent NXC Logo, Orbital Doodles & Blue Sparkle Loops */}
+          <BrandLogo />
 
           {/* Center: Navigation Links with Symbols & Glassmorphic Hover */}
           <nav className="hidden lg:flex items-center gap-1 xl:gap-2 bg-white/[0.03] border border-white/[0.06] rounded-full px-4 py-1.5 backdrop-blur-xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
@@ -130,10 +123,13 @@ export function SiteNav() {
           {/* Ambient Electric Blue Glow */}
           <div className="absolute top-1/4 right-0 w-80 h-80 bg-[#0066FF]/15 rounded-full blur-[140px] pointer-events-none overflow-hidden" />
 
-          <div className="space-y-3 relative z-10">
-            <span className="font-mono text-[10px] text-[#0099FF] uppercase tracking-[0.3em] font-semibold">
-              NAVIGATION MATRIX
-            </span>
+          <div className="space-y-4 relative z-10">
+            <div className="pb-3 border-b border-white/10 flex items-center justify-between">
+              <BrandLogo size="sm" />
+              <span className="font-mono text-[9px] text-[#0099FF] uppercase tracking-[0.25em] font-semibold">
+                MATRIX
+              </span>
+            </div>
 
             <div className="space-y-1.5 pt-2">
               {navLinks.map((link) => {

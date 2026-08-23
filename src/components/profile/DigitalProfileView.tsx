@@ -25,6 +25,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
+import { BrandLogo } from "@/components/layout/BrandLogo";
 
 interface ProfileData {
   id: string;
@@ -191,12 +192,7 @@ export function DigitalProfileView({ profile }: { profile: ProfileData }) {
       <div className="w-full max-w-md bg-[#050508]/90 border border-white/[0.12] rounded-[28px] sm:rounded-[32px] p-4 sm:p-7 space-y-5 sm:space-y-6 shadow-[0_30px_90px_rgba(0,0,0,0.98),0_0_30px_rgba(0,120,255,0.15)] backdrop-blur-2xl relative z-10 my-auto overflow-hidden">
         {/* Top Header Row: Brand, Verification & Quick Actions */}
         <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
-          <Link href="/" className="group flex items-center gap-2 btn-interactive">
-            <div className="w-2 h-2 rounded-full bg-[#0099FF] shadow-[0_0_8px_#0099FF]" />
-            <span className="font-cinzel font-semibold text-xs tracking-[0.25em] text-white/80 group-hover:text-white transition-colors">
-              NXC VERSE
-            </span>
-          </Link>
+          <BrandLogo size="sm" />
 
           <div className="flex items-center gap-2">
             {profile.isVerified && (

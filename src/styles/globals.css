@@ -182,6 +182,105 @@ body::before {
   animation: ambientPulse 8s ease-in-out infinite;
 }
 
+/* Blue Sparkling & Cyber Doodle Animations */
+@keyframes sparkleTwinkle {
+  0%, 100% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+    filter: drop-shadow(0 0 2px #0099FF);
+  }
+  50% {
+    transform: scale(1.15) rotate(90deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 8px #00D4FF) drop-shadow(0 0 14px #0088FF);
+  }
+}
+
+@keyframes sparkleFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg) scale(0.6);
+    opacity: 0.15;
+  }
+  50% {
+    transform: translateY(-4px) rotate(45deg) scale(1);
+    opacity: 0.95;
+    filter: drop-shadow(0 0 6px #00D4FF);
+  }
+}
+
+@keyframes doodleOrbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes doodleOrbitRev {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes textShimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes electricPulseGlow {
+  0%, 100% {
+    opacity: 0.45;
+    transform: scale(0.96);
+    filter: drop-shadow(0 0 8px rgba(0, 140, 255, 0.4));
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.08);
+    filter: drop-shadow(0 0 16px rgba(0, 200, 255, 0.8)) drop-shadow(0 0 24px rgba(0, 100, 255, 0.5));
+  }
+}
+
+.animate-sparkle-1 {
+  animation: sparkleTwinkle 2.6s ease-in-out infinite;
+}
+
+.animate-sparkle-2 {
+  animation: sparkleTwinkle 3.2s ease-in-out 0.9s infinite;
+}
+
+.animate-sparkle-3 {
+  animation: sparkleTwinkle 2.8s ease-in-out 1.6s infinite;
+}
+
+.animate-sparkle-float {
+  animation: sparkleFloat 4s ease-in-out infinite;
+}
+
+.animate-doodle-orbit {
+  animation: doodleOrbit 16s linear infinite;
+}
+
+.animate-doodle-orbit-fast {
+  animation: doodleOrbitRev 10s linear infinite;
+}
+
+.animate-text-shimmer {
+  background-size: 200% auto;
+  animation: textShimmer 6s linear infinite;
+}
+
+.animate-electric-pulse {
+  animation: electricPulseGlow 3.5s ease-in-out infinite;
+}
+
 /* Electric Blue Cybernetic Glows & Luxury Lightings */
 .electric-glow-sm {
   box-shadow: 0 0 15px rgba(0, 140, 255, 0.3), inset 0 0 10px rgba(0, 140, 255, 0.15);
