@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { formatCurrency } from "@/lib/utils";
-import { Check, Shield, Zap, Sparkles, ArrowRight } from "lucide-react";
+import { Check, Shield, Zap, Sparkles } from "lucide-react";
 
 export function PricingSection() {
   const [currency, setCurrency] = useState<"INR" | "USD">("INR");
@@ -225,11 +225,7 @@ export function PricingSection() {
                     </Button>
                   </Link>
 
-                  <Link href={`/customize?tier=${p.tier}`} className="block text-center btn-interactive">
-                    <span className="font-mono text-[10px] text-[#70707C] hover:text-[#00A2FF] tracking-wider uppercase inline-flex items-center gap-1 transition-colors">
-                      Customize in Atelier <ArrowRight className="w-3 h-3" />
-                    </span>
-                  </Link>
+
                 </div>
               </div>
             );

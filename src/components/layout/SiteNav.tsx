@@ -7,13 +7,11 @@ import {
   Menu,
   X,
   CreditCard,
-  Layers,
   Sparkles,
   Zap,
   ShieldCheck,
   ShoppingBag,
   ArrowUpRight,
-  User,
   LayoutDashboard,
 } from "lucide-react";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
@@ -53,8 +51,6 @@ export function SiteNav() {
 
   const navLinks = [
     { name: "PRODUCT", href: "/#products", icon: CreditCard },
-    { name: "DESIGNS", href: "/designs", icon: Layers },
-    { name: "ATELIER", href: "/customize", icon: Sparkles },
     { name: "ORDER", href: "/order", icon: ShoppingBag },
     { name: "HOW IT WORKS", href: "/#how-it-works", icon: Zap },
     { name: "PRICING", href: "/#pricing", icon: ShieldCheck },

@@ -27,7 +27,7 @@ export default async function OrdersPage() {
           </p>
         </div>
 
-        <Link href="/customize" className="w-full sm:w-auto btn-interactive">
+        <Link href="/order" className="w-full sm:w-auto btn-interactive">
           <Button variant="primary" size="sm" className="w-full sm:w-auto text-xs tracking-wider">
             <ShoppingBag className="w-3.5 h-3.5 mr-1" />
             COMMISSION NEW CARD
@@ -56,9 +56,9 @@ export default async function OrdersPage() {
                 Commission your bespoke aerospace metal card with permanent NFC chip and laser engraved QR matrix.
               </p>
             </div>
-            <Link href="/customize">
+            <Link href="/order">
               <Button variant="primary" size="sm" className="text-xs rounded-full">
-                Open Atelier Configurator
+                Order a Card
               </Button>
             </Link>
           </div>

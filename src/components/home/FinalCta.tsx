@@ -32,11 +32,7 @@ export function FinalCta() {
               ACQUIRE YOUR CARD <ArrowUpRight className="w-4 h-4 ml-1.5" />
             </Button>
           </Link>
-          <Link href="/customize" className="btn-interactive">
-            <Button variant="outline" size="lg" className="h-12 px-8 border-white/20 hover:border-white/60 text-white backdrop-blur-md">
-              CUSTOMIZE ATELIER
-            </Button>
-          </Link>
+
           <a
             href="https://wa.me/919561248677"
             target="_blank"

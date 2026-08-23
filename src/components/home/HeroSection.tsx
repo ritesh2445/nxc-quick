@@ -92,12 +92,6 @@ export function HeroSection() {
               </button>
             </Link>
 
-            {/* Secondary Design / Atelier Button */}
-            <Link href="/customize" className="btn-interactive">
-              <button className="px-4 sm:px-6 py-3 sm:py-3.5 rounded-full bg-white/[0.05] hover:bg-white/[0.1] border border-white/20 hover:border-white/60 text-[#FFFFFF] font-sans font-medium text-[11px] sm:text-xs md:text-sm tracking-wider uppercase flex items-center gap-1.5 sm:gap-2 backdrop-blur-md">
-                CUSTOMIZE ATELIER
-              </button>
-            </Link>
 
             {/* 3D Interactive Inspection Pill */}
             <button

@@ -225,7 +225,7 @@ export function MaterialShowcase() {
               {/* Primary Action Button */}
               <Link href={`/order?finish=${current.id}`} className="block btn-interactive">
                 <button className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#0055FF] via-[#0088FF] to-[#00A2FF] text-white font-sans font-bold text-xs tracking-[0.2em] uppercase shadow-[0_0_25px_rgba(0,120,255,0.45)] hover:shadow-[0_0_35px_rgba(0,150,255,0.7)] flex items-center justify-center gap-2">
-                  <span>CUSTOMIZE IN {current.name.toUpperCase()}</span>
+                  <span>ORDER IN {current.name.toUpperCase()}</span>
                   <ArrowUpRight className="w-4 h-4" />
                 </button>
               </Link>

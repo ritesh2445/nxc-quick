@@ -49,12 +49,10 @@ export function FooterContent() {
           {/* Navigation Links */}
           <div className="space-y-3">
             <h4 className="font-sans text-xs font-semibold text-white tracking-widest uppercase">
-              Product & Atelier
+              Product
             </h4>
             <ul className="space-y-2.5 text-xs font-sans text-[#9E9EA8]">
               <li><Link href="/order" className="text-white hover:text-[#00A2FF] transition-colors font-medium">Order Metal Card</Link></li>
-              <li><Link href="/designs" className="hover:text-white transition-colors">Hardware Collection</Link></li>
-              <li><Link href="/customize" className="hover:text-white transition-colors">Card Configurator</Link></li>
               <li><Link href="/#how-it-works" className="hover:text-white transition-colors">How It Works</Link></li>
               <li><Link href="/#pricing" className="hover:text-white transition-colors">Acquisition Tiers</Link></li>
               <li><Link href="/login" className="hover:text-white transition-colors">Client Console</Link></li>
