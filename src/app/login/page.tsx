@@ -188,12 +188,24 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#000000] text-white flex flex-col justify-center items-center px-4 py-12 relative overflow-hidden text-left">
-      {/* Ambient background studio glows */}
+    <div className="min-h-screen bg-[#000000] text-white flex flex-col px-4 relative overflow-hidden text-left">
+      {/* Ambient glows */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-[#0055FF]/10 rounded-full blur-[200px] pointer-events-none" />
       <div className="absolute bottom-10 right-10 w-[450px] h-[450px] bg-[#0099FF]/10 rounded-full blur-[180px] pointer-events-none" />
 
-      {/* Main Container */}
+      {/* Standalone Top Bar */}
+      <div className="flex items-center justify-between py-4 relative z-10">
+        <Link href="/" className="flex items-center gap-2 font-cinzel text-sm font-semibold tracking-[0.25em] text-white uppercase hover:text-[#00A2FF] transition-colors">
+          <span className="text-[#00A2FF]">NXC</span> VERSE
+        </Link>
+        <Link href="/" className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/10 text-[11px] font-sans text-[#9E9EA8] hover:text-white transition-all">
+          <ArrowLeft className="w-3 h-3" />
+          <span>Back to Site</span>
+        </Link>
+      </div>
+
+      {/* Main Container — centred vertically in remaining space */}
+      <div className="flex-1 flex items-center justify-center py-8">
       <div className="w-full max-w-lg relative z-10 space-y-6">
         {/* Brand Header */}
         <div className="text-center flex flex-col items-center space-y-3">
@@ -585,6 +597,7 @@ export default function LoginPage() {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

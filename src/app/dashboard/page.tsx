@@ -66,9 +66,9 @@ export default async function DashboardPage() {
   ];
 
   return (
-    <div className="space-y-6 sm:space-y-8 text-left">
+    <div className="space-y-6 text-left">
       {/* Top Greeting Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-5 border-b border-white/[0.08]">
         <div className="space-y-1">
           <span className="font-mono text-[11px] text-[#00A2FF] uppercase tracking-[0.25em] font-semibold flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5" /> CLIENT CONSOLE · SOVEREIGN IDENTITY
