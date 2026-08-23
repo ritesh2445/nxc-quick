@@ -86,9 +86,9 @@ export function LiveProfilePreview() {
               href="https://wa.me/919561248677"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-[2px] bg-[#18181C] border border-[#25D366]/40 hover:border-[#25D366] text-[#25D366] text-xs font-mono tracking-wider transition-all hover:shadow-[0_0_15px_rgba(37,211,102,0.3)] btn-interactive"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-[4px] bg-[#25D366] hover:bg-[#20ba59] text-white text-xs font-sans font-semibold tracking-wider transition-all shadow-sm btn-interactive"
             >
-              <WhatsAppIcon className="w-4 h-4 text-[#25D366]" color="#25D366" /> WhatsApp Us
+              <WhatsAppIcon className="w-4 h-4 text-white" color="#FFFFFF" /> WhatsApp Us
             </a>
           </div>
         </div>

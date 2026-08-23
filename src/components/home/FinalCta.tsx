@@ -41,9 +41,9 @@ export function FinalCta() {
             href="https://wa.me/919561248677"
             target="_blank"
             rel="noopener noreferrer"
-            className="h-12 px-6 rounded-full bg-[#0E0E12] border border-[#25D366]/40 hover:border-[#25D366] text-[#25D366] hover:text-white flex items-center gap-2 text-xs font-mono tracking-wider transition-all duration-300 hover:shadow-[0_0_25px_rgba(37,211,102,0.35)] btn-interactive"
+            className="h-12 px-6 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white font-sans font-bold flex items-center gap-2 text-xs tracking-wider transition-all duration-200 shadow-md btn-interactive"
           >
-            <WhatsAppIcon className="w-4 h-4 text-[#25D366]" color="#25D366" /> WhatsApp Concierge
+            <WhatsAppIcon className="w-4 h-4 text-white" color="#FFFFFF" /> WhatsApp Concierge
           </a>
         </div>
 

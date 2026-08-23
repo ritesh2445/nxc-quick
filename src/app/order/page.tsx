@@ -571,9 +571,9 @@ export default function OrderPage() {
                 href={`https://wa.me/919561248677?text=Hello%20NXC%20Verse%20Concierge,%20I%20just%20placed%20order%20${orderId}%20for%20${name}.`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-3 rounded-xl bg-[#25D366] text-black font-sans font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-lg btn-interactive"
+                className="px-6 py-3 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-sans font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-md btn-interactive"
               >
-                <WhatsAppIcon className="w-4 h-4 text-black" color="#000000" />
+                <WhatsAppIcon className="w-4 h-4 text-white" color="#FFFFFF" />
                 <span>Connect with Concierge</span>
               </a>
 

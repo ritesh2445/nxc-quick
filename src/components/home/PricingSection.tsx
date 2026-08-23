@@ -152,22 +152,23 @@ export function PricingSection() {
         </div>
 
         {/* 3 Tier Product Panels */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-8 items-stretch pt-4">
           {plans.map((p) => {
             const price = currency === "INR" ? p.priceInr : p.priceUsd;
             return (
               <div
                 key={p.tier}
-                className={`relative rounded-[20px] p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 overflow-hidden ${
+                className={`relative rounded-[20px] p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 ${
                   p.isPopular
-                    ? "bg-[#0B0B0E] border-2 border-white/40 shadow-[0_30px_70px_rgba(0,0,0,0.98),0_0_30px_rgba(255,255,255,0.1),inset_0_1px_1px_rgba(255,255,255,0.3)] scale-[1.02]"
+                    ? "bg-[#0B0B0E] border-2 border-white/50 shadow-[0_30px_70px_rgba(0,0,0,0.98),0_0_30px_rgba(255,255,255,0.1),inset_0_1px_1px_rgba(255,255,255,0.3)] scale-[1.02]"
                     : "bg-[#060608] border border-white/[0.1] hover:border-white/25 shadow-[0_20px_50px_rgba(0,0,0,0.8)] hover:-translate-y-1"
                 }`}
               >
-                {/* Badge */}
+                {/* Most Popular Badge */}
                 {p.isPopular && (
-                  <div className="absolute -top-3.5 left-8 px-4 py-1 rounded-full bg-white text-black font-mono text-[10px] font-bold tracking-widest uppercase shadow-[0_4px_15px_rgba(255,255,255,0.3)]">
-                    {p.badge}
+                  <div className="absolute -top-3.5 left-6 sm:left-8 px-4 py-1 rounded-full bg-white text-black font-mono text-[10px] font-extrabold tracking-widest uppercase shadow-[0_4px_20px_rgba(255,255,255,0.4)] border border-white z-30 flex items-center gap-1.5">
+                    <Sparkles className="w-3 h-3 text-[#0088FF]" />
+                    <span>{p.badge}</span>
                   </div>
                 )}
 
