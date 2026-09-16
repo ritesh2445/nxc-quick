@@ -16,11 +16,9 @@ import {
   FileSpreadsheet,
   Contact,
   Radio,
-  Sparkles,
-  ExternalLink,
-  MessageSquare,
   Check,
   ChevronRight,
+  ShieldCheck,
 } from "lucide-react";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 
@@ -154,18 +152,18 @@ export default function ContactsPage() {
   const webCount = contacts.filter((c) => c.source === "profile_exchange").length;
 
   return (
-    <div className="space-y-6 text-left">
+    <div className="space-y-6 text-left max-w-6xl">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">
         <div>
-          <span className="font-mono text-xs text-[#00A2FF] uppercase tracking-[0.25em] font-semibold flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5" /> SOVEREIGN LEADS & CONTACTS
+          <span className="font-mono text-xs text-[#A1A1AA] uppercase tracking-[0.2em] font-medium flex items-center gap-1.5">
+            <Users className="w-3.5 h-3.5 text-[#C8C6C0]" /> SOVEREIGN LEADS & CONTACTS
           </span>
           <h1 className="font-cinzel font-medium text-2xl sm:text-3xl text-white tracking-wide mt-1">
             Contacts Management
           </h1>
-          <p className="font-sans text-xs text-[#9E9EA8] mt-0.5">
-            Track and download contacts received via your physical NFC card tap or digital profile exchange.
+          <p className="font-sans text-xs text-[#8E8E98] mt-0.5">
+            View, filter, and export contacts collected via your physical NFC card tap or sovereign profile exchange.
           </p>
         </div>
 
@@ -175,9 +173,9 @@ export default function ContactsPage() {
             variant="outline"
             size="sm"
             onClick={handleDownloadCsv}
-            className="text-xs rounded-full border-white/20 hover:border-[#0088FF] text-white flex-1 sm:flex-initial"
+            className="text-xs rounded-full border-white/20 hover:border-white/40 text-white min-h-[44px] sm:min-h-0 flex-1 sm:flex-initial"
           >
-            <FileSpreadsheet className="w-3.5 h-3.5 mr-1 text-[#00A2FF]" />
+            <FileSpreadsheet className="w-3.5 h-3.5 mr-1 text-[#A1A1AA]" />
             CSV
           </Button>
 
@@ -185,9 +183,9 @@ export default function ContactsPage() {
             variant="outline"
             size="sm"
             onClick={handleDownloadVcf}
-            className="text-xs rounded-full border-white/20 hover:border-[#0088FF] text-white flex-1 sm:flex-initial"
+            className="text-xs rounded-full border-white/20 hover:border-white/40 text-white min-h-[44px] sm:min-h-0 flex-1 sm:flex-initial"
           >
-            <Contact className="w-3.5 h-3.5 mr-1 text-[#00A2FF]" />
+            <Contact className="w-3.5 h-3.5 mr-1 text-[#A1A1AA]" />
             .VCF
           </Button>
 
@@ -195,7 +193,7 @@ export default function ContactsPage() {
             variant="primary"
             size="sm"
             onClick={() => setAddModalOpen(true)}
-            className="text-xs rounded-full tracking-wider w-full sm:w-auto"
+            className="text-xs rounded-full tracking-wider w-full sm:w-auto min-h-[44px] sm:min-h-0 bg-white text-black hover:bg-[#E5E5EA]"
           >
             <Plus className="w-3.5 h-3.5 mr-1" /> ADD CONTACT
           </Button>
@@ -204,18 +202,18 @@ export default function ContactsPage() {
 
       {/* Action Notice Alert */}
       {actionNotice && (
-        <div className="p-3 rounded-[12px] bg-[#0055FF]/15 border border-[#0099FF]/40 text-[#A0D4FF] text-xs font-sans flex items-center gap-2 animate-in fade-in">
-          <Check className="w-4 h-4 text-[#00A2FF]" />
+        <div className="p-3.5 rounded-xl bg-white/[0.05] border border-white/15 text-white text-xs font-sans flex items-center gap-2 animate-in fade-in">
+          <Check className="w-4 h-4 text-emerald-400" />
           <span>{actionNotice}</span>
         </div>
       )}
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-        <div className="bg-[#060608] border border-white/[0.08] rounded-[16px] p-4 sm:p-5 space-y-1 shadow-[0_15px_40px_rgba(0,0,0,0.8)]">
+        <div className="bg-[#0E0E12] border border-white/[0.08] rounded-2xl p-4 sm:p-5 space-y-1 shadow-lg">
           <div className="flex items-center justify-between text-[#8E8E98]">
             <span className="font-mono text-[10px] uppercase tracking-widest">Total Sovereign Leads</span>
-            <Users className="w-4 h-4 text-[#00A2FF]" />
+            <Users className="w-4 h-4 text-[#A1A1AA]" />
           </div>
           <p className="font-sans text-2xl sm:text-3xl font-semibold text-white tracking-tight">
             {contacts.length}
@@ -223,10 +221,10 @@ export default function ContactsPage() {
           <p className="font-sans text-[11px] text-[#70707C]">Synchronized across records</p>
         </div>
 
-        <div className="bg-[#060608] border border-white/[0.08] rounded-[16px] p-4 sm:p-5 space-y-1 shadow-[0_15px_40px_rgba(0,0,0,0.8)]">
+        <div className="bg-[#0E0E12] border border-white/[0.08] rounded-2xl p-4 sm:p-5 space-y-1 shadow-lg">
           <div className="flex items-center justify-between text-[#8E8E98]">
             <span className="font-mono text-[10px] uppercase tracking-widest">NFC Contactless Taps</span>
-            <Radio className="w-4 h-4 text-[#00E5FF]" />
+            <Radio className="w-4 h-4 text-[#C8C6C0]" />
           </div>
           <p className="font-sans text-2xl sm:text-3xl font-semibold text-white tracking-tight">
             {nfcCount}
@@ -234,10 +232,10 @@ export default function ContactsPage() {
           <p className="font-sans text-[11px] text-[#70707C]">Physical card encounters</p>
         </div>
 
-        <div className="bg-[#060608] border border-white/[0.08] rounded-[16px] p-4 sm:p-5 space-y-1 shadow-[0_15px_40px_rgba(0,0,0,0.8)]">
+        <div className="bg-[#0E0E12] border border-white/[0.08] rounded-2xl p-4 sm:p-5 space-y-1 shadow-lg">
           <div className="flex items-center justify-between text-[#8E8E98]">
             <span className="font-mono text-[10px] uppercase tracking-widest">Web / QR Exchanges</span>
-            <Download className="w-4 h-4 text-[#70A5FF]" />
+            <Download className="w-4 h-4 text-[#C8C6C0]" />
           </div>
           <p className="font-sans text-2xl sm:text-3xl font-semibold text-white tracking-tight">
             {webCount}
@@ -247,19 +245,19 @@ export default function ContactsPage() {
       </div>
 
       {/* Search & Filter Bar */}
-      <div className="bg-[#060608] border border-white/[0.08] rounded-[16px] p-3.5 sm:p-4 flex items-center gap-3">
+      <div className="bg-[#0E0E12] border border-white/[0.08] rounded-xl p-3 sm:p-3.5 flex items-center gap-3">
         <Search className="w-4 h-4 text-[#62626E] shrink-0" />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search by name, company, title, phone, email..."
-          className="w-full bg-transparent text-xs sm:text-sm text-white placeholder:text-[#52525E] focus:outline-none"
+          className="w-full bg-transparent text-base sm:text-xs text-white placeholder:text-[#52525E] focus:outline-none min-h-[36px]"
         />
         {searchQuery && (
           <button
             onClick={() => setSearchQuery("")}
-            className="text-[10px] font-mono text-[#8E8E98] hover:text-white px-2 py-1 bg-white/[0.05] rounded shrink-0"
+            className="text-[10px] font-mono text-[#8E8E98] hover:text-white px-2 py-1 bg-white/[0.05] rounded shrink-0 min-h-[36px] flex items-center"
           >
             CLEAR
           </button>
@@ -267,10 +265,10 @@ export default function ContactsPage() {
       </div>
 
       {/* Contacts List Section */}
-      <div className="bg-[#060608] border border-white/[0.08] rounded-[16px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.9)]">
+      <div className="bg-[#0E0E12] border border-white/[0.08] rounded-2xl overflow-hidden shadow-xl">
         {loading ? (
           <div className="py-16 text-center space-y-3">
-            <div className="w-6 h-6 border-2 border-[#0088FF] border-t-transparent rounded-full animate-spin mx-auto" />
+            <div className="w-6 h-6 border-2 border-white/40 border-t-transparent rounded-full animate-spin mx-auto" />
             <p className="font-mono text-xs text-[#8E8E98]">Loading sovereign contacts...</p>
           </div>
         ) : filteredContacts.length === 0 ? (
@@ -289,7 +287,7 @@ export default function ContactsPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => setAddModalOpen(true)}
-                className="text-xs rounded-full"
+                className="text-xs rounded-full min-h-[44px]"
               >
                 <Plus className="w-3.5 h-3.5 mr-1" /> Add Your First Contact
               </Button>
@@ -313,7 +311,7 @@ export default function ContactsPage() {
                       onClick={() => setSelectedContact(c)}
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#0055FF]/30 to-[#00A2FF]/20 border border-[#0099FF]/40 text-[#80D0FF] flex items-center justify-center font-cinzel font-semibold text-xs shrink-0">
+                        <div className="w-10 h-10 rounded-full bg-white/[0.06] border border-white/10 text-white flex items-center justify-center font-cinzel font-semibold text-xs shrink-0">
                           {c.fullName
                             .split(" ")
                             .map((n) => n[0])
@@ -330,7 +328,7 @@ export default function ContactsPage() {
                             {c.company && (
                               <>
                                 <span>·</span>
-                                <span className="text-[#A0A0B0]">{c.company}</span>
+                                <span className="text-[#C8C6C0]">{c.company}</span>
                               </>
                             )}
                           </p>
@@ -338,12 +336,12 @@ export default function ContactsPage() {
                       </div>
 
                       <span
-                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-mono text-[9px] uppercase tracking-wider shrink-0 ${
+                        className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full font-mono text-[9px] uppercase tracking-wider shrink-0 ${
                           c.source === "nfc_tap"
-                            ? "bg-[#0099FF]/15 text-[#00E5FF] border border-[#0099FF]/30"
+                            ? "bg-white/10 text-white border border-white/20"
                             : c.source === "manual"
-                            ? "bg-white/[0.05] text-[#D0D0DC] border border-white/10"
-                            : "bg-[#0055FF]/15 text-[#80D0FF] border border-[#0055FF]/30"
+                            ? "bg-white/[0.04] text-[#8E8E98] border border-white/10"
+                            : "bg-white/[0.06] text-[#C8C6C0] border border-white/10"
                         }`}
                       >
                         {c.source === "nfc_tap" ? "NFC" : c.source === "manual" ? "Manual" : "QR / Web"}
@@ -362,36 +360,39 @@ export default function ContactsPage() {
                             href={`https://wa.me/${cleanPhone.replace("+", "")}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-2 rounded-full bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366]/20 transition-colors"
+                            className="w-9 h-9 rounded-full bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366]/20 flex items-center justify-center transition-colors"
                             title="Message on WhatsApp"
+                            aria-label="Message on WhatsApp"
                           >
-                            <WhatsAppIcon className="w-3.5 h-3.5 text-[#25D366]" />
+                            <WhatsAppIcon className="w-4 h-4 text-[#25D366]" />
                           </a>
                         )}
                         {c.phone && (
                           <a
                             href={`tel:${c.phone}`}
-                            className="p-2 rounded-full bg-white/[0.05] text-[#D0D0DC] hover:text-white transition-colors"
+                            className="w-9 h-9 rounded-full bg-white/[0.05] text-[#D0D0DC] hover:text-white flex items-center justify-center transition-colors"
                             title="Call Phone"
+                            aria-label="Call Phone"
                           >
-                            <Phone className="w-3.5 h-3.5" />
+                            <Phone className="w-4 h-4" />
                           </a>
                         )}
                         {c.email && (
                           <a
                             href={`mailto:${c.email}`}
-                            className="p-2 rounded-full bg-white/[0.05] text-[#D0D0DC] hover:text-white transition-colors"
+                            className="w-9 h-9 rounded-full bg-white/[0.05] text-[#D0D0DC] hover:text-white flex items-center justify-center transition-colors"
                             title="Send Email"
+                            aria-label="Send Email"
                           >
-                            <Mail className="w-3.5 h-3.5" />
+                            <Mail className="w-4 h-4" />
                           </a>
                         )}
                         <button
                           onClick={() => setSelectedContact(c)}
-                          className="px-2.5 py-1 rounded-full bg-white/[0.05] text-[#A0D0FF] text-[11px] font-sans hover:bg-white/10 transition-colors flex items-center gap-1"
+                          className="h-9 px-3 rounded-full bg-white/[0.05] text-white text-[11px] font-sans hover:bg-white/10 transition-colors flex items-center gap-1"
                         >
                           <span>View</span>
-                          <ChevronRight className="w-3 h-3" />
+                          <ChevronRight className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     </div>
@@ -427,7 +428,7 @@ export default function ContactsPage() {
                         {/* Name & Initials */}
                         <td className="py-4 px-6">
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#0055FF]/30 to-[#00A2FF]/20 border border-[#0099FF]/40 text-[#80D0FF] flex items-center justify-center font-cinzel font-semibold text-xs shrink-0">
+                            <div className="w-8 h-8 rounded-full bg-white/[0.06] border border-white/10 text-white flex items-center justify-center font-cinzel font-semibold text-xs shrink-0">
                               {c.fullName
                                 .split(" ")
                                 .map((n) => n[0])
@@ -436,7 +437,7 @@ export default function ContactsPage() {
                                 .toUpperCase()}
                             </div>
                             <div>
-                              <p className="font-sans font-medium text-sm text-white group-hover:text-[#00A2FF] transition-colors">
+                              <p className="font-sans font-medium text-sm text-white group-hover:text-accent-silver transition-colors">
                                 {c.fullName}
                               </p>
                               {c.notes && (
@@ -465,13 +466,13 @@ export default function ContactsPage() {
                         <td className="py-4 px-4">
                           <div className="space-y-1">
                             {c.phone && (
-                              <p className="font-mono text-[11px] text-[#A0D0FF] flex items-center gap-1.5">
-                                <Phone className="w-3 h-3 text-[#00A2FF]" />
+                              <p className="font-mono text-[11px] text-[#C8C6C0] flex items-center gap-1.5">
+                                <Phone className="w-3 h-3 text-[#8E8E98]" />
                                 <span>{c.phone}</span>
                               </p>
                             )}
                             {c.email && (
-                              <p className="font-sans text-[11px] text-[#A0A0B0] flex items-center gap-1.5 truncate max-w-[180px]">
+                              <p className="font-sans text-[11px] text-[#8E8E98] flex items-center gap-1.5 truncate max-w-[180px]">
                                 <Mail className="w-3 h-3 text-[#62626E]" />
                                 <span>{c.email}</span>
                               </p>
@@ -484,10 +485,10 @@ export default function ContactsPage() {
                           <span
                             className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full font-mono text-[9px] uppercase tracking-wider ${
                               c.source === "nfc_tap"
-                                ? "bg-[#0099FF]/15 text-[#00E5FF] border border-[#0099FF]/30"
+                                ? "bg-white/10 text-white border border-white/20"
                                 : c.source === "manual"
-                                ? "bg-white/[0.05] text-[#D0D0DC] border border-white/10"
-                                : "bg-[#0055FF]/15 text-[#80D0FF] border border-[#0055FF]/30"
+                                ? "bg-white/[0.04] text-[#8E8E98] border border-white/10"
+                                : "bg-white/[0.06] text-[#C8C6C0] border border-white/10"
                             }`}
                           >
                             {c.source === "nfc_tap" ? "NFC Tap" : c.source === "manual" ? "Manual" : "Profile Exchange"}
@@ -507,7 +508,7 @@ export default function ContactsPage() {
                                 href={`https://wa.me/${cleanPhone.replace("+", "")}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="p-1.5 rounded-full bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366]/20 transition-colors"
+                                className="p-2 rounded-full bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366]/20 transition-colors"
                                 title="Message on WhatsApp"
                               >
                                 <WhatsAppIcon className="w-3.5 h-3.5 text-[#25D366]" />
@@ -516,7 +517,7 @@ export default function ContactsPage() {
                             {c.phone && (
                               <a
                                 href={`tel:${c.phone}`}
-                                className="p-1.5 rounded-full bg-white/[0.05] text-[#D0D0DC] hover:text-white transition-colors"
+                                className="p-2 rounded-full bg-white/[0.05] text-[#D0D0DC] hover:text-white transition-colors"
                                 title="Call Phone"
                               >
                                 <Phone className="w-3.5 h-3.5" />
@@ -525,7 +526,7 @@ export default function ContactsPage() {
                             {c.email && (
                               <a
                                 href={`mailto:${c.email}`}
-                                className="p-1.5 rounded-full bg-white/[0.05] text-[#D0D0DC] hover:text-white transition-colors"
+                                className="p-2 rounded-full bg-white/[0.05] text-[#D0D0DC] hover:text-white transition-colors"
                                 title="Send Email"
                               >
                                 <Mail className="w-3.5 h-3.5" />
@@ -533,7 +534,7 @@ export default function ContactsPage() {
                             )}
                             <button
                               onClick={() => handleDeleteContact(c.id)}
-                              className="p-1.5 rounded-full bg-white/[0.03] text-[#70707C] hover:text-red-400 transition-colors"
+                              className="p-2 rounded-full bg-white/[0.03] text-[#70707C] hover:text-red-400 transition-colors"
                               title="Delete Contact"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -559,7 +560,7 @@ export default function ContactsPage() {
       >
         <form onSubmit={handleAddContact} className="space-y-4 text-left">
           <div>
-            <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1">
+            <label className="block text-[11px] font-mono text-[#A1A1AA] uppercase tracking-wider mb-1">
               Full Name *
             </label>
             <input
@@ -568,13 +569,13 @@ export default function ContactsPage() {
               value={newFullName}
               onChange={(e) => setNewFullName(e.target.value)}
               placeholder="e.g. Vikram Malhotra"
-              className="w-full bg-[#0E0E14] border border-white/[0.1] rounded-[10px] px-3.5 py-2.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF]"
+              className="w-full bg-[#14141A] border border-white/[0.1] rounded-xl px-3.5 py-3 sm:py-2.5 min-h-[44px] text-base sm:text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 transition-colors"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1">
+              <label className="block text-[11px] font-mono text-[#A1A1AA] uppercase tracking-wider mb-1">
                 Company / Organization
               </label>
               <input
@@ -582,11 +583,11 @@ export default function ContactsPage() {
                 value={newCompany}
                 onChange={(e) => setNewCompany(e.target.value)}
                 placeholder="Apex Capital"
-                className="w-full bg-[#0E0E14] border border-white/[0.1] rounded-[10px] px-3.5 py-2.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF]"
+                className="w-full bg-[#14141A] border border-white/[0.1] rounded-xl px-3.5 py-3 sm:py-2.5 min-h-[44px] text-base sm:text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 transition-colors"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1">
+              <label className="block text-[11px] font-mono text-[#A1A1AA] uppercase tracking-wider mb-1">
                 Designation / Title
               </label>
               <input
@@ -594,14 +595,14 @@ export default function ContactsPage() {
                 value={newDesignation}
                 onChange={(e) => setNewDesignation(e.target.value)}
                 placeholder="Managing Director"
-                className="w-full bg-[#0E0E14] border border-white/[0.1] rounded-[10px] px-3.5 py-2.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF]"
+                className="w-full bg-[#14141A] border border-white/[0.1] rounded-xl px-3.5 py-3 sm:py-2.5 min-h-[44px] text-base sm:text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 transition-colors"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1">
+              <label className="block text-[11px] font-mono text-[#A1A1AA] uppercase tracking-wider mb-1">
                 Phone Number
               </label>
               <input
@@ -609,11 +610,11 @@ export default function ContactsPage() {
                 value={newPhone}
                 onChange={(e) => setNewPhone(e.target.value)}
                 placeholder="+91 98765 43210"
-                className="w-full bg-[#0E0E14] border border-white/[0.1] rounded-[10px] px-3.5 py-2.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF]"
+                className="w-full bg-[#14141A] border border-white/[0.1] rounded-xl px-3.5 py-3 sm:py-2.5 min-h-[44px] text-base sm:text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 font-mono transition-colors"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1">
+              <label className="block text-[11px] font-mono text-[#A1A1AA] uppercase tracking-wider mb-1">
                 Email Address
               </label>
               <input
@@ -621,13 +622,13 @@ export default function ContactsPage() {
                 value={newEmail}
                 onChange={(e) => setNewEmail(e.target.value)}
                 placeholder="vikram@apex.io"
-                className="w-full bg-[#0E0E14] border border-white/[0.1] rounded-[10px] px-3.5 py-2.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF]"
+                className="w-full bg-[#14141A] border border-white/[0.1] rounded-xl px-3.5 py-3 sm:py-2.5 min-h-[44px] text-base sm:text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 transition-colors"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1">
+            <label className="block text-[11px] font-mono text-[#A1A1AA] uppercase tracking-wider mb-1">
               Private Notes / Meeting Context
             </label>
             <textarea
@@ -635,17 +636,17 @@ export default function ContactsPage() {
               value={newNotes}
               onChange={(e) => setNewNotes(e.target.value)}
               placeholder="Met at Global Founders Summit. Interested in corporate metal card tiers..."
-              className="w-full bg-[#0E0E14] border border-white/[0.1] rounded-[10px] p-3 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF] leading-relaxed"
+              className="w-full bg-[#14141A] border border-white/[0.1] rounded-xl p-3.5 text-base sm:text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 leading-relaxed transition-colors"
             />
           </div>
 
-          <div className="pt-2 flex justify-end gap-2.5">
+          <div className="pt-3 flex justify-end gap-2.5">
             <Button
               type="button"
               variant="outline"
               size="sm"
               onClick={() => setAddModalOpen(false)}
-              className="text-xs"
+              className="text-xs min-h-[44px] rounded-full"
             >
               Cancel
             </Button>
@@ -654,7 +655,7 @@ export default function ContactsPage() {
               variant="primary"
               size="sm"
               isLoading={isSubmitting}
-              className="text-xs tracking-wider"
+              className="text-xs tracking-wider min-h-[44px] rounded-full bg-white text-black hover:bg-[#E5E5EA]"
             >
               SAVE CONTACT
             </Button>
@@ -671,11 +672,11 @@ export default function ContactsPage() {
           subtitle={`${selectedContact.designation || "Executive"} · ${selectedContact.company || "Independent"}`}
         >
           <div className="space-y-4 text-left text-xs">
-            <div className="space-y-2.5 bg-[#0A0A0E] border border-white/[0.08] rounded-[14px] p-4">
+            <div className="space-y-2.5 bg-[#0A0A0E] border border-white/[0.08] rounded-xl p-4">
               {selectedContact.phone && (
                 <div className="flex items-center justify-between">
                   <span className="text-[#8E8E98] font-mono text-[11px]">Phone:</span>
-                  <a href={`tel:${selectedContact.phone}`} className="text-[#00A2FF] font-mono hover:underline">
+                  <a href={`tel:${selectedContact.phone}`} className="text-white font-mono hover:underline">
                     {selectedContact.phone}
                   </a>
                 </div>
@@ -707,18 +708,18 @@ export default function ContactsPage() {
                 <span className="font-mono text-[10px] text-[#8E8E98] uppercase tracking-wider">
                   Private Notes:
                 </span>
-                <p className="p-3 rounded-[12px] bg-[#0E0E14] border border-white/[0.08] text-[#D0D0DC] leading-relaxed">
+                <p className="p-3.5 rounded-xl bg-[#14141A] border border-white/[0.08] text-[#D0D0DC] leading-relaxed">
                   {selectedContact.notes}
                 </p>
               </div>
             )}
 
-            <div className="pt-2 flex justify-between items-center">
+            <div className="pt-2 flex justify-between items-center gap-3">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => handleDeleteContact(selectedContact.id)}
-                className="text-xs border-red-500/30 text-red-400 hover:bg-red-950/40"
+                className="text-xs min-h-[44px] rounded-full border-red-500/30 text-red-400 hover:bg-red-950/40"
               >
                 <Trash2 className="w-3.5 h-3.5 mr-1" /> Delete
               </Button>
@@ -726,7 +727,7 @@ export default function ContactsPage() {
                 variant="primary"
                 size="sm"
                 onClick={() => setSelectedContact(null)}
-                className="text-xs"
+                className="text-xs min-h-[44px] rounded-full bg-white text-black hover:bg-[#E5E5EA]"
               >
                 Close
               </Button>

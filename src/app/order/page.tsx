@@ -1,19 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { DynamicHeroCardScene } from "@/components/3d/DynamicHeroCardScene";
 import { CardFinish } from "@/components/3d/InteractiveFlippableCard";
 import {
   Check,
-  Sparkles,
   ShoppingBag,
-  ShieldCheck,
-  Truck,
-  Zap,
   ArrowRight,
   Radio,
-  QrCode,
   Lock,
 } from "lucide-react";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
@@ -21,9 +17,46 @@ import { formatCurrency } from "@/lib/utils";
 
 type EditionTier = "classic" | "metal" | "atelier";
 
-export default function OrderPage() {
-  const [tier, setTier] = useState<EditionTier>("metal");
-  const [finish, setFinish] = useState<CardFinish>("pitch_black");
+function OrderPageContent() {
+  const searchParams = useSearchParams();
+
+  // Read incoming query params from marketing & pricing CTAs
+  const queryTier = searchParams.get("tier");
+  const queryFinish = searchParams.get("finish");
+
+  const [tier, setTier] = useState<EditionTier>(() => {
+    if (queryTier === "classic" || queryTier === "verse") return "classic";
+    if (queryTier === "atelier") return "atelier";
+    return "metal";
+  });
+
+  const [finish, setFinish] = useState<CardFinish>(() => {
+    if (
+      queryFinish &&
+      ["pitch_black", "silver", "gold", "royal_red", "cobalt_blue"].includes(queryFinish)
+    ) {
+      return queryFinish as CardFinish;
+    }
+    return "pitch_black";
+  });
+
+  // Sync state if query parameters change
+  useEffect(() => {
+    if (queryTier === "classic" || queryTier === "verse") {
+      setTier("classic");
+    } else if (queryTier === "atelier") {
+      setTier("atelier");
+    } else if (queryTier === "metal") {
+      setTier("metal");
+    }
+
+    if (
+      queryFinish &&
+      ["pitch_black", "silver", "gold", "royal_red", "cobalt_blue"].includes(queryFinish)
+    ) {
+      setFinish(queryFinish as CardFinish);
+    }
+  }, [queryTier, queryFinish]);
   const [currency, setCurrency] = useState<"INR" | "USD">("INR");
 
   // Card Personalization Inputs
@@ -66,7 +99,7 @@ export default function OrderPage() {
     e.preventDefault();
     if (!name.trim()) return;
     setStep("checkout");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleFinalOrderSubmit = async (e: React.FormEvent) => {
@@ -103,30 +136,26 @@ export default function OrderPage() {
       setStep("success");
     } finally {
       setIsSubmitting(false);
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#000000] text-white pt-24 pb-28 px-4 sm:px-6 md:px-12 relative overflow-hidden selection:bg-[#0099FF]/30 selection:text-white">
-      {/* Background Electric Blue Studio Beams */}
-      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#0066FF]/10 rounded-full blur-[180px] pointer-events-none" />
-      <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-[#0044CC]/10 rounded-full blur-[160px] pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto space-y-12 relative z-10">
+    <div className="min-h-screen bg-[#000000] text-white pt-20 sm:pt-24 pb-20 sm:pb-28 px-4 sm:px-6 md:px-12 relative overflow-x-hidden selection:bg-white/20 selection:text-white safe-pb">
+      <div className="max-w-7xl mx-auto space-y-10 sm:space-y-12 relative z-10">
         {/* Page Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-[#0099FF]/30 backdrop-blur-md shadow-[0_0_20px_rgba(0,140,255,0.2)]">
-            <Sparkles className="w-3.5 h-3.5 text-[#00A2FF]" />
-            <span className="font-mono text-[10px] text-[#80D0FF] tracking-[0.25em] uppercase font-semibold">
-              OFFICIAL ATELIER ACQUISITION
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/15 backdrop-blur-md">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#E2E0DC]" />
+            <span className="font-mono text-[10px] text-[#C8C6C0] tracking-[0.22em] uppercase font-semibold">
+              ATELIER ACQUISITION
             </span>
           </div>
-          <h1 className="font-cinzel text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight text-white">
+          <h1 className="font-cinzel text-2xl sm:text-4xl md:text-5xl font-medium tracking-tight text-white">
             Order Your Bespoke Metal Card
           </h1>
           <p className="font-sans text-xs sm:text-sm text-[#9E9EA8] max-w-xl mx-auto leading-relaxed">
-            Crafted in cold-forged metal with high-density NTAG216 NFC and permanent digital identity profile. Click the 3D card anytime to flip between faces.
+            Crafted in cold-forged metal with high-density NTAG216 NFC and permanent sovereign digital profile. Tap the 3D card to inspect both faces.
           </p>
         </div>
 
@@ -137,7 +166,7 @@ export default function OrderPage() {
               onClick={() => setCurrency("INR")}
               className={`px-4 py-1 rounded-full text-xs font-mono transition-all ${
                 currency === "INR"
-                  ? "bg-[#0077FF] text-white shadow-[0_0_15px_rgba(0,120,255,0.5)] font-bold"
+                  ? "bg-white text-black font-semibold shadow-sm"
                   : "text-[#9E9EA8] hover:text-white"
               }`}
             >
@@ -147,7 +176,7 @@ export default function OrderPage() {
               onClick={() => setCurrency("USD")}
               className={`px-4 py-1 rounded-full text-xs font-mono transition-all ${
                 currency === "USD"
-                  ? "bg-[#0077FF] text-white shadow-[0_0_15px_rgba(0,120,255,0.5)] font-bold"
+                  ? "bg-white text-black font-semibold shadow-sm"
                   : "text-[#9E9EA8] hover:text-white"
               }`}
             >
@@ -161,15 +190,12 @@ export default function OrderPage() {
         {/* ========================================================================= */}
         {step === "configure" && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-            {/* Left Column: Live 3D Dual-Sided Flippable Card View */}
-            <div className="lg:col-span-6 sticky top-28 bg-[#040406]/90 border border-white/[0.1] rounded-[20px] p-4 sm:p-6 md:p-8 flex flex-col items-center justify-center min-h-[480px] sm:min-h-[520px] md:min-h-[620px] shadow-[0_25px_70px_rgba(0,0,0,0.95)] backdrop-blur-xl max-w-full">
-              {/* Electric Blue Top Accent */}
-              <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-[#0099FF]/60 to-transparent" />
-
+            {/* Left Column: Live 3D Dual-Sided Card View */}
+            <div className="lg:col-span-6 lg:sticky lg:top-24 bg-[#060608] border border-white/[0.1] rounded-[20px] p-4 sm:p-6 md:p-8 flex flex-col items-center justify-center min-h-[440px] sm:min-h-[500px] md:min-h-[560px] shadow-[0_24px_70px_rgba(0,0,0,0.95)] backdrop-blur-xl max-w-full">
               <div className="w-full flex items-center justify-between border-b border-white/[0.08] pb-3 mb-4">
-                <span className="font-mono text-[10px] text-[#00A2FF] tracking-[0.25em] uppercase font-semibold flex items-center gap-1.5">
-                  <Radio className="w-3.5 h-3.5 animate-pulse text-[#00A2FF]" />
-                  LIVE REAL-TIME 3D PREVIEW
+                <span className="font-mono text-[10px] text-[#A0A0AA] tracking-[0.22em] uppercase font-semibold flex items-center gap-1.5">
+                  <Radio className="w-3.5 h-3.5 text-[#E2E0DC]" />
+                  LIVE 3D INSPECTOR
                 </span>
                 <span className="font-mono text-xs text-white font-medium uppercase">
                   {finish.replace("_", " ")}
@@ -190,15 +216,15 @@ export default function OrderPage() {
 
               <div className="w-full pt-4 border-t border-white/[0.08] flex items-center justify-between text-[11px] font-sans text-[#8E8E98]">
                 <span>NFC Chip: NTAG216 High Speed</span>
-                <span className="text-[#00A2FF]">Click card to flip ⟲</span>
+                <span className="text-white/80">Tap card to flip ⟲</span>
               </div>
             </div>
 
             {/* Right Column: Customization Controls & Hardware Options */}
-            <div className="lg:col-span-6 space-y-8 bg-[#060608]/80 border border-white/[0.08] rounded-[20px] p-6 sm:p-8 backdrop-blur-xl">
+            <div className="lg:col-span-6 space-y-7 bg-[#08080A] border border-white/[0.08] rounded-[20px] p-5 sm:p-7 md:p-8 backdrop-blur-xl">
               {/* 1. Hardware Edition Selector */}
               <div className="space-y-3">
-                <label className="font-mono text-xs text-[#00A2FF] uppercase tracking-widest font-semibold flex items-center gap-2">
+                <label className="font-mono text-xs text-[#C8C6C0] uppercase tracking-widest font-semibold flex items-center gap-2">
                   <span>01</span>
                   <span>CHOOSE HARDWARE EDITION</span>
                 </label>
@@ -208,10 +234,10 @@ export default function OrderPage() {
                       key={t}
                       type="button"
                       onClick={() => setTier(t)}
-                      className={`p-4 rounded-xl border text-left transition-all duration-200 btn-interactive ${
+                      className={`min-h-[52px] p-3.5 rounded-xl border text-left transition-all duration-200 btn-interactive ${
                         tier === t
-                          ? "bg-[#002255]/40 border-[#0099FF] shadow-[0_0_20px_rgba(0,140,255,0.3)]"
-                          : "bg-white/[0.02] border-white/[0.08] hover:border-white/20 hover:bg-white/[0.04]"
+                          ? "bg-white/[0.08] border-white/50 shadow-md"
+                          : "bg-white/[0.02] border-white/[0.07] hover:border-white/20 hover:bg-white/[0.04]"
                       }`}
                     >
                       <div className="font-cinzel text-xs font-semibold text-white tracking-wider">
@@ -220,7 +246,7 @@ export default function OrderPage() {
                       <div className="font-sans text-[10px] text-[#8E8E98] mt-0.5">
                         {pricing[t].subtitle}
                       </div>
-                      <div className="font-mono text-sm font-bold text-[#00A2FF] mt-2">
+                      <div className="font-mono text-sm font-bold text-white mt-2">
                         {formatCurrency(pricing[t][currency], currency)}
                       </div>
                     </button>
@@ -230,7 +256,7 @@ export default function OrderPage() {
 
               {/* 2. Card Color Finish Selector */}
               <div className="space-y-3">
-                <label className="font-mono text-xs text-[#00A2FF] uppercase tracking-widest font-semibold flex items-center gap-2">
+                <label className="font-mono text-xs text-[#C8C6C0] uppercase tracking-widest font-semibold flex items-center gap-2">
                   <span>02</span>
                   <span>SELECT COLOR FINISH (5 OPTIONS)</span>
                 </label>
@@ -240,9 +266,9 @@ export default function OrderPage() {
                       key={f.id}
                       type="button"
                       onClick={() => setFinish(f.id)}
-                      className={`p-3 rounded-xl border flex items-center gap-2.5 transition-all btn-interactive ${
+                      className={`min-h-[46px] p-2.5 sm:p-3 rounded-xl border flex items-center gap-2.5 transition-all btn-interactive ${
                         finish === f.id
-                          ? "bg-white/[0.08] border-[#0099FF] shadow-[0_0_15px_rgba(0,140,255,0.25)]"
+                          ? "bg-white/[0.1] border-white/60 shadow-sm"
                           : "bg-white/[0.02] border-white/[0.06] hover:border-white/20"
                       }`}
                     >
@@ -259,15 +285,15 @@ export default function OrderPage() {
               </div>
 
               {/* 3. Card Engraving Personalization Form */}
-              <form onSubmit={handleProceedToCheckout} className="space-y-5 pt-2">
-                <label className="font-mono text-xs text-[#00A2FF] uppercase tracking-widest font-semibold flex items-center gap-2">
+              <form onSubmit={handleProceedToCheckout} className="space-y-4 pt-1">
+                <label className="font-mono text-xs text-[#C8C6C0] uppercase tracking-widest font-semibold flex items-center gap-2">
                   <span>03</span>
                   <span>PERSONALIZATION DETAILS</span>
                 </label>
 
-                <div className="space-y-4">
+                <div className="space-y-3.5">
                   <div>
-                    <label className="block text-[11px] font-mono text-[#8E8E98] uppercase tracking-wider mb-1.5">
+                    <label className="block text-[11px] font-mono text-[#8E8E98] uppercase tracking-wider mb-1">
                       Cardholder Full Name
                     </label>
                     <input
@@ -276,13 +302,13 @@ export default function OrderPage() {
                       onChange={(e) => setName(e.target.value)}
                       placeholder="e.g. Ritesh Martawar"
                       required
-                      className="w-full bg-[#0E0E12] border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white font-cinzel tracking-wider focus:outline-none focus:border-[#0099FF] focus:ring-1 focus:ring-[#0099FF] transition-all"
+                      className="w-full bg-[#121217] border border-white/10 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white font-cinzel tracking-wider focus:outline-none focus:border-white/40 transition-colors"
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div>
-                      <label className="block text-[11px] font-mono text-[#8E8E98] uppercase tracking-wider mb-1.5">
+                      <label className="block text-[11px] font-mono text-[#8E8E98] uppercase tracking-wider mb-1">
                         Designation / Position
                       </label>
                       <input
@@ -291,11 +317,11 @@ export default function OrderPage() {
                         onChange={(e) => setDesignation(e.target.value)}
                         placeholder="e.g. Founder & CEO"
                         required
-                        className="w-full bg-[#0E0E12] border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white font-mono tracking-wider focus:outline-none focus:border-[#0099FF] focus:ring-1 focus:ring-[#0099FF] transition-all"
+                        className="w-full bg-[#121217] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono tracking-wider focus:outline-none focus:border-white/40 transition-colors"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-mono text-[#8E8E98] uppercase tracking-wider mb-1.5">
+                      <label className="block text-[11px] font-mono text-[#8E8E98] uppercase tracking-wider mb-1">
                         Company Name
                       </label>
                       <input
@@ -303,30 +329,30 @@ export default function OrderPage() {
                         value={company}
                         onChange={(e) => setCompany(e.target.value)}
                         placeholder="e.g. NXC Verse"
-                        className="w-full bg-[#0E0E12] border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white font-cinzel tracking-wider focus:outline-none focus:border-[#0099FF] focus:ring-1 focus:ring-[#0099FF] transition-all"
+                        className="w-full bg-[#121217] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white font-cinzel tracking-wider focus:outline-none focus:border-white/40 transition-colors"
                       />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div>
-                      <label className="block text-[11px] font-mono text-[#8E8E98] uppercase tracking-wider mb-1.5">
-                        Custom Monogram / Serial
+                      <label className="block text-[11px] font-mono text-[#8E8E98] uppercase tracking-wider mb-1">
+                        Custom Serial / Monogram
                       </label>
                       <input
                         type="text"
                         value={engraving}
                         onChange={(e) => setEngraving(e.target.value)}
                         placeholder="e.g. EDITION NO. 001/100"
-                        className="w-full bg-[#0E0E12] border border-white/10 rounded-lg px-4 py-2.5 text-xs text-white font-mono tracking-widest focus:outline-none focus:border-[#0099FF] focus:ring-1 focus:ring-[#0099FF] transition-all"
+                        className="w-full bg-[#121217] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono tracking-widest focus:outline-none focus:border-white/40 transition-colors"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-mono text-[#8E8E98] uppercase tracking-wider mb-1.5">
+                      <label className="block text-[11px] font-mono text-[#8E8E98] uppercase tracking-wider mb-1">
                         Permanent Digital Slug
                       </label>
-                      <div className="flex items-center bg-[#0E0E12] border border-white/10 rounded-lg px-3 py-2.5 focus-within:border-[#0099FF] focus-within:ring-1 focus-within:ring-[#0099FF] transition-all">
-                        <span className="font-mono text-xs text-[#52525C] select-none">/@</span>
+                      <div className="flex items-center bg-[#121217] border border-white/10 rounded-xl px-3 py-2.5 focus-within:border-white/40 transition-colors">
+                        <span className="font-mono text-xs text-[#6E6E7A] select-none">/@</span>
                         <input
                           type="text"
                           value={qrSlug}
@@ -341,19 +367,19 @@ export default function OrderPage() {
                 </div>
 
                 {/* Price & CTA Action */}
-                <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="pt-5 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
                     <div className="font-mono text-[10px] text-[#8E8E98] uppercase tracking-wider">
                       TOTAL INVESTMENT
                     </div>
-                    <div className="font-sans font-bold text-2xl text-white">
+                    <div className="font-sans font-semibold text-2xl sm:text-3xl text-white">
                       {formatCurrency(currentPrice, currency)}
                     </div>
                   </div>
 
                   <button
                     type="submit"
-                    className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#0055FF] via-[#0088FF] to-[#00A2FF] text-white font-sans font-bold text-xs tracking-[0.2em] uppercase shadow-[0_0_25px_rgba(0,120,255,0.45)] hover:shadow-[0_0_35px_rgba(0,150,255,0.7)] flex items-center justify-center gap-2 btn-interactive"
+                    className="min-h-[48px] px-8 py-3 rounded-full bg-white text-black font-sans font-semibold text-xs tracking-[0.16em] uppercase hover:bg-[#EAE8E4] flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(255,255,255,0.18)] btn-interactive"
                   >
                     <span>CONTINUE TO SHIPPING</span>
                     <ArrowRight className="w-4 h-4" />
@@ -368,12 +394,12 @@ export default function OrderPage() {
         {/* STEP 2: SHIPPING & CHECKOUT FORM                                         */}
         {/* ========================================================================= */}
         {step === "checkout" && (
-          <div className="max-w-4xl mx-auto bg-[#060608] border border-white/10 rounded-[20px] p-6 sm:p-10 backdrop-blur-2xl shadow-2xl space-y-8">
+          <div className="max-w-4xl mx-auto bg-[#08080A] border border-white/10 rounded-[22px] p-5 sm:p-8 md:p-10 backdrop-blur-2xl shadow-2xl space-y-7">
             <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <button
                 type="button"
                 onClick={() => setStep("configure")}
-                className="font-mono text-xs text-[#00A2FF] hover:underline flex items-center gap-1"
+                className="font-mono text-xs text-[#C8C6C0] hover:text-white flex items-center gap-1 transition-colors"
               >
                 ← Back to Card Atelier
               </button>
@@ -385,7 +411,7 @@ export default function OrderPage() {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
               {/* Left Column: Delivery Details Form */}
               <form onSubmit={handleFinalOrderSubmit} className="md:col-span-7 space-y-4">
-                <h3 className="font-cinzel text-lg text-white font-semibold tracking-wide">
+                <h3 className="font-cinzel text-base sm:text-lg text-white font-medium tracking-wide">
                   Shipping Destination
                 </h3>
 
@@ -398,27 +424,27 @@ export default function OrderPage() {
                     value={customerName || name}
                     onChange={(e) => setCustomerName(e.target.value)}
                     required
-                    className="w-full bg-[#0E0E12] border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#0099FF]"
+                    className="w-full bg-[#121217] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-white/40"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="block text-[11px] font-mono text-[#8E8E98] uppercase mb-1">
-                      Email Address (Profile Login)
+                      Email Address (Login)
                     </label>
                     <input
                       type="email"
                       value={customerEmail}
                       onChange={(e) => setCustomerEmail(e.target.value)}
-                      placeholder="alex@acme.com"
+                      placeholder="alex@company.com"
                       required
-                      className="w-full bg-[#0E0E12] border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#0099FF]"
+                      className="w-full bg-[#121217] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-white/40"
                     />
                   </div>
                   <div>
                     <label className="block text-[11px] font-mono text-[#8E8E98] uppercase mb-1">
-                      WhatsApp Number (Photo Proof)
+                      WhatsApp Number (Proof)
                     </label>
                     <input
                       type="tel"
@@ -426,7 +452,7 @@ export default function OrderPage() {
                       onChange={(e) => setCustomerPhone(e.target.value)}
                       placeholder="+91 98765 43210"
                       required
-                      className="w-full bg-[#0E0E12] border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#0099FF]"
+                      className="w-full bg-[#121217] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-white/40 font-mono"
                     />
                   </div>
                 </div>
@@ -439,9 +465,9 @@ export default function OrderPage() {
                     type="text"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
-                    placeholder="124 Aerospace Tower, Marina Bay"
+                    placeholder="124 Executive Tower, High Street"
                     required
-                    className="w-full bg-[#0E0E12] border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#0099FF]"
+                    className="w-full bg-[#121217] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-white/40"
                   />
                 </div>
 
@@ -456,12 +482,12 @@ export default function OrderPage() {
                       onChange={(e) => setCity(e.target.value)}
                       placeholder="Mumbai, Maharashtra"
                       required
-                      className="w-full bg-[#0E0E12] border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#0099FF]"
+                      className="w-full bg-[#121217] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-white/40"
                     />
                   </div>
                   <div>
                     <label className="block text-[11px] font-mono text-[#8E8E98] uppercase mb-1">
-                      Postal / ZIP Code
+                      Postal / PIN Code
                     </label>
                     <input
                       type="text"
@@ -469,16 +495,16 @@ export default function OrderPage() {
                       onChange={(e) => setPincode(e.target.value)}
                       placeholder="400001"
                       required
-                      className="w-full bg-[#0E0E12] border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-[#0099FF]"
+                      className="w-full bg-[#121217] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-white/40 font-mono"
                     />
                   </div>
                 </div>
 
-                <div className="pt-4">
+                <div className="pt-3">
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-4 rounded-xl bg-gradient-to-r from-[#0055FF] via-[#0088FF] to-[#00A2FF] text-white font-sans font-bold text-xs tracking-[0.2em] uppercase shadow-[0_0_30px_rgba(0,120,255,0.5)] flex items-center justify-center gap-2 btn-interactive disabled:opacity-50"
+                    className="w-full min-h-[48px] py-3.5 rounded-full bg-white text-black font-sans font-semibold text-xs tracking-[0.16em] uppercase hover:bg-[#EAE8E4] flex items-center justify-center gap-2 shadow-[0_4px_24px_rgba(255,255,255,0.18)] btn-interactive disabled:opacity-50"
                   >
                     <Lock className="w-4 h-4" />
                     <span>{isSubmitting ? "FORGING HARDWARE..." : `CONFIRM & PAY ${formatCurrency(currentPrice, currency)}`}</span>
@@ -487,9 +513,9 @@ export default function OrderPage() {
               </form>
 
               {/* Right Column: Order Summary Card */}
-              <div className="md:col-span-5 bg-[#0A0A0E] border border-white/[0.08] rounded-xl p-5 space-y-4 flex flex-col justify-between">
+              <div className="md:col-span-5 bg-[#0D0D11] border border-white/[0.08] rounded-xl p-5 space-y-4 flex flex-col justify-between">
                 <div className="space-y-4">
-                  <h4 className="font-cinzel text-sm text-white font-semibold tracking-wider">
+                  <h4 className="font-cinzel text-sm text-white font-medium tracking-wider">
                     Order Overview
                   </h4>
 
@@ -504,27 +530,27 @@ export default function OrderPage() {
                     </div>
                     <div className="flex justify-between py-1 border-b border-white/5">
                       <span className="text-[#8E8E98]">Engraving:</span>
-                      <span className="text-white font-medium">{name}</span>
+                      <span className="text-white font-medium truncate max-w-[140px]">{name}</span>
                     </div>
                     <div className="flex justify-between py-1 border-b border-white/5">
                       <span className="text-[#8E8E98]">Digital Profile:</span>
-                      <span className="font-mono text-[#00A2FF]">nxcverse.in/@{qrSlug}</span>
+                      <span className="font-mono text-white">nxcverse.in/@{qrSlug}</span>
                     </div>
                     <div className="flex justify-between py-1 border-b border-white/5">
-                      <span className="text-[#8E8E98]">Express Courier:</span>
-                      <span className="text-[#25D366] font-medium">FREE (Aerospace Pack)</span>
+                      <span className="text-[#8E8E98]">Courier:</span>
+                      <span className="text-[#25D366] font-medium">COMPLIMENTARY AIR PACK</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-white/10 space-y-2">
-                  <div className="flex justify-between items-center text-sm font-sans font-bold">
+                <div className="pt-4 border-t border-white/10 space-y-1.5">
+                  <div className="flex justify-between items-center text-sm font-sans font-semibold">
                     <span>Total Due:</span>
-                    <span className="text-xl text-[#00A2FF] font-mono">
+                    <span className="text-xl text-white font-mono">
                       {formatCurrency(currentPrice, currency)}
                     </span>
                   </div>
-                  <p className="text-[10px] text-[#62626E] leading-relaxed">
+                  <p className="text-[10px] text-[#70707C] leading-relaxed">
                     256-bit encrypted checkout. Includes lifetime profile hosting and 1-year hardware warranty.
                   </p>
                 </div>
@@ -537,16 +563,16 @@ export default function OrderPage() {
         {/* STEP 3: ORDER SUCCESS CONFIRMATION                                       */}
         {/* ========================================================================= */}
         {step === "success" && (
-          <div className="max-w-2xl mx-auto bg-[#060608] border border-[#0099FF]/40 rounded-[24px] p-8 sm:p-12 text-center space-y-6 shadow-[0_0_60px_rgba(0,140,255,0.3)]">
-            <div className="w-16 h-16 rounded-full bg-[#0088FF]/20 border border-[#0099FF] mx-auto flex items-center justify-center shadow-[0_0_30px_rgba(0,140,255,0.5)]">
-              <Check className="w-8 h-8 text-[#00A2FF]" />
+          <div className="max-w-2xl mx-auto bg-[#08080A] border border-white/20 rounded-[24px] p-6 sm:p-10 md:p-12 text-center space-y-6 shadow-2xl">
+            <div className="w-14 h-14 rounded-full bg-white/10 border border-white/20 mx-auto flex items-center justify-center text-white">
+              <Check className="w-7 h-7 text-[#25D366]" />
             </div>
 
             <div className="space-y-2">
-              <span className="font-mono text-xs text-[#00A2FF] tracking-[0.25em] uppercase font-semibold">
+              <span className="font-mono text-xs text-[#C8C6C0] tracking-[0.22em] uppercase font-semibold">
                 ACQUISITION CONFIRMED
               </span>
-              <h2 className="font-cinzel text-3xl text-white font-medium">
+              <h2 className="font-cinzel text-2xl sm:text-3xl text-white font-medium">
                 Your NXC Metal Card is Queued for Casting
               </h2>
               <p className="font-sans text-xs text-[#9E9EA8] max-w-md mx-auto leading-relaxed">
@@ -555,21 +581,20 @@ export default function OrderPage() {
             </div>
 
             {/* Next Steps Card */}
-            <div className="bg-[#0E0E14] border border-white/10 rounded-xl p-5 text-left space-y-3 text-xs">
+            <div className="bg-[#101015] border border-white/10 rounded-xl p-5 text-left space-y-2.5 text-xs">
               <div className="font-mono text-[11px] text-white font-semibold uppercase tracking-wider">
                 What Happens Next:
               </div>
-              <ul className="space-y-2 text-[#A0A0AC] list-disc list-inside">
+              <ul className="space-y-1.5 text-[#A0A0AC] list-disc list-inside">
                 <li>Laser precision milling of your personalized NTAG216 chip & QR matrix.</li>
-                <li>Concierge WhatsApp photo proof before sealing the aerospace package.</li>
-                <li>Your sovereign digital profile at <span className="font-mono text-[#00A2FF]">nxcverse.in/@{qrSlug}</span> is activated immediately.</li>
+                <li>Concierge WhatsApp photo proof before dispatching the aerospace package.</li>
+                <li>Your sovereign digital profile at <span className="font-mono text-white">nxcverse.in/@{qrSlug}</span> is activated immediately.</li>
               </ul>
             </div>
 
-            <div className="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
+            <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
               <Link href="/dashboard">
-                <button className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-[#0055FF] to-[#0088FF] text-white font-sans font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(0,140,255,0.4)] btn-interactive">
-                  <Sparkles className="w-4 h-4" />
+                <button className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-full bg-white text-black font-sans font-semibold text-xs tracking-wider uppercase flex items-center justify-center gap-2 hover:bg-[#EAE8E4] btn-interactive">
                   <span>Access Client Dashboard</span>
                 </button>
               </Link>
@@ -578,14 +603,14 @@ export default function OrderPage() {
                 href={`https://wa.me/919561248677?text=Hello%20NXC%20Verse%20Concierge,%20I%20just%20placed%20order%20${orderId}%20for%20${name}.`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-3 rounded-xl bg-[#25D366] hover:bg-[#20ba59] text-white font-sans font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 shadow-md btn-interactive"
+                className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/20 text-white font-sans font-medium text-xs tracking-wider uppercase flex items-center justify-center gap-2 btn-interactive"
               >
-                <WhatsAppIcon className="w-4 h-4 text-white" color="#FFFFFF" />
+                <WhatsAppIcon className="w-4 h-4 text-[#25D366]" color="#25D366" />
                 <span>Connect Concierge</span>
               </a>
 
               <Link href="/">
-                <button className="w-full sm:w-auto px-6 py-3 rounded-xl bg-white/[0.06] border border-white/20 text-white font-sans font-medium text-xs tracking-wider uppercase hover:bg-white/10 btn-interactive">
+                <button className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-full bg-white/[0.04] border border-white/10 text-[#A0A0AC] font-sans font-medium text-xs tracking-wider uppercase hover:text-white btn-interactive">
                   Return Home
                 </button>
               </Link>
@@ -594,5 +619,19 @@ export default function OrderPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function OrderPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-black text-white flex items-center justify-center">
+          <div className="w-8 h-8 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+        </div>
+      }
+    >
+      <OrderPageContent />
+    </Suspense>
   );
 }

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/Button";
-import { Shield, Key, Bell, Check, Sparkles, Lock, Mail, Globe, Plus, Trash2, RefreshCw } from "lucide-react";
+import { Shield, Key, Bell, Check, Lock, Mail, Globe, Plus, Trash2, RefreshCw } from "lucide-react";
 
 export default function SettingsPage() {
   const [saved, setSaved] = useState(false);
@@ -98,26 +98,26 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="space-y-6 text-left">
+    <div className="space-y-6 text-left max-w-5xl">
       {/* Header */}
       <div className="pb-6 border-b border-white/[0.08]">
-        <span className="font-mono text-xs text-[#00A2FF] uppercase tracking-[0.25em] font-semibold flex items-center gap-1.5">
-          <Sparkles className="w-3.5 h-3.5" /> SECURITY, DOMAINS & PREFERENCES
+        <span className="font-mono text-xs text-[#A1A1AA] uppercase tracking-[0.2em] font-medium flex items-center gap-1.5">
+          <Key className="w-3.5 h-3.5 text-[#C8C6C0]" /> SECURITY, DOMAINS & PREFERENCES
         </span>
         <h1 className="font-cinzel font-medium text-2xl sm:text-3xl text-white tracking-tight mt-1">
           Account Settings
         </h1>
-        <p className="font-sans text-xs text-[#9E9EA8] mt-0.5">
+        <p className="font-sans text-xs text-[#8E8E98] mt-0.5">
           Manage your sovereign authentication credentials, custom domains, and notification preferences.
         </p>
       </div>
 
       {/* Custom Domains Management Section */}
-      <div className="bg-[#060608]/80 border border-white/[0.08] rounded-2xl p-4 sm:p-7 space-y-5 backdrop-blur-xl shadow-xl">
+      <div className="bg-[#0E0E12] border border-white/[0.08] rounded-2xl p-5 sm:p-7 space-y-5 shadow-xl">
         <div className="border-b border-white/[0.06] pb-3">
           <h3 className="font-cinzel font-medium text-base text-white tracking-wider flex items-center gap-2">
-            <Globe className="w-4 h-4 text-[#00A2FF]" />
-            Custom Domain Routing (e.g. ceo.company.com)
+            <Globe className="w-4 h-4 text-[#C8C6C0]" />
+            Custom Domain Routing
           </h3>
           <p className="font-sans text-xs text-[#8E8E98] mt-0.5">
             Map your personal executive domain to your sovereign digital profile with automated SSL and Cloudflare edge delivery.
@@ -125,25 +125,25 @@ export default function SettingsPage() {
         </div>
 
         {domainMsg && (
-          <div className="p-3 rounded-xl bg-white/[0.04] border border-[#0099FF]/40 text-xs font-sans text-[#80D0FF]">
+          <div className="p-3.5 rounded-xl bg-white/[0.05] border border-white/15 text-xs font-sans text-white">
             {domainMsg}
           </div>
         )}
 
-        <form onSubmit={handleAddDomain} className="flex flex-col sm:flex-row gap-2.5">
+        <form onSubmit={handleAddDomain} className="flex flex-col sm:flex-row gap-3">
           <input
             type="text"
             value={domainInput}
             onChange={(e) => setDomainInput(e.target.value)}
             placeholder="e.g. ceo.apexcapital.com"
-            className="flex-1 bg-[#0E0E14] border border-white/[0.1] rounded-[12px] px-3.5 py-2.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF] font-mono"
+            className="flex-1 bg-[#14141A] border border-white/[0.1] rounded-xl px-3.5 py-3 sm:py-2.5 min-h-[44px] text-base sm:text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 font-mono transition-colors"
           />
           <Button
             type="submit"
             variant="primary"
             size="sm"
             isLoading={domainLoading}
-            className="rounded-full text-xs px-6"
+            className="rounded-full text-xs px-6 min-h-[44px] bg-white text-black hover:bg-[#E5E5EA]"
           >
             <Plus className="w-3.5 h-3.5 mr-1" /> ADD DOMAIN
           </Button>
@@ -154,30 +154,30 @@ export default function SettingsPage() {
             {domainsList.map((d) => (
               <div
                 key={d.id}
-                className="p-4 rounded-xl bg-[#0E0E14] border border-white/[0.06] space-y-3 text-xs"
+                className="p-4 rounded-xl bg-[#14141A] border border-white/[0.06] space-y-3 text-xs"
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Globe className="w-4 h-4 text-[#00A2FF]" />
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Globe className="w-4 h-4 text-[#C8C6C0]" />
                     <span className="font-mono text-white font-medium">{d.domain}</span>
                     {d.verificationStatus === "verified" ? (
-                      <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-mono text-[9px] font-bold">
+                      <span className="px-2 py-0.5 rounded-full bg-emerald-950/30 text-emerald-400 border border-emerald-800/30 font-mono text-[9px] font-bold">
                         VERIFIED · SSL ACTIVE
                       </span>
                     ) : (
-                      <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[9px] font-bold">
+                      <span className="px-2 py-0.5 rounded-full bg-amber-950/30 text-amber-300 border border-amber-800/30 font-mono text-[9px] font-bold">
                         PENDING DNS PROPAGATION
                       </span>
                     )}
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 self-end sm:self-auto">
                     {d.verificationStatus !== "verified" && (
                       <button
                         type="button"
                         onClick={() => handleVerifyDomain(d.id)}
                         disabled={verifyingId === d.id}
-                        className="px-3 py-1 rounded-full bg-[#0088FF]/20 hover:bg-[#0088FF]/30 text-[#00A2FF] font-mono text-[10px] flex items-center gap-1"
+                        className="px-3 py-1.5 min-h-[36px] rounded-full bg-white/[0.06] hover:bg-white/[0.12] text-white font-mono text-[10px] flex items-center gap-1.5 transition-colors"
                       >
                         <RefreshCw className={`w-3 h-3 ${verifyingId === d.id ? "animate-spin" : ""}`} />
                         <span>{verifyingId === d.id ? "Checking..." : "Verify DNS"}</span>
@@ -186,17 +186,18 @@ export default function SettingsPage() {
                     <button
                       type="button"
                       onClick={() => handleDeleteDomain(d.id)}
-                      className="p-1.5 rounded-lg text-red-400 hover:bg-red-950/30"
+                      aria-label="Delete domain"
+                      className="w-9 h-9 sm:w-8 sm:h-8 rounded-lg text-red-400 hover:bg-red-950/30 flex items-center justify-center transition-colors"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
 
                 {d.verificationStatus !== "verified" && (
-                  <div className="p-3 rounded-lg bg-black/40 border border-white/5 space-y-1.5 text-[11px] font-mono text-[#9E9EA8]">
-                    <div>✦ CNAME Record: <span className="text-white">{d.domain}</span> → <span className="text-[#00A2FF]">domains.nxcverse.in</span></div>
-                    <div>✦ TXT Verification: <span className="text-white">{d.domain}</span> → <span className="text-[#00A2FF]">nxc-verification={d.verificationToken}</span></div>
+                  <div className="p-3 rounded-lg bg-black/50 border border-white/5 space-y-1.5 text-[11px] font-mono text-[#8E8E98]">
+                    <div>✦ CNAME Record: <span className="text-white">{d.domain}</span> → <span className="text-white font-semibold">domains.nxcverse.in</span></div>
+                    <div>✦ TXT Verification: <span className="text-white">{d.domain}</span> → <span className="text-white font-semibold">nxc-verification={d.verificationToken}</span></div>
                   </div>
                 )}
               </div>
@@ -207,10 +208,10 @@ export default function SettingsPage() {
 
       <form onSubmit={handleSave} className="space-y-6 sm:space-y-8">
         {/* Password & Security Section */}
-        <div className="bg-[#060608]/80 border border-white/[0.08] rounded-2xl p-4 sm:p-7 space-y-5 backdrop-blur-xl shadow-xl">
+        <div className="bg-[#0E0E12] border border-white/[0.08] rounded-2xl p-5 sm:p-7 space-y-5 shadow-xl">
           <div className="border-b border-white/[0.06] pb-3">
             <h3 className="font-cinzel font-medium text-base text-white tracking-wider flex items-center gap-2">
-              <Key className="w-4 h-4 text-[#00A2FF]" />
+              <Key className="w-4 h-4 text-[#C8C6C0]" />
               Authentication & Credentials
             </h3>
             <p className="font-sans text-xs text-[#8E8E98] mt-0.5">
@@ -220,7 +221,7 @@ export default function SettingsPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             <div>
-              <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] font-mono text-[#A1A1AA] uppercase tracking-wider mb-1.5">
                 Current Password
               </label>
               <input
@@ -228,12 +229,12 @@ export default function SettingsPage() {
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="w-full bg-[#0E0E14] border border-white/[0.1] rounded-[12px] px-3.5 py-2.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF]"
+                className="w-full bg-[#14141A] border border-white/[0.1] rounded-xl px-3.5 py-3 sm:py-2.5 min-h-[44px] text-base sm:text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] font-mono text-[#A1A1AA] uppercase tracking-wider mb-1.5">
                 New Password
               </label>
               <input
@@ -241,17 +242,17 @@ export default function SettingsPage() {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="Minimum 8 characters"
-                className="w-full bg-[#0E0E14] border border-white/[0.1] rounded-[12px] px-3.5 py-2.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF]"
+                className="w-full bg-[#14141A] border border-white/[0.1] rounded-xl px-3.5 py-3 sm:py-2.5 min-h-[44px] text-base sm:text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 transition-colors"
               />
             </div>
           </div>
         </div>
 
         {/* Notifications & Telemetry Alerts Section */}
-        <div className="bg-[#060608]/80 border border-white/[0.08] rounded-2xl p-4 sm:p-7 space-y-5 backdrop-blur-xl shadow-xl">
+        <div className="bg-[#0E0E12] border border-white/[0.08] rounded-2xl p-5 sm:p-7 space-y-5 shadow-xl">
           <div className="border-b border-white/[0.06] pb-3">
             <h3 className="font-cinzel font-medium text-base text-white tracking-wider flex items-center gap-2">
-              <Bell className="w-4 h-4 text-[#00A2FF]" />
+              <Bell className="w-4 h-4 text-[#C8C6C0]" />
               Telemetry & Interaction Alerts
             </h3>
             <p className="font-sans text-xs text-[#8E8E98] mt-0.5">
@@ -259,13 +260,13 @@ export default function SettingsPage() {
             </p>
           </div>
 
-          <div className="space-y-4">
-            <label className="flex items-start gap-3 p-3.5 rounded-xl bg-[#0E0E14] border border-white/[0.06] cursor-pointer hover:border-white/15 transition-all">
+          <div className="space-y-3">
+            <label className="flex items-start gap-3 p-4 rounded-xl bg-[#14141A] border border-white/[0.06] cursor-pointer hover:border-white/15 transition-all min-h-[52px]">
               <input
                 type="checkbox"
                 checked={notifyVcf}
                 onChange={(e) => setNotifyVcf(e.target.checked)}
-                className="mt-0.5 rounded bg-[#060608] border-white/20 text-[#00A2FF] focus:ring-0 focus:ring-offset-0 w-4 h-4"
+                className="mt-1 rounded bg-[#0A0A0E] border-white/20 text-white focus:ring-0 focus:ring-offset-0 w-4 h-4"
               />
               <div className="space-y-0.5">
                 <span className="font-sans text-xs text-white font-medium block">
@@ -277,12 +278,12 @@ export default function SettingsPage() {
               </div>
             </label>
 
-            <label className="flex items-start gap-3 p-3.5 rounded-xl bg-[#0E0E14] border border-white/[0.06] cursor-pointer hover:border-white/15 transition-all">
+            <label className="flex items-start gap-3 p-4 rounded-xl bg-[#14141A] border border-white/[0.06] cursor-pointer hover:border-white/15 transition-all min-h-[52px]">
               <input
                 type="checkbox"
                 checked={notifyWeekly}
                 onChange={(e) => setNotifyWeekly(e.target.checked)}
-                className="mt-0.5 rounded bg-[#060608] border-white/20 text-[#00A2FF] focus:ring-0 focus:ring-offset-0 w-4 h-4"
+                className="mt-1 rounded bg-[#0A0A0E] border-white/20 text-white focus:ring-0 focus:ring-offset-0 w-4 h-4"
               />
               <div className="space-y-0.5">
                 <span className="font-sans text-xs text-white font-medium block">
@@ -297,11 +298,11 @@ export default function SettingsPage() {
         </div>
 
         {/* Save Bar */}
-        <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-2">
+        <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-2 pb-6">
           <div>
             {saved && (
-              <span className="inline-flex items-center gap-1.5 text-xs font-mono text-[#00E5FF] animate-in fade-in">
-                <Check className="w-4 h-4 text-[#00A2FF]" /> Preferences updated successfully.
+              <span className="inline-flex items-center gap-1.5 text-xs font-mono text-emerald-400 animate-in fade-in">
+                <Check className="w-4 h-4" /> Preferences updated successfully.
               </span>
             )}
           </div>
@@ -309,7 +310,7 @@ export default function SettingsPage() {
             type="submit"
             variant="primary"
             size="lg"
-            className="w-full sm:w-auto text-xs px-8 rounded-full shadow-[0_0_20px_rgba(0,120,255,0.4)]"
+            className="w-full sm:w-auto text-xs px-8 min-h-[48px] rounded-full bg-white text-black hover:bg-[#E5E5EA]"
           >
             SAVE PREFERENCES
           </Button>

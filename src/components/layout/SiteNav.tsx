@@ -7,7 +7,6 @@ import {
   Menu,
   X,
   CreditCard,
-  Sparkles,
   Zap,
   ShieldCheck,
   ShoppingBag,
@@ -33,7 +32,7 @@ export function SiteNav() {
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 15);
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -58,28 +57,26 @@ export function SiteNav() {
     { name: "PRICING", href: "/#pricing", icon: ShieldCheck },
   ];
 
-  // Return null on console and profile routes — those have dedicated presentation
+  // Return null on console and profile routes
   if (isStandaloneRoute) return null;
 
   return (
     <>
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 px-4 md:px-10 py-3.5 transition-all duration-500",
+          "fixed top-0 left-0 right-0 z-50 px-4 md:px-10 py-3 sm:py-3.5 transition-all duration-300",
           scrolled || mobileMenuOpen
-            ? "bg-[#000000]/95 backdrop-blur-2xl border-b border-white/[0.08] shadow-[0_12px_40px_rgba(0,0,0,0.9)]"
-            : "bg-gradient-to-b from-[#000000]/80 via-[#000000]/40 to-transparent backdrop-blur-md"
+            ? "bg-[#000000]/95 backdrop-blur-xl border-b border-white/[0.08] shadow-[0_8px_30px_rgba(0,0,0,0.85)]"
+            : "bg-gradient-to-b from-[#000000]/80 to-transparent backdrop-blur-sm"
         )}
+        style={{ paddingTop: "calc(0.75rem + env(safe-area-inset-top, 0px))" }}
       >
-        {/* Electric Blue Hairline Accent */}
-        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#0088FF]/30 to-transparent pointer-events-none" />
-
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Brand Logo */}
           <BrandLogo />
 
           {/* Desktop Center Nav */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2 bg-white/[0.03] border border-white/[0.06] rounded-full px-4 py-1.5 backdrop-blur-xl shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]">
+          <nav className="hidden lg:flex items-center gap-1 bg-white/[0.03] border border-white/[0.07] rounded-full px-4 py-1.5 backdrop-blur-xl">
             {navLinks.map((link) => {
               const Icon = link.icon;
               const isActive = pathname === link.href;
@@ -88,13 +85,13 @@ export function SiteNav() {
                   key={link.name}
                   href={link.href}
                   className={cn(
-                    "text-[10px] font-sans font-medium tracking-[0.2em] uppercase px-3 py-1.5 rounded-full transition-all duration-300 flex items-center gap-1.5 btn-interactive",
+                    "text-[10px] font-sans font-medium tracking-[0.2em] uppercase px-3.5 py-1.5 rounded-full transition-colors flex items-center gap-1.5 btn-interactive",
                     isActive
-                      ? "text-white bg-white/10 border border-[#0099FF]/40"
-                      : "text-[#9E9EA8] hover:text-white hover:bg-white/[0.06]"
+                      ? "text-white bg-white/10 border border-white/20"
+                      : "text-[#9E9EA8] hover:text-white hover:bg-white/[0.05]"
                   )}
                 >
-                  <Icon className="w-3 h-3 text-[#00A2FF]" />
+                  <Icon className="w-3 h-3 text-[#A09E9A]" />
                   <span>{link.name}</span>
                 </Link>
               );
@@ -102,45 +99,47 @@ export function SiteNav() {
           </nav>
 
           {/* Right Actions */}
-          <div className="flex items-center gap-2.5 sm:gap-3">
-            {/* 1-Click View Demo Console — visible on desktop */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* 1-Click View Demo Console */}
             <Link
               href="/dashboard"
-              className="hidden md:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.1] border border-white/15 text-[10px] font-sans font-medium tracking-wider text-[#D0D0DC] hover:text-white transition-all btn-interactive"
+              className="hidden md:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/15 text-[10px] font-sans font-medium tracking-wider text-[#D0D0DC] hover:text-white transition-all btn-interactive"
             >
-              <LayoutDashboard className="w-3 h-3 text-[#00A2FF]" />
+              <LayoutDashboard className="w-3 h-3 text-[#A09E9A]" />
               <span>VIEW DEMO</span>
             </Link>
 
             <Link href="/order" className="hidden sm:inline-block btn-interactive">
-              <button className="px-4 sm:px-5 py-2 rounded-full bg-gradient-to-r from-[#0055FF] via-[#0088FF] to-[#00A2FF] text-[10px] font-sans font-bold tracking-[0.22em] text-white uppercase transition-all shadow-[0_0_20px_rgba(0,120,255,0.4)] hover:shadow-[0_0_30px_rgba(0,150,255,0.7)] flex items-center gap-1.5">
+              <button className="min-h-[38px] px-5 py-2 rounded-full bg-white text-black font-sans font-semibold text-[10px] tracking-[0.18em] uppercase hover:bg-[#EAE8E4] transition-colors flex items-center gap-1.5 shadow-sm">
                 <ShoppingBag className="w-3 h-3" />
-                <span>ORDER NOW</span>
+                <span>ORDER CARD</span>
               </button>
             </Link>
 
-            {/* Mobile Hamburger — only on non-dashboard public pages */}
+            {/* Mobile Hamburger Button (min 44px touch area for iOS) */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg bg-white/[0.05] border border-white/10 hover:border-white/30 text-white lg:hidden transition-all duration-300 btn-interactive"
+              className="min-w-[44px] min-h-[44px] p-2 rounded-xl bg-white/[0.05] border border-white/10 hover:border-white/30 text-white lg:hidden flex items-center justify-center transition-colors btn-interactive"
               aria-label="Toggle Navigation Menu"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5 text-[#00A2FF]" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? <X className="w-5 h-5 text-white" /> : <Menu className="w-5 h-5 text-white" />}
             </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile Menu Overlay — Marketing Only */}
+      {/* Mobile Menu Overlay — iOS & Android Touch Optimized */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-[#050508]/98 backdrop-blur-3xl flex flex-col px-5 pt-20 pb-8 overflow-y-auto overflow-x-hidden animate-in fade-in duration-300">
-          {/* Ambient Glow */}
-          <div className="absolute top-1/4 right-0 w-80 h-80 bg-[#0066FF]/12 rounded-full blur-[140px] pointer-events-none" />
-          <div className="absolute bottom-10 left-10 w-72 h-72 bg-[#0033AA]/8 rounded-full blur-[140px] pointer-events-none" />
-
-          <div className="relative z-10 flex-1 space-y-2 py-4">
-            <p className="font-mono text-[10px] text-[#00A2FF] uppercase tracking-[0.28em] font-semibold mb-4 flex items-center gap-1.5">
-              <Sparkles className="w-3 h-3" /> NAVIGATION
+        <div
+          className="fixed inset-0 z-40 bg-[#060608]/98 backdrop-blur-2xl flex flex-col px-5 overflow-y-auto overflow-x-hidden animate-in fade-in duration-200"
+          style={{
+            paddingTop: "calc(5.5rem + env(safe-area-inset-top, 0px))",
+            paddingBottom: "calc(2rem + env(safe-area-inset-bottom, 0px))",
+          }}
+        >
+          <div className="relative z-10 flex-1 space-y-2.5 py-2">
+            <p className="font-mono text-[9px] text-[#70707C] uppercase tracking-[0.25em] font-semibold mb-3">
+              NAVIGATION
             </p>
 
             {navLinks.map((link) => {
@@ -152,15 +151,15 @@ export function SiteNav() {
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
                   className={cn(
-                    "flex items-center justify-between p-4 rounded-2xl border transition-all btn-interactive",
+                    "min-h-[52px] flex items-center justify-between p-3.5 rounded-xl border transition-all btn-interactive",
                     isActive
-                      ? "bg-[#0055FF]/25 border-[#0099FF]/50 text-white"
-                      : "bg-white/[0.03] border-white/[0.07] text-[#D0D0DC] hover:text-white hover:bg-white/[0.06] hover:border-white/20"
+                      ? "bg-white/10 border-white/30 text-white"
+                      : "bg-white/[0.02] border-white/[0.06] text-[#D0D0DC] hover:text-white hover:bg-white/[0.05]"
                   )}
                 >
                   <div className="flex items-center gap-3">
-                    <Icon className="w-4 h-4 text-[#00A2FF]" />
-                    <span className="font-cinzel text-sm font-medium tracking-[0.18em] uppercase">{link.name}</span>
+                    <Icon className="w-4 h-4 text-[#A09E9A]" />
+                    <span className="font-cinzel text-sm font-medium tracking-[0.16em] uppercase">{link.name}</span>
                   </div>
                   <ArrowUpRight className="w-4 h-4 text-[#62626E]" />
                 </Link>
@@ -168,34 +167,34 @@ export function SiteNav() {
             })}
           </div>
 
-          {/* Bottom: View Demo Console + Order Card + WhatsApp */}
-          <div className="relative z-10 pt-5 border-t border-white/[0.08] space-y-3">
-            <Link
-              href="/dashboard"
-              onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#0044DD] via-[#0066FF] to-[#0099FF] text-white font-sans font-bold text-sm tracking-wider shadow-[0_0_24px_rgba(0,100,255,0.45)] btn-interactive"
-            >
-              <LayoutDashboard className="w-4 h-4" />
-              <span>VIEW DEMO CONSOLE (1-CLICK)</span>
-            </Link>
-
+          {/* Bottom Actions for Mobile */}
+          <div className="relative z-10 pt-4 border-t border-white/[0.08] space-y-2.5">
             <Link
               href="/order"
               onClick={() => setMobileMenuOpen(false)}
-              className="flex items-center justify-center gap-2 w-full py-3 rounded-2xl bg-white/[0.05] border border-white/20 text-white font-sans font-semibold text-sm tracking-wider hover:bg-white/10 transition-all btn-interactive"
+              className="min-h-[48px] flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-white text-black font-sans font-semibold text-xs tracking-wider uppercase hover:bg-[#EAE8E4] transition-colors btn-interactive shadow-sm"
             >
-              <ShoppingBag className="w-4 h-4 text-[#00A2FF]" />
+              <ShoppingBag className="w-4 h-4" />
               <span>ORDER METAL CARD</span>
+            </Link>
+
+            <Link
+              href="/dashboard"
+              onClick={() => setMobileMenuOpen(false)}
+              className="min-h-[46px] flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-white/[0.04] border border-white/15 text-white font-sans font-medium text-xs tracking-wider hover:bg-white/[0.08] transition-colors btn-interactive"
+            >
+              <LayoutDashboard className="w-4 h-4 text-[#A09E9A]" />
+              <span>VIEW CLIENT DEMO CONSOLE</span>
             </Link>
 
             <a
               href="https://wa.me/919561248677?text=Hello%20NXC%20Verse%20Concierge"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 py-2 text-xs font-mono text-[#9E9EA8] hover:text-white tracking-wider btn-interactive transition-colors"
+              className="flex items-center justify-center gap-2 py-2 text-xs font-mono text-[#9E9EA8] hover:text-white tracking-wider transition-colors pt-1"
             >
-              <WhatsAppIcon className="w-4 h-4 text-[#25D366]" color="#25D366" />
-              <span>VIP Concierge: +91 9561248677</span>
+              <WhatsAppIcon className="w-3.5 h-3.5 text-[#25D366]" color="#25D366" />
+              <span>Concierge: +91 9561248677</span>
             </a>
           </div>
         </div>

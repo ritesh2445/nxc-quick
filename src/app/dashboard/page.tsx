@@ -11,13 +11,11 @@ import {
   Edit,
   CreditCard,
   CheckCircle,
-  Sparkles,
-  ArrowUpRight,
   TrendingUp,
   Shield,
   PlusCircle,
 } from "lucide-react";
-import { formatCurrency, formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
@@ -25,14 +23,14 @@ export default async function DashboardPage() {
   const session = await getCurrentUser();
   const userId = session?.user?.id || "usr_ritesh";
 
-  // Query account data from D1 database
+  // Query account data from D1 / SQLite database
   const data = await getUserDashboardData(userId);
 
   if (!data) {
     return <div className="p-8 text-[#9E9EA8]">Account data not found.</div>;
   }
 
-  const { profile, card, cards, subscription, stats, recentEvents } = data;
+  const { profile, card, cards, stats, recentEvents } = data;
 
   const statCards = [
     {
@@ -40,28 +38,28 @@ export default async function DashboardPage() {
       value: stats.totalViews.toString(),
       icon: Eye,
       detail: "Unique visitors to your sovereign URL",
-      color: "text-[#00A2FF]",
+      color: "text-[#E2E0DC]",
     },
     {
       title: "Contact Saves",
       value: stats.totalSaves.toString(),
       icon: ArrowDownToLine,
       detail: "1-Click .VCF contact downloads",
-      color: "text-[#66C2FF]",
+      color: "text-[#E2E0DC]",
     },
     {
       title: "QR Scans",
       value: stats.totalScans.toString(),
       icon: QrCode,
       detail: "Laser QR matrix scans",
-      color: "text-[#80D0FF]",
+      color: "text-[#E2E0DC]",
     },
     {
       title: "NFC Taps",
       value: stats.totalTaps.toString(),
       icon: Radio,
       detail: "Contactless hardware taps",
-      color: "text-[#0077FF]",
+      color: "text-[#E2E0DC]",
     },
   ];
 
@@ -70,8 +68,8 @@ export default async function DashboardPage() {
       {/* Top Greeting Banner */}
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-5 border-b border-white/[0.08]">
         <div className="space-y-1">
-          <span className="font-mono text-[11px] text-[#00A2FF] uppercase tracking-[0.25em] font-semibold flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5" /> CLIENT CONSOLE · SOVEREIGN IDENTITY
+          <span className="font-mono text-[10px] sm:text-[11px] text-[#8E8E98] uppercase tracking-[0.24em] font-medium flex items-center gap-1.5">
+            CLIENT CONSOLE · SOVEREIGN IDENTITY
           </span>
           <h1 className="font-cinzel font-medium text-2xl sm:text-3xl text-white tracking-tight">
             Welcome back, {profile.fullName}
@@ -86,13 +84,13 @@ export default async function DashboardPage() {
 
         <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5 sm:gap-3 shrink-0">
           <Link href={`/@${profile.username}`} target="_blank" className="flex-1 sm:flex-initial btn-interactive">
-            <button className="w-full px-4 sm:px-5 py-2.5 rounded-full bg-white/[0.04] border border-white/20 hover:border-[#0099FF]/50 text-xs font-sans text-white hover:bg-white/[0.08] transition-all flex items-center justify-center gap-1.5 shadow-sm">
-              <ExternalLink className="w-3.5 h-3.5 text-[#00A2FF]" />
+            <button className="w-full min-h-[42px] px-4 sm:px-5 py-2 rounded-full bg-white/[0.04] border border-white/20 hover:border-white/40 text-xs font-sans text-white hover:bg-white/[0.08] transition-colors flex items-center justify-center gap-1.5 shadow-sm">
+              <ExternalLink className="w-3.5 h-3.5 text-[#A09E9A]" />
               <span>View Live Profile</span>
             </button>
           </Link>
           <Link href="/dashboard/profile" className="flex-1 sm:flex-initial btn-interactive">
-            <button className="w-full px-4 sm:px-5 py-2.5 rounded-full bg-gradient-to-r from-[#0055FF] via-[#0088FF] to-[#00A2FF] text-white text-xs font-sans font-bold tracking-wider uppercase transition-all shadow-[0_0_20px_rgba(0,120,255,0.4)] flex items-center justify-center gap-1.5">
+            <button className="w-full min-h-[42px] px-4 sm:px-5 py-2 rounded-full bg-white text-black text-xs font-sans font-semibold tracking-wider uppercase transition-colors hover:bg-[#EAE8E4] flex items-center justify-center gap-1.5 shadow-sm">
               <Edit className="w-3.5 h-3.5" />
               <span>Edit Profile</span>
             </button>
@@ -100,17 +98,15 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      {/* 4 Metrics Grid (Glassmorphism & Electric Blue Accents) */}
+      {/* 4 Metrics Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {statCards.map((s, idx) => {
           const Icon = s.icon;
           return (
             <div
               key={idx}
-              className="bg-[#06060A]/80 border border-white/[0.08] rounded-2xl p-4 sm:p-5 space-y-3 relative overflow-hidden backdrop-blur-xl shadow-lg hover:border-white/20 transition-all group"
+              className="bg-[#08080A] border border-white/[0.08] rounded-2xl p-4 sm:p-5 space-y-3 relative overflow-hidden backdrop-blur-xl shadow-md hover:border-white/20 transition-colors group"
             >
-              <div className="absolute top-0 right-0 w-24 h-24 bg-[#0088FF]/5 rounded-bl-full pointer-events-none group-hover:bg-[#0088FF]/10 transition-colors" />
-
               <div className="flex items-center justify-between">
                 <span className="font-mono text-[10px] sm:text-[11px] text-[#8E8E98] uppercase tracking-wider">
                   {s.title}
@@ -135,21 +131,20 @@ export default async function DashboardPage() {
 
       {/* 2 Column Main Section */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Column: Physical Hardware or Digital Only Status */}
-        <div className="lg:col-span-6 bg-[#06060A]/80 border border-white/[0.08] rounded-2xl p-5 sm:p-7 space-y-5 sm:space-y-6 backdrop-blur-xl shadow-xl">
+        {/* Left Column: Physical Hardware Status */}
+        <div className="lg:col-span-6 bg-[#08080A] border border-white/[0.08] rounded-2xl p-5 sm:p-7 space-y-5 backdrop-blur-xl shadow-md">
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/[0.06] pb-3">
             <h3 className="font-cinzel text-sm sm:text-base font-medium text-white tracking-wider flex items-center gap-2">
-              <CreditCard className="w-4 h-4 text-[#00A2FF]" />
+              <CreditCard className="w-4 h-4 text-[#C8C6C0]" />
               Physical Hardware
             </h3>
             {card ? (
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#0055FF]/15 border border-[#0099FF]/40 text-[#80D0FF] font-mono text-[10px] font-semibold tracking-wider">
-                <CheckCircle className="w-3 h-3 text-[#00A2FF]" />
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/[0.06] border border-white/20 text-[#E2E0DC] font-mono text-[10px] font-medium tracking-wider">
+                <CheckCircle className="w-3 h-3 text-[#25D366]" />
                 HARDWARE PAIRED ({cards.length})
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 font-mono text-[10px] font-semibold tracking-wider">
-                <Sparkles className="w-3 h-3 text-emerald-400" />
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-mono text-[10px] font-medium tracking-wider">
                 DIGITAL IDENTITY ACTIVE
               </span>
             )}
@@ -167,7 +162,7 @@ export default async function DashboardPage() {
               </div>
               <div className="flex justify-between py-2 border-b border-white/[0.04]">
                 <span className="text-[#8E8E98]">NFC Chip Status:</span>
-                <span className="font-mono text-[#00A2FF] font-semibold">{card.nfcUid || "ACTIVATED / NTAG216"}</span>
+                <span className="font-mono text-white font-semibold">{card.nfcUid || "ACTIVATED / NTAG216"}</span>
               </div>
               <div className="flex justify-between py-2 border-b border-white/[0.04]">
                 <span className="text-[#8E8E98]">Engraving:</span>
@@ -180,12 +175,12 @@ export default async function DashboardPage() {
 
               <div className="pt-2 flex gap-2">
                 <Link href="/dashboard/card" className="flex-1 btn-interactive">
-                  <button className="w-full py-3 rounded-full bg-white/[0.04] border border-white/15 hover:border-[#0099FF]/50 text-white font-sans font-semibold text-xs tracking-wider uppercase transition-all">
+                  <button className="w-full min-h-[42px] py-2 rounded-full bg-white/[0.04] border border-white/15 hover:border-white/30 text-white font-sans font-medium text-xs tracking-wider uppercase transition-colors">
                     Manage Card
                   </button>
                 </Link>
                 <Link href="/order" className="btn-interactive">
-                  <button className="px-4 py-3 rounded-full bg-white/[0.04] border border-white/15 hover:border-[#0099FF]/50 text-[#00A2FF] font-sans font-semibold text-xs flex items-center gap-1.5 transition-all">
+                  <button className="min-h-[42px] px-4 py-2 rounded-full bg-white/[0.04] border border-white/15 hover:border-white/30 text-white font-sans font-medium text-xs flex items-center gap-1.5 transition-colors">
                     <PlusCircle className="w-3.5 h-3.5" />
                     <span>Add Card</span>
                   </button>
@@ -193,19 +188,19 @@ export default async function DashboardPage() {
               </div>
             </div>
           ) : (
-            <div className="space-y-4 text-center py-4">
-              <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.06] text-left space-y-2 text-xs">
+            <div className="space-y-4 text-center py-3">
+              <div className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] text-left space-y-2 text-xs">
                 <div className="flex items-center gap-2 text-white font-medium">
-                  <Shield className="w-4 h-4 text-[#00A2FF]" />
+                  <Shield className="w-4 h-4 text-[#A09E9A]" />
                   <span>Sovereign Digital Identity Tier</span>
                 </div>
                 <p className="text-[#8E8E98] text-[11px] leading-relaxed">
-                  Your digital identity profile at <code className="text-[#00A2FF]">nxcverse.in/@{profile.username}</code> is fully active with vCard downloads and lead capture enabled.
+                  Your digital identity profile at <code className="text-white">nxcverse.in/@{profile.username}</code> is fully active with vCard downloads and lead capture enabled.
                 </p>
               </div>
 
               <Link href="/order" className="block w-full btn-interactive">
-                <button className="w-full py-3.5 rounded-full bg-gradient-to-r from-[#0055FF] via-[#0088FF] to-[#00A2FF] text-white font-sans font-bold text-xs tracking-wider uppercase shadow-[0_0_20px_rgba(0,120,255,0.4)] flex items-center justify-center gap-2">
+                <button className="w-full min-h-[46px] py-3 rounded-full bg-white text-black font-sans font-semibold text-xs tracking-wider uppercase hover:bg-[#EAE8E4] flex items-center justify-center gap-2 shadow-sm transition-colors">
                   <CreditCard className="w-4 h-4" />
                   <span>Commission Aerospace Metal Card (₹1,599)</span>
                 </button>
@@ -215,13 +210,13 @@ export default async function DashboardPage() {
         </div>
 
         {/* Right Column: Real-Time Event Feed */}
-        <div className="lg:col-span-6 bg-[#06060A]/80 border border-white/[0.08] rounded-2xl p-5 sm:p-7 space-y-5 sm:space-y-6 backdrop-blur-xl shadow-xl">
+        <div className="lg:col-span-6 bg-[#08080A] border border-white/[0.08] rounded-2xl p-5 sm:p-7 space-y-5 backdrop-blur-xl shadow-md">
           <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
             <h3 className="font-cinzel text-sm sm:text-base font-medium text-white tracking-wider flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-[#00A2FF]" />
+              <TrendingUp className="w-4 h-4 text-[#C8C6C0]" />
               Real-Time Activity
             </h3>
-            <span className="font-mono text-[10px] text-[#00A2FF] uppercase tracking-wider font-semibold">
+            <span className="font-mono text-[10px] text-[#A0A0AA] uppercase tracking-wider font-semibold">
               LIVE STREAM
             </span>
           </div>
@@ -234,7 +229,7 @@ export default async function DashboardPage() {
                   className="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/[0.05] text-xs font-sans gap-2"
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="w-2 h-2 rounded-full bg-[#0099FF] shadow-[0_0_6px_#0099FF] shrink-0" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-white shrink-0" />
                     <span className="text-white font-medium capitalize truncate">{ev.eventType.replace("_", " ")}</span>
                     <span className="text-[#7E7E8E] truncate text-[11px]">· {ev.referrer || "Direct"}</span>
                   </div>
@@ -245,14 +240,14 @@ export default async function DashboardPage() {
               ))
             ) : (
               <div className="text-center py-6 text-xs text-[#7E7E8E] font-sans">
-                No recent activity recorded yet. Share your sovereign profile to generate live analytics.
+                No recent activity recorded yet. Share your sovereign profile to generate live telemetry.
               </div>
             )}
           </div>
 
-          <div className="pt-2">
+          <div className="pt-1">
             <Link href="/dashboard/analytics" className="block w-full btn-interactive">
-              <button className="w-full py-3 rounded-full bg-white/[0.04] border border-white/15 hover:border-[#0099FF]/50 text-white font-sans font-semibold text-xs tracking-wider uppercase transition-all">
+              <button className="w-full min-h-[42px] py-2.5 rounded-full bg-white/[0.04] border border-white/15 hover:border-white/30 text-white font-sans font-medium text-xs tracking-wider uppercase transition-colors">
                 View Detailed Analytics
               </button>
             </Link>

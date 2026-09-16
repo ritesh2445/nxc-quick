@@ -7,29 +7,27 @@ import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 
 export function FinalCta() {
   return (
-    <section className="w-full py-20 sm:py-28 md:py-36 px-4 sm:px-6 bg-[#000000] border-t border-white/[0.08] relative overflow-hidden text-center select-none">
-      {/* Background radial luxury glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[750px] h-[750px] bg-gradient-to-b from-white/[0.03] to-transparent rounded-full blur-[180px] pointer-events-none" />
-
+    <section className="w-full py-20 sm:py-28 md:py-32 px-4 sm:px-6 bg-[#000000] border-t border-white/[0.08] relative overflow-hidden text-center select-none">
       <div className="max-w-4xl mx-auto space-y-8 sm:space-y-10 relative z-10">
         {/* Subtle Watermark NXC Logo */}
-        <div className="w-16 sm:w-20 h-20 sm:h-24 mx-auto opacity-85 flex items-center justify-center">
+        <div className="w-14 sm:w-16 h-18 sm:h-20 mx-auto opacity-80 flex items-center justify-center">
           <PhoenixEmblem />
         </div>
 
-        <div className="space-y-4">
-          <h2 className="font-sans font-medium text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white tracking-tight">
+        <div className="space-y-3">
+          <h2 className="font-cinzel font-medium text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white tracking-tight">
             Make an impression that stays.
           </h2>
-          <p className="font-sans text-sm md:text-base text-[#9E9EA8] max-w-lg mx-auto leading-relaxed">
-            Your physical card introduces you. Your sovereign digital identity keeps you connected forever.
+          <p className="font-sans text-xs sm:text-base text-[#9E9EA8] max-w-lg mx-auto leading-relaxed">
+            Your physical metal card introduces you. Your sovereign digital identity keeps you connected forever.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
           <Link href="/order" className="btn-interactive">
-            <Button variant="primary" size="lg" className="h-12 px-8 bg-gradient-to-r from-[#0055FF] via-[#0088FF] to-[#00A2FF] text-white font-bold shadow-[0_0_30px_rgba(0,120,255,0.45)] hover:shadow-[0_0_45px_rgba(0,150,255,0.7)] border-none">
-              ACQUIRE YOUR CARD <ArrowUpRight className="w-4 h-4 ml-1.5" />
+            <Button variant="primary" size="lg" className="min-h-[46px] px-8 bg-white text-black font-semibold hover:bg-[#EAE8E4] shadow-[0_4px_24px_rgba(255,255,255,0.18)] border-none rounded-full text-xs tracking-wider">
+              <span>ACQUIRE YOUR CARD</span>
+              <ArrowUpRight className="w-4 h-4 ml-1" />
             </Button>
           </Link>
 
@@ -37,14 +35,15 @@ export function FinalCta() {
             href="https://wa.me/919561248677"
             target="_blank"
             rel="noopener noreferrer"
-            className="h-12 px-6 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white font-sans font-bold flex items-center gap-2 text-xs tracking-wider transition-all duration-200 shadow-md btn-interactive"
+            className="min-h-[46px] px-6 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/20 text-white font-sans font-medium flex items-center gap-2 text-xs tracking-wider transition-all shadow-sm btn-interactive"
           >
-            <WhatsAppIcon className="w-4 h-4 text-white" color="#FFFFFF" /> WhatsApp Concierge
+            <WhatsAppIcon className="w-4 h-4 text-[#25D366]" color="#25D366" />
+            <span>WhatsApp Concierge</span>
           </a>
         </div>
 
-        <div className="pt-8">
-          <span className="font-mono text-[10px] text-[#62626E] tracking-[0.25em] uppercase">
+        <div className="pt-6">
+          <span className="font-mono text-[10px] text-[#62626E] tracking-[0.22em] uppercase">
             SHIPPED GLOBALLY · READY IN 48 HOURS · LIFETIME WARRANTY
           </span>
         </div>

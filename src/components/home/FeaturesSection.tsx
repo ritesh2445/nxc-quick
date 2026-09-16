@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { Cpu, ShieldCheck, Zap, QrCode, Smartphone, Sparkles, Layers, RefreshCw } from "lucide-react";
 
 export function FeaturesSection() {
@@ -81,9 +82,10 @@ export function FeaturesSection() {
           {features.map((f, idx) => {
             const Icon = f.icon;
             return (
-              <div
+              <Link
                 key={idx}
-                className="group relative bg-[#060608] hover:bg-[#0B0B0E] border border-white/[0.08] hover:border-white/25 rounded-[16px] p-5 sm:p-7 md:p-8 flex flex-col justify-between transition-all duration-300 shadow-[0_20px_50px_rgba(0,0,0,0.8)] hover:shadow-[0_30px_70px_rgba(0,0,0,0.95)] hover:-translate-y-1.5 overflow-hidden"
+                href="/order"
+                className="group relative bg-[#060608] hover:bg-[#0B0B0E] border border-white/[0.08] hover:border-white/25 rounded-[16px] p-5 sm:p-7 md:p-8 flex flex-col justify-between transition-all duration-300 shadow-[0_20px_50px_rgba(0,0,0,0.8)] hover:shadow-[0_30px_70px_rgba(0,0,0,0.95)] hover:-translate-y-1.5 overflow-hidden btn-interactive block"
               >
                 {/* Subtle top glare highlight */}
                 <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -110,9 +112,11 @@ export function FeaturesSection() {
 
                 <div className="pt-6 mt-6 border-t border-white/[0.06] flex items-center justify-between text-[10px] font-mono text-[#62626E] group-hover:text-[#9E9EA8] transition-colors">
                   <span>SPECIFICATION 0{idx + 1}</span>
-                  <span className="opacity-0 group-hover:opacity-100 transition-opacity">INCLUDED →</span>
+                  <span className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 text-white font-medium">
+                    ACQUIRE →
+                  </span>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>

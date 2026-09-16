@@ -20,7 +20,7 @@ export function FloatingWhatsApp() {
   }
 
   return (
-    <aside aria-label="WhatsApp Concierge" className="fixed bottom-6 right-6 z-50 flex items-center gap-3">
+    <aside aria-label="WhatsApp Concierge" className="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] right-5 sm:right-6 z-50 flex items-center gap-3">
       <a
         href="https://wa.me/919561248677"
         target="_blank"

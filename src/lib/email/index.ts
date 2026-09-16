@@ -85,10 +85,10 @@ export function getLuxuryEmailWrapper(contentHtml: string) {
           .container { max-width: 600px; margin: 40px auto; background-color: #060608; border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; overflow: hidden; padding: 40px; }
           .header { text-align: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 25px; margin-bottom: 30px; }
           .title { font-family: 'Cinzel', Georgia, serif; font-size: 22px; letter-spacing: 0.15em; color: #FFFFFF; margin: 0; text-transform: uppercase; }
-          .subtitle { font-size: 11px; letter-spacing: 0.25em; color: #00A2FF; margin-top: 6px; text-transform: uppercase; font-weight: 600; }
-          .content { font-size: 14px; line-height: 1.7; color: #B0B0C0; }
-          .button { display: inline-block; background: linear-gradient(90deg, #0055FF, #0099FF); color: #FFFFFF !important; text-decoration: none; padding: 14px 32px; border-radius: 999px; font-weight: bold; font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; margin: 25px 0; }
-          .footer { text-align: center; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 25px; font-size: 11px; color: #62626E; }
+          .subtitle { font-size: 11px; letter-spacing: 0.25em; color: #A1A1AA; margin-top: 6px; text-transform: uppercase; font-weight: 600; }
+          .content { font-size: 14px; line-height: 1.7; color: #D4D2CD; }
+          .button { display: inline-block; background: #FFFFFF; color: #000000 !important; text-decoration: none; padding: 14px 32px; border-radius: 999px; font-weight: bold; font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; margin: 25px 0; }
+          .footer { text-align: center; margin-top: 40px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 25px; font-size: 11px; color: #71717A; }
         </style>
       </head>
       <body>
@@ -127,7 +127,7 @@ export async function sendWelcomeEmail({
     <p>Welcome to the sovereign identity network. Your permanent digital identity is now active and ready for instantaneous connection.</p>
     <div style="background-color: #0E0E14; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 20px; margin: 20px 0;">
       <div style="color: #8E8E98; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 5px;">Your Sovereign Handle</div>
-      <div style="color: #00A2FF; font-family: monospace; font-size: 16px; font-weight: bold;">@${username}</div>
+      <div style="color: #FFFFFF; font-family: monospace; font-size: 16px; font-weight: bold;">@${username}</div>
       <div style="color: #A0A0B0; font-size: 12px; margin-top: 6px;">URL: <a href="${profileUrl}" style="color: #FFFFFF;">${profileUrl}</a></div>
     </div>
     ${
@@ -167,12 +167,12 @@ export async function sendLeadReceivedAlertEmail({
   const html = getLuxuryEmailWrapper(`
     <p>Dear ${ownerName},</p>
     <p>You have captured a new executive connection through your NXC Verse sovereign profile.</p>
-    <div style="background-color: #0E0E14; border: 1px solid rgba(0,162,255,0.3); border-radius: 14px; padding: 20px; margin: 20px 0;">
-      <div style="color: #00A2FF; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: bold; margin-bottom: 10px;">Contact Details Captured</div>
+    <div style="background-color: #0E0E14; border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 20px; margin: 20px 0;">
+      <div style="color: #A1A1AA; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: bold; margin-bottom: 10px;">Contact Details Captured</div>
       <div style="color: #FFFFFF; font-size: 16px; font-weight: bold; margin-bottom: 6px;">${leadName}</div>
       ${leadCompany ? `<div style="color: #A0A0B0; font-size: 12px;">Organization: ${leadCompany}</div>` : ""}
-      ${leadEmail ? `<div style="color: #A0A0B0; font-size: 12px;">Email: <a href="mailto:${leadEmail}" style="color: #00A2FF;">${leadEmail}</a></div>` : ""}
-      ${leadPhone ? `<div style="color: #A0A0B0; font-size: 12px;">Phone: <a href="tel:${leadPhone}" style="color: #00A2FF;">${leadPhone}</a></div>` : ""}
+      ${leadEmail ? `<div style="color: #A0A0B0; font-size: 12px;">Email: <a href="mailto:${leadEmail}" style="color: #FFFFFF; text-decoration: underline;">${leadEmail}</a></div>` : ""}
+      ${leadPhone ? `<div style="color: #A0A0B0; font-size: 12px;">Phone: <a href="tel:${leadPhone}" style="color: #FFFFFF; text-decoration: underline;">${leadPhone}</a></div>` : ""}
       ${leadMessage ? `<div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.06); font-style: italic; color: #D0D0DC; font-size: 12px;">"${leadMessage}"</div>` : ""}
     </div>
     <div style="text-align: center;">

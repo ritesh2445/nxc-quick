@@ -14,9 +14,7 @@ import {
   QrCode,
   Download,
   Copy,
-  Sparkles,
   ShieldCheck,
-  Globe,
   Radio,
   Upload,
   Zap,
@@ -245,40 +243,38 @@ export default function ProfileEditorPage() {
   };
 
   return (
-    <div className="space-y-6 text-left">
+    <div className="space-y-6 text-left max-w-5xl">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">
         <div>
-          <span className="font-mono text-xs text-[#00A2FF] uppercase tracking-[0.25em] font-semibold flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5" /> IDENTITY CONFIGURATION
+          <span className="font-mono text-xs text-[#A1A1AA] uppercase tracking-[0.2em] font-medium flex items-center gap-1.5">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#C8C6C0]" /> IDENTITY CONFIGURATION
           </span>
           <h1 className="font-cinzel font-medium text-2xl sm:text-3xl text-white tracking-wide mt-1">
             Profile Editor
           </h1>
-          <p className="font-sans text-xs text-[#9E9EA8] mt-0.5">
-            Changes made here update your live public profile and .VCF contact card instantly in the cloud.
+          <p className="font-sans text-xs text-[#8E8E98] mt-0.5">
+            Changes update your live public profile and .VCF contact card instantaneously in the cloud.
           </p>
         </div>
 
-        <a href={`/@${username}`} target="_blank" rel="noopener noreferrer" className="btn-interactive">
-          <Button variant="outline" size="sm" className="w-full sm:w-auto text-xs rounded-full border-white/20 hover:border-[#0088FF] text-white">
-            <ExternalLink className="w-3.5 h-3.5 mr-1 text-[#00A2FF]" /> VIEW LIVE PROFILE
+        <a href={`/@${username}`} target="_blank" rel="noopener noreferrer" className="btn-interactive shrink-0">
+          <Button variant="outline" size="sm" className="w-full sm:w-auto text-xs min-h-[44px] sm:min-h-0 rounded-full border-white/20 hover:border-white/40 text-white">
+            <ExternalLink className="w-3.5 h-3.5 mr-1.5 text-[#A1A1AA]" /> VIEW LIVE PROFILE
           </Button>
         </a>
       </div>
 
       {/* Sovereign Identifier & QR Matrix */}
-      <div className="bg-[#060608] border border-white/[0.1] rounded-[20px] p-4 sm:p-7 shadow-[0_20px_60px_rgba(0,0,0,0.9)] relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-[#0066FF]/10 rounded-full blur-[100px] pointer-events-none" />
-
+      <div className="bg-[#0E0E12] border border-white/[0.08] rounded-2xl p-5 sm:p-7 shadow-xl relative overflow-hidden">
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6 relative z-10">
           <div className="space-y-3 max-w-xl">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-2.5 py-1 rounded-full bg-white/[0.06] border border-white/15 text-[10px] font-mono text-[#00A2FF] uppercase tracking-wider flex items-center gap-1.5">
-                <Lock className="w-3 h-3 text-[#00A2FF]" /> PERMANENT IDENTIFIER
+              <span className="px-2.5 py-1 rounded-full bg-white/[0.05] border border-white/10 text-[10px] font-mono text-[#C8C6C0] uppercase tracking-wider flex items-center gap-1.5">
+                <Lock className="w-3 h-3 text-[#A1A1AA]" /> PERMANENT IDENTIFIER
               </span>
-              <span className="px-2 py-0.5 rounded-full bg-[#0055FF]/20 text-[10px] font-mono text-[#80D0FF]">
-                NON-EDITABLE
+              <span className="px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/10 text-[10px] font-mono text-[#8E8E98]">
+                LOCKED
               </span>
             </div>
 
@@ -291,24 +287,24 @@ export default function ProfileEditorPage() {
               </p>
             </div>
 
-            <p className="font-sans text-xs text-[#9E9EA8] leading-relaxed">
-              Your unique sovereign handle and default hardware QR matrix are permanently assigned to this profile, hardwired to your metal card's contactless NFC chip.
+            <p className="font-sans text-xs text-[#8E8E98] leading-relaxed">
+              Your sovereign handle and hardware QR matrix are permanently assigned to this profile, hardwired to your metal card's contactless NFC chip.
             </p>
 
             <div className="pt-1">
               <button
                 type="button"
                 onClick={handleCopyUrl}
-                className="w-full sm:w-auto px-4 py-2 rounded-full bg-white/[0.05] hover:bg-white/[0.1] border border-white/10 text-xs font-mono text-[#E2E0DC] hover:text-white flex items-center justify-center gap-1.5 transition-colors"
+                className="w-full sm:w-auto px-4 py-2.5 min-h-[44px] sm:min-h-0 rounded-full bg-white/[0.05] hover:bg-white/[0.1] active:scale-[0.98] border border-white/10 text-xs font-mono text-[#E2E0DC] hover:text-white flex items-center justify-center gap-1.5 transition-all"
               >
-                {copiedUrl ? <Check className="w-3.5 h-3.5 text-[#00E5FF]" /> : <Copy className="w-3.5 h-3.5 text-[#00A2FF]" />}
+                {copiedUrl ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-[#A1A1AA]" />}
                 <span>{copiedUrl ? "COPIED TO CLIPBOARD" : "COPY PUBLIC LINK"}</span>
               </button>
             </div>
           </div>
 
-          <div className="bg-[#0A0A0E] border border-white/[0.1] rounded-[16px] p-4 flex flex-col items-center justify-center space-y-3 shrink-0 shadow-inner">
-            <div className="p-2 bg-white rounded-[10px] shadow-lg">
+          <div className="bg-[#060608] border border-white/[0.08] rounded-xl p-4 flex flex-col items-center justify-center space-y-3 shrink-0 shadow-inner">
+            <div className="p-2.5 bg-white rounded-lg shadow-lg">
               {qrDataUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -317,7 +313,7 @@ export default function ProfileEditorPage() {
                   className="w-28 h-28 sm:w-32 sm:h-32 object-contain"
                 />
               ) : (
-                <div className="w-28 h-28 sm:w-32 sm:h-32 bg-[#111] flex items-center justify-center text-[10px] font-mono text-white">
+                <div className="w-28 h-28 sm:w-32 sm:h-32 bg-[#111] flex items-center justify-center text-[10px] font-mono text-[#8E8E98]">
                   GENERATING QR...
                 </div>
               )}
@@ -330,9 +326,9 @@ export default function ProfileEditorPage() {
               <button
                 type="button"
                 onClick={handleDownloadQr}
-                className="text-[11px] font-mono text-[#00A2FF] hover:text-white flex items-center gap-1 mx-auto transition-colors"
+                className="text-[11px] font-mono text-[#C8C6C0] hover:text-white flex items-center justify-center gap-1 mx-auto transition-colors min-h-[36px] sm:min-h-0"
               >
-                <Download className="w-3 h-3" />
+                <Download className="w-3 h-3 text-[#A1A1AA]" />
                 <span>SAVE QR PNG</span>
               </button>
             </div>
@@ -343,35 +339,36 @@ export default function ProfileEditorPage() {
       {/* Main Profile Form */}
       <form onSubmit={handleSave} className="space-y-6 sm:space-y-8">
         {/* VIP Direct Mode Switch Card */}
-        <div className="bg-[#060608] border border-white/[0.1] rounded-[20px] p-4 sm:p-7 space-y-3 shadow-lg backdrop-blur-xl">
-          <div className="flex items-center justify-between">
+        <div className="bg-[#0E0E12] border border-white/[0.08] rounded-2xl p-5 sm:p-7 space-y-3 shadow-lg">
+          <div className="flex items-center justify-between gap-4">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <Zap className="w-4 h-4 text-[#FFD700]" />
+                <Zap className="w-4 h-4 text-white" />
                 <h3 className="font-cinzel font-medium text-base text-white">
                   VIP Direct Mode
                 </h3>
                 {vipDirectMode && (
-                  <span className="px-2 py-0.5 rounded-full bg-[#FFD700]/20 border border-[#FFD700]/40 text-[#FFD700] text-[9px] font-mono font-bold uppercase">
+                  <span className="px-2 py-0.5 rounded-full bg-white/10 border border-white/20 text-white text-[9px] font-mono font-bold uppercase">
                     ACTIVE
                   </span>
                 )}
               </div>
               <p className="font-sans text-xs text-[#8E8E98] leading-relaxed max-w-2xl">
-                When enabled, visitors and NFC taps immediately download your contact vCard (.vcf) directly into their phonebook without displaying the web profile page.
+                When enabled, NFC taps immediately download your verified vCard (.vcf) into the phonebook without showing the profile webpage.
               </p>
             </div>
 
             <button
               type="button"
               onClick={() => setVipDirectMode(!vipDirectMode)}
-              className={`w-12 h-6 rounded-full transition-colors relative shrink-0 p-0.5 ${
-                vipDirectMode ? "bg-[#0088FF]" : "bg-white/20"
+              aria-label="Toggle VIP Direct Mode"
+              className={`w-13 h-7 sm:w-12 sm:h-6 rounded-full transition-colors relative shrink-0 p-0.5 ${
+                vipDirectMode ? "bg-white" : "bg-white/20"
               }`}
             >
               <div
-                className={`w-5 h-5 rounded-full bg-white transition-transform ${
-                  vipDirectMode ? "translate-x-6" : "translate-x-0"
+                className={`w-6 h-6 sm:w-5 sm:h-5 rounded-full shadow-md transition-transform ${
+                  vipDirectMode ? "translate-x-6 sm:translate-x-6 bg-black" : "translate-x-0 bg-white"
                 }`}
               />
             </button>
@@ -379,7 +376,7 @@ export default function ProfileEditorPage() {
         </div>
 
         {/* Core Profile Attributes */}
-        <div className="bg-[#060608] border border-white/[0.08] rounded-[20px] p-4 sm:p-7 md:p-8 space-y-5 sm:space-y-6 shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
+        <div className="bg-[#0E0E12] border border-white/[0.08] rounded-2xl p-5 sm:p-7 md:p-8 space-y-5 sm:space-y-6 shadow-xl">
           <div className="border-b border-white/[0.08] pb-3">
             <h3 className="font-cinzel font-medium text-base text-white tracking-wide">
               Core Identity & Contact Information
@@ -391,7 +388,7 @@ export default function ProfileEditorPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             <div>
-              <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] font-mono text-[#A1A1AA] uppercase tracking-wider mb-1.5">
                 Full Name *
               </label>
               <input
@@ -399,12 +396,12 @@ export default function ProfileEditorPage() {
                 required
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="w-full bg-[#0E0E14] border border-white/[0.1] rounded-[12px] px-3.5 py-2.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF]"
+                className="w-full bg-[#14141A] border border-white/[0.1] rounded-xl px-3.5 py-3 sm:py-2.5 min-h-[44px] text-base sm:text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] font-mono text-[#A1A1AA] uppercase tracking-wider mb-1.5">
                 Designation / Professional Title *
               </label>
               <input
@@ -412,36 +409,36 @@ export default function ProfileEditorPage() {
                 required
                 value={designation}
                 onChange={(e) => setDesignation(e.target.value)}
-                className="w-full bg-[#0E0E14] border border-white/[0.1] rounded-[12px] px-3.5 py-2.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF]"
+                className="w-full bg-[#14141A] border border-white/[0.1] rounded-xl px-3.5 py-3 sm:py-2.5 min-h-[44px] text-base sm:text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] font-mono text-[#A1A1AA] uppercase tracking-wider mb-1.5">
                 Company / Organization
               </label>
               <input
                 type="text"
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
-                className="w-full bg-[#0E0E14] border border-white/[0.1] rounded-[12px] px-3.5 py-2.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF]"
+                className="w-full bg-[#14141A] border border-white/[0.1] rounded-xl px-3.5 py-3 sm:py-2.5 min-h-[44px] text-base sm:text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] font-mono text-[#A1A1AA] uppercase tracking-wider mb-1.5">
                 Location (City, Country)
               </label>
               <input
                 type="text"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                className="w-full bg-[#0E0E14] border border-white/[0.1] rounded-[12px] px-3.5 py-2.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF]"
+                className="w-full bg-[#14141A] border border-white/[0.1] rounded-xl px-3.5 py-3 sm:py-2.5 min-h-[44px] text-base sm:text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] font-mono text-[#A1A1AA] uppercase tracking-wider mb-1.5">
                 Direct Phone Number
               </label>
               <input
@@ -449,12 +446,12 @@ export default function ProfileEditorPage() {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+91 95612 48677"
-                className="w-full bg-[#0E0E14] border border-white/[0.1] rounded-[12px] px-3.5 py-2.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF] font-mono"
+                className="w-full bg-[#14141A] border border-white/[0.1] rounded-xl px-3.5 py-3 sm:py-2.5 min-h-[44px] text-base sm:text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 font-mono transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] font-mono text-[#A1A1AA] uppercase tracking-wider mb-1.5">
                 Direct Email Address
               </label>
               <input
@@ -462,12 +459,12 @@ export default function ProfileEditorPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@domain.com"
-                className="w-full bg-[#0E0E14] border border-white/[0.1] rounded-[12px] px-3.5 py-2.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF]"
+                className="w-full bg-[#14141A] border border-white/[0.1] rounded-xl px-3.5 py-3 sm:py-2.5 min-h-[44px] text-base sm:text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] font-mono text-[#A1A1AA] uppercase tracking-wider mb-1.5">
                 Website URL
               </label>
               <input
@@ -475,12 +472,12 @@ export default function ProfileEditorPage() {
                 value={website}
                 onChange={(e) => setWebsite(e.target.value)}
                 placeholder="https://"
-                className="w-full bg-[#0E0E14] border border-white/[0.1] rounded-[12px] px-3.5 py-2.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF] font-mono"
+                className="w-full bg-[#14141A] border border-white/[0.1] rounded-xl px-3.5 py-3 sm:py-2.5 min-h-[44px] text-base sm:text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 font-mono transition-colors"
               />
             </div>
 
             <div>
-              <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1.5">
+              <label className="block text-[11px] font-mono text-[#A1A1AA] uppercase tracking-wider mb-1.5">
                 Avatar Photo (Cloudflare R2)
               </label>
               <div className="flex items-center gap-2">
@@ -495,13 +492,13 @@ export default function ProfileEditorPage() {
                   type="text"
                   value={avatarUrl}
                   onChange={(e) => setAvatarUrl(e.target.value)}
-                  className="flex-1 bg-[#0E0E14] border border-white/[0.1] rounded-[12px] px-3.5 py-2.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF]"
+                  className="flex-1 bg-[#14141A] border border-white/[0.1] rounded-xl px-3.5 py-3 sm:py-2.5 min-h-[44px] text-base sm:text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 transition-colors"
                 />
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={uploadingAvatar}
-                  className="px-3.5 py-2.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.1] border border-white/15 text-xs font-mono text-[#00A2FF] flex items-center gap-1.5 shrink-0"
+                  className="px-4 py-3 sm:py-2.5 min-h-[44px] rounded-xl bg-white/[0.06] hover:bg-white/[0.12] active:scale-[0.98] border border-white/15 text-xs font-mono text-white flex items-center gap-1.5 shrink-0 transition-all disabled:opacity-50"
                 >
                   <Upload className="w-3.5 h-3.5" />
                   <span>{uploadingAvatar ? "..." : "Upload"}</span>
@@ -511,20 +508,20 @@ export default function ProfileEditorPage() {
           </div>
 
           <div>
-            <label className="block text-[11px] font-mono text-[#9E9EA8] uppercase tracking-wider mb-1.5">
+            <label className="block text-[11px] font-mono text-[#A1A1AA] uppercase tracking-wider mb-1.5">
               Executive Bio
             </label>
             <textarea
               rows={3}
               value={bio}
               onChange={(e) => setBio(e.target.value)}
-              className="w-full bg-[#0E0E14] border border-white/[0.1] rounded-[12px] p-3.5 text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-[#0088FF] leading-relaxed"
+              className="w-full bg-[#14141A] border border-white/[0.1] rounded-xl p-3.5 text-base sm:text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-white/40 focus:ring-1 focus:ring-white/20 leading-relaxed transition-colors"
             />
           </div>
         </div>
 
         {/* Connected Social & Portfolio Links */}
-        <div className="bg-[#060608] border border-white/[0.08] rounded-[20px] p-4 sm:p-7 md:p-8 space-y-4 shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
+        <div className="bg-[#0E0E12] border border-white/[0.08] rounded-2xl p-5 sm:p-7 md:p-8 space-y-4 shadow-xl">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/[0.08] pb-3">
             <div>
               <h3 className="font-cinzel font-medium text-base text-white tracking-wide">
@@ -540,7 +537,7 @@ export default function ProfileEditorPage() {
               variant="outline"
               size="sm"
               onClick={handleAddLink}
-              className="rounded-full text-xs border-[#0088FF]/40 text-[#00E5FF] hover:bg-[#0088FF]/10 self-start sm:self-auto"
+              className="rounded-full text-xs min-h-[44px] sm:min-h-0 border-white/20 text-white hover:border-white/40 self-start sm:self-auto"
             >
               <Plus className="w-3.5 h-3.5 mr-1" /> ADD NEW CHANNEL
             </Button>
@@ -550,24 +547,26 @@ export default function ProfileEditorPage() {
             {links.map((link, index) => (
               <div
                 key={link.id}
-                className="bg-[#0E0E14] border border-white/[0.06] rounded-[14px] p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center gap-3 transition-all hover:border-white/20"
+                className="bg-[#14141A] border border-white/[0.06] rounded-xl p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center gap-3 transition-all hover:border-white/20"
               >
                 <div className="flex items-center gap-2 shrink-0">
                   <button
                     type="button"
                     onClick={() => handleMoveLink(index, "up")}
                     disabled={index === 0}
-                    className="p-1.5 rounded-lg bg-white/[0.03] text-[#8E8E98] hover:text-white disabled:opacity-30"
+                    aria-label="Move link up"
+                    className="w-9 h-9 sm:w-8 sm:h-8 rounded-lg bg-white/[0.05] text-[#8E8E98] hover:text-white flex items-center justify-center disabled:opacity-30 transition-colors"
                   >
-                    <ArrowUp className="w-3.5 h-3.5" />
+                    <ArrowUp className="w-4 h-4" />
                   </button>
                   <button
                     type="button"
                     onClick={() => handleMoveLink(index, "down")}
                     disabled={index === links.length - 1}
-                    className="p-1.5 rounded-lg bg-white/[0.03] text-[#8E8E98] hover:text-white disabled:opacity-30"
+                    aria-label="Move link down"
+                    className="w-9 h-9 sm:w-8 sm:h-8 rounded-lg bg-white/[0.05] text-[#8E8E98] hover:text-white flex items-center justify-center disabled:opacity-30 transition-colors"
                   >
-                    <ArrowDown className="w-3.5 h-3.5" />
+                    <ArrowDown className="w-4 h-4" />
                   </button>
                 </div>
 
@@ -576,7 +575,7 @@ export default function ProfileEditorPage() {
                     <select
                       value={link.platform}
                       onChange={(e) => handleUpdateLink(link.id, "platform", e.target.value)}
-                      className="w-full bg-[#060608] border border-white/10 rounded-[10px] px-3 py-2 text-xs text-white focus:outline-none focus:border-[#0088FF]"
+                      className="w-full bg-[#0E0E12] border border-white/10 rounded-lg px-3 py-2.5 sm:py-2 min-h-[44px] sm:min-h-0 text-base sm:text-xs text-white focus:outline-none focus:border-white/40 appearance-none"
                     >
                       <option value="linkedin">LinkedIn</option>
                       <option value="x">X / Twitter</option>
@@ -595,7 +594,7 @@ export default function ProfileEditorPage() {
                       value={link.label}
                       onChange={(e) => handleUpdateLink(link.id, "label", e.target.value)}
                       placeholder="Display Label"
-                      className="w-full bg-[#060608] border border-white/10 rounded-[10px] px-3 py-2 text-xs text-white focus:outline-none focus:border-[#0088FF]"
+                      className="w-full bg-[#0E0E12] border border-white/10 rounded-lg px-3 py-2.5 sm:py-2 min-h-[44px] sm:min-h-0 text-base sm:text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-white/40"
                     />
                   </div>
 
@@ -605,7 +604,7 @@ export default function ProfileEditorPage() {
                       value={link.url}
                       onChange={(e) => handleUpdateLink(link.id, "url", e.target.value)}
                       placeholder="https://"
-                      className="w-full bg-[#060608] border border-white/10 rounded-[10px] px-3 py-2 text-xs text-white focus:outline-none focus:border-[#0088FF] font-mono"
+                      className="w-full bg-[#0E0E12] border border-white/10 rounded-lg px-3 py-2.5 sm:py-2 min-h-[44px] sm:min-h-0 text-base sm:text-xs text-white placeholder:text-[#52525E] focus:outline-none focus:border-white/40 font-mono"
                     />
                   </div>
                 </div>
@@ -613,9 +612,10 @@ export default function ProfileEditorPage() {
                 <button
                   type="button"
                   onClick={() => handleRemoveLink(link.id)}
-                  className="p-2 rounded-lg bg-red-950/20 text-red-400 hover:bg-red-900/40 transition-colors self-end sm:self-center"
+                  aria-label="Remove link"
+                  className="w-9 h-9 sm:w-8 sm:h-8 rounded-lg bg-red-950/20 text-red-400 hover:bg-red-900/40 flex items-center justify-center transition-colors self-end sm:self-center shrink-0"
                 >
-                  <Trash2 className="w-3.5 h-3.5" />
+                  <Trash2 className="w-4 h-4" />
                 </button>
               </div>
             ))}
@@ -623,7 +623,7 @@ export default function ProfileEditorPage() {
         </div>
 
         {/* Submit Bar */}
-        <div className="flex items-center justify-between pt-4 border-t border-white/[0.08]">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 pt-4 border-t border-white/[0.08] pb-6">
           {saved ? (
             <div className="flex items-center gap-2 text-emerald-400 text-xs font-mono">
               <Check className="w-4 h-4" />
@@ -640,7 +640,7 @@ export default function ProfileEditorPage() {
             variant="primary"
             size="lg"
             isLoading={loading}
-            className="rounded-full text-xs font-bold tracking-widest uppercase px-8"
+            className="w-full sm:w-auto rounded-full text-xs font-bold tracking-widest uppercase px-8 min-h-[48px] bg-white text-black hover:bg-[#E5E5EA]"
           >
             <Save className="w-3.5 h-3.5 mr-1.5" /> SAVE PROFILE
           </Button>

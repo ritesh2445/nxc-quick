@@ -20,17 +20,17 @@ export function FooterContent() {
                 href="https://instagram.com/nxcverse.in"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2.5 rounded-[8px] bg-[#0E0E12] border border-white/10 hover:border-[#E1306C]/60 text-[#9E9EA8] hover:text-white transition-all hover:shadow-[0_0_20px_rgba(225,48,108,0.35)] btn-interactive"
+                className="w-10 h-10 rounded-xl bg-[#0E0E12] border border-white/10 hover:border-white/30 text-[#9E9EA8] hover:text-white transition-all flex items-center justify-center btn-interactive"
                 aria-label="Instagram @nxcverse.in"
               >
-                <Instagram className="w-4 h-4 text-[#E1306C]" />
+                <Instagram className="w-4 h-4 text-white/80" />
               </a>
 
               <a
                 href="https://wa.me/919561248677"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2.5 rounded-[8px] bg-[#0E0E12] border border-white/10 hover:border-[#25D366]/60 text-[#9E9EA8] hover:text-white transition-all hover:shadow-[0_0_20px_rgba(37,211,102,0.35)] btn-interactive"
+                className="w-10 h-10 rounded-xl bg-[#0E0E12] border border-white/10 hover:border-white/30 text-[#9E9EA8] hover:text-white transition-all flex items-center justify-center btn-interactive"
                 aria-label="WhatsApp Concierge"
               >
                 <WhatsAppIcon className="w-4 h-4 text-[#25D366]" color="#25D366" />
@@ -38,7 +38,7 @@ export function FooterContent() {
 
               <a
                 href="mailto:nxcbadge@gmail.com"
-                className="p-2.5 rounded-[8px] bg-[#0E0E12] border border-white/10 hover:border-white/40 text-[#9E9EA8] hover:text-white transition-all"
+                className="w-10 h-10 rounded-xl bg-[#0E0E12] border border-white/10 hover:border-white/30 text-[#9E9EA8] hover:text-white transition-all flex items-center justify-center btn-interactive"
                 aria-label="Email Concierge"
               >
                 <Mail className="w-4 h-4 text-[#E2E0DC]" />
@@ -52,7 +52,7 @@ export function FooterContent() {
               Product
             </h4>
             <ul className="space-y-2.5 text-xs font-sans text-[#9E9EA8]">
-              <li><Link href="/order" className="text-white hover:text-[#00A2FF] transition-colors font-medium">Order Metal Card</Link></li>
+              <li><Link href="/order" className="text-white hover:text-white/70 transition-colors font-medium">Order Metal Card</Link></li>
               <li><Link href="/#how-it-works" className="hover:text-white transition-colors">How It Works</Link></li>
               <li><Link href="/#pricing" className="hover:text-white transition-colors">Acquisition Tiers</Link></li>
               <li><Link href="/login" className="hover:text-white transition-colors">Client Console</Link></li>
