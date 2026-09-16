@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+
+export const dynamic = "force-dynamic";
 import { Button } from "@/components/ui/Button";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { ShoppingBag, Package, Check, Truck, Clock } from "lucide-react";

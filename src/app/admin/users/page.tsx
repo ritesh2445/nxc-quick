@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+
+export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Users, ShieldCheck, ExternalLink, Search, Check, Ban } from "lucide-react";
