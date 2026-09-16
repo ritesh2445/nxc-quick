@@ -104,8 +104,8 @@ export function InteractiveFlippableCard({
       if (!running) return;
 
       if (!isFlipping) {
-        // Fluid metallic spring damping: tracks phone tilt closely while removing micro-jitter
-        const lerpFactor = isTouchingRef.current ? 0.32 : 0.16;
+        // Fluid metallic spring damping: weighted inertia for natural tactile metallic feel
+        const lerpFactor = isTouchingRef.current ? 0.32 : isGyroActiveRef.current ? 0.10 : 0.14;
         const dx = targetTiltRef.current.x - currentTiltRef.current.x;
         const dy = targetTiltRef.current.y - currentTiltRef.current.y;
 
@@ -131,7 +131,7 @@ export function InteractiveFlippableCard({
     };
   }, [interactiveTilt, isFlipping]);
 
-  // Hardware Gyroscope / Accelerometer listener (phone movement)
+  // Hardware Gyroscope / Accelerometer listener (realistic 1:1 physical phone movement)
   useEffect(() => {
     if (!interactiveTilt) return;
 
@@ -141,15 +141,26 @@ export function InteractiveFlippableCard({
 
       isGyroActiveRef.current = true;
 
-      // Natural portrait resting angle when looking at phone in hand is ~42° pitch
-      const restingBeta = 42;
-      const rawBetaDelta = e.beta - restingBeta;
+      // Natural portrait resting angle when looking at phone in hand is ~45° pitch
+      const restingBeta = 45;
+      const deltaBeta = e.beta - restingBeta;
+      const deadzone = 1.2;
 
-      // Generous responsive scaling: 1° of phone rotation produces ~1.35° of card tilt, clamped to ±28° and ±34°
-      const targetX = Math.max(-28, Math.min(28, -rawBetaDelta * 1.35));
+      // Soft deadzone filter: ignores micro-hand-tremors below 1.2°
+      const effectiveBeta = Math.abs(deltaBeta) > deadzone
+        ? deltaBeta - Math.sign(deltaBeta) * deadzone
+        : 0;
+
+      const effectiveGamma = Math.abs(e.gamma) > deadzone
+        ? e.gamma - Math.sign(e.gamma) * deadzone
+        : 0;
+
+      // Calibrated physical ratio: maps device tilt gently and realistically (max ±15° and ±18°)
+      // Moving the phone now feels like holding a real weighted slab of metal in your hand
+      const targetX = Math.max(-15, Math.min(15, -effectiveBeta * 0.42));
       const targetY = isFlipped
-        ? Math.max(-34, Math.min(34, -e.gamma * 1.5))
-        : Math.max(-34, Math.min(34, e.gamma * 1.5));
+        ? Math.max(-18, Math.min(18, -effectiveGamma * 0.45))
+        : Math.max(-18, Math.min(18, effectiveGamma * 0.45));
 
       targetTiltRef.current = { x: targetX, y: targetY };
     };
@@ -251,8 +262,8 @@ export function InteractiveFlippableCard({
     const xNorm = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     const yNorm = ((e.clientY - rect.top) / rect.height) * 2 - 1;
     targetTiltRef.current = {
-      x: isFlipped ? yNorm * 22 : yNorm * -22,
-      y: isFlipped ? xNorm * -26 : xNorm * 26,
+      x: isFlipped ? yNorm * 14 : yNorm * -14,
+      y: isFlipped ? xNorm * -17 : xNorm * 17,
     };
   };
 
@@ -431,7 +442,7 @@ export function InteractiveFlippableCard({
             <div
               className="absolute inset-0 pointer-events-none opacity-40 transition-opacity duration-300 group-hover:opacity-75 rounded-[16px] sm:rounded-[18px]"
               style={{
-                background: `radial-gradient(circle 260px at ${50 + (tilt.y / 34) * 36}% ${50 + (tilt.x / 28) * 36}%, ${finishStyles.shimmer}, transparent 70%)`,
+                background: `radial-gradient(circle 260px at ${50 + (tilt.y / 18) * 38}% ${50 + (tilt.x / 15) * 38}%, ${finishStyles.shimmer}, transparent 70%)`,
               }}
             />
 
@@ -496,7 +507,7 @@ export function InteractiveFlippableCard({
             <div
               className="absolute inset-0 pointer-events-none opacity-40 transition-opacity duration-300 group-hover:opacity-75 rounded-[16px] sm:rounded-[18px]"
               style={{
-                background: `radial-gradient(circle 260px at ${50 + (tilt.y / 34) * 36}% ${50 + (tilt.x / 28) * 36}%, ${finishStyles.shimmer}, transparent 70%)`,
+                background: `radial-gradient(circle 260px at ${50 + (tilt.y / 18) * 38}% ${50 + (tilt.x / 15) * 38}%, ${finishStyles.shimmer}, transparent 70%)`,
               }}
             />
 
