@@ -11,9 +11,12 @@ import {
   ArrowRight,
   Radio,
   Lock,
+  Type,
+  Sparkles,
+  RotateCw,
 } from "lucide-react";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, cn } from "@/lib/utils";
 
 type EditionTier = "classic" | "metal" | "atelier";
 
@@ -65,6 +68,15 @@ function OrderPageContent() {
   const [company, setCompany] = useState("NXC VERSE");
   const [engraving, setEngraving] = useState("EDITION NO. 001/100");
   const [qrSlug, setQrSlug] = useState("ritesh");
+  const [fontStyle, setFontStyle] = useState<"cinzel" | "sans" | "mono">("cinzel");
+  const [cardFace, setCardFace] = useState<"front" | "back">("front");
+
+  const getInitials = (fullName: string) => {
+    if (!fullName) return "NXC";
+    const parts = fullName.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  };
 
   // Shipping & Contact Details
   const [customerName, setCustomerName] = useState("");
@@ -191,18 +203,51 @@ function OrderPageContent() {
         {step === "configure" && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
             {/* Left Column: Live 3D Dual-Sided Card View */}
-            <div className="lg:col-span-6 lg:sticky lg:top-24 bg-[#060608] border border-white/[0.1] rounded-[20px] p-4 sm:p-6 md:p-8 flex flex-col items-center justify-center min-h-[440px] sm:min-h-[500px] md:min-h-[560px] shadow-[0_24px_70px_rgba(0,0,0,0.95)] backdrop-blur-xl max-w-full">
-              <div className="w-full flex items-center justify-between border-b border-white/[0.08] pb-3 mb-4">
-                <span className="font-mono text-[10px] text-[#A0A0AA] tracking-[0.22em] uppercase font-semibold flex items-center gap-1.5">
-                  <Radio className="w-3.5 h-3.5 text-[#E2E0DC]" />
-                  LIVE 3D INSPECTOR
-                </span>
-                <span className="font-mono text-xs text-white font-medium uppercase">
-                  {finish.replace("_", " ")}
-                </span>
+            <div className="lg:col-span-6 lg:sticky lg:top-24 bg-[#060608] border border-white/[0.1] rounded-[24px] p-4 sm:p-6 md:p-8 flex flex-col items-center justify-between min-h-[460px] sm:min-h-[520px] md:min-h-[580px] shadow-[0_24px_70px_rgba(0,0,0,0.95)] backdrop-blur-xl max-w-full">
+              {/* Header with Segmented Face Switcher */}
+              <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-3 border-b border-white/[0.08] pb-3.5 mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-[10px] text-[#A0A0AA] tracking-[0.22em] uppercase font-semibold flex items-center gap-1.5">
+                    <Radio className="w-3.5 h-3.5 text-[#E2E0DC]" />
+                    LIVE 3D INSPECTOR
+                  </span>
+                  <span className="w-1 h-1 rounded-full bg-white/20" />
+                  <span className="font-mono text-[11px] text-white font-medium uppercase">
+                    {finish.replace("_", " ")}
+                  </span>
+                </div>
+
+                {/* Segmented Face Toggle Pill */}
+                <div className="flex items-center gap-1 bg-white/[0.04] p-1 rounded-full border border-white/10">
+                  <button
+                    type="button"
+                    onClick={() => setCardFace("front")}
+                    className={cn(
+                      "px-3 py-1 rounded-full text-[10px] font-mono tracking-wider transition-all",
+                      cardFace === "front"
+                        ? "bg-white text-black font-semibold shadow-sm"
+                        : "text-[#8E8E98] hover:text-white"
+                    )}
+                  >
+                    FRONT (LOGO)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setCardFace("back")}
+                    className={cn(
+                      "px-3 py-1 rounded-full text-[10px] font-mono tracking-wider transition-all",
+                      cardFace === "back"
+                        ? "bg-white text-black font-semibold shadow-sm"
+                        : "text-[#8E8E98] hover:text-white"
+                    )}
+                  >
+                    BACK (ENGRAVING)
+                  </button>
+                </div>
               </div>
 
-              <div className="w-full flex-1 flex items-center justify-center">
+              {/* 3D Scene */}
+              <div className="w-full flex-1 flex items-center justify-center my-auto py-2">
                 <DynamicHeroCardScene
                   finish={finish}
                   name={name}
@@ -210,18 +255,30 @@ function OrderPageContent() {
                   company={company}
                   engraving={engraving}
                   qrSlug={qrSlug}
+                  fontStyle={fontStyle}
+                  activeFace={cardFace}
+                  onFlipChange={(isBack) => setCardFace(isBack ? "back" : "front")}
                   interactive={true}
                 />
               </div>
 
-              <div className="w-full pt-4 border-t border-white/[0.08] flex items-center justify-between text-[11px] font-sans text-[#8E8E98]">
-                <span>NFC Chip: NTAG216 High Speed</span>
-                <span className="text-white/80">Tap card to flip ⟲</span>
+              {/* Inspection Footer Specs */}
+              <div className="w-full pt-3.5 border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] font-mono text-[#8E8E98]">
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#25D366] animate-pulse" />
+                  <span className="text-[#D0D0DC]">CNC TOLERANCE ±0.05MM</span>
+                  <span className="text-white/20">·</span>
+                  <span>NTAG216 NFC</span>
+                </div>
+                <div className="text-[#A0A0AA] flex items-center gap-1">
+                  <RotateCw className="w-3 h-3 text-[#E2E0DC]" />
+                  <span>Tap card or drag to inspect 3D tilt</span>
+                </div>
               </div>
             </div>
 
             {/* Right Column: Customization Controls & Hardware Options */}
-            <div className="lg:col-span-6 space-y-7 bg-[#08080A] border border-white/[0.08] rounded-[20px] p-5 sm:p-7 md:p-8 backdrop-blur-xl">
+            <div className="lg:col-span-6 space-y-7 bg-[#08080A] border border-white/[0.08] rounded-[24px] p-5 sm:p-7 md:p-8 backdrop-blur-xl">
               {/* 1. Hardware Edition Selector */}
               <div className="space-y-3">
                 <label className="font-mono text-xs text-[#C8C6C0] uppercase tracking-widest font-semibold flex items-center gap-2">
@@ -284,50 +341,152 @@ function OrderPageContent() {
                 </div>
               </div>
 
-              {/* 3. Card Engraving Personalization Form */}
+              {/* 3. Laser Typography Style Selector (New Feature) */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="font-mono text-xs text-[#C8C6C0] uppercase tracking-widest font-semibold flex items-center gap-2">
+                    <span>03</span>
+                    <span>SELECT LASER TYPOGRAPHY</span>
+                  </label>
+                  <span className="text-[10px] font-mono text-[#8E8E98]">Deep CNC Laser Infill</span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  {[
+                    {
+                      id: "cinzel" as const,
+                      name: "Classic Roman",
+                      sub: "Cinzel Serif",
+                      badge: "TIMELUXE",
+                      sample: "RITESH MARTAWAR",
+                      fontClass: "font-cinzel",
+                    },
+                    {
+                      id: "sans" as const,
+                      name: "Modern Executive",
+                      sub: "Jakarta Sans",
+                      badge: "MINIMALIST",
+                      sample: "RITESH MARTAWAR",
+                      fontClass: "font-sans font-bold",
+                    },
+                    {
+                      id: "mono" as const,
+                      name: "Precision Monogram",
+                      sub: "JetBrains Mono",
+                      badge: "TECHNICAL",
+                      sample: "RITESH MARTAWAR",
+                      fontClass: "font-mono font-medium",
+                    },
+                  ].map((f) => (
+                    <button
+                      key={f.id}
+                      type="button"
+                      onClick={() => {
+                        setFontStyle(f.id);
+                        setCardFace("back");
+                      }}
+                      className={cn(
+                        "p-3 rounded-xl border text-left transition-all btn-interactive flex flex-col justify-between min-h-[72px]",
+                        fontStyle === f.id
+                          ? "bg-white/[0.09] border-white/50 shadow-sm"
+                          : "bg-white/[0.02] border-white/[0.06] hover:border-white/20"
+                      )}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-medium text-white">{f.name}</span>
+                        <span className="text-[9px] font-mono text-[#8E8E98] tracking-widest px-1.5 py-0.5 rounded bg-white/[0.04]">
+                          {f.badge}
+                        </span>
+                      </div>
+                      <div className={cn("text-xs text-white/90 truncate mt-2 tracking-wider", f.fontClass)}>
+                        {name || f.sample}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 4. Card Engraving Personalization Form */}
               <form onSubmit={handleProceedToCheckout} className="space-y-4 pt-1">
-                <label className="font-mono text-xs text-[#C8C6C0] uppercase tracking-widest font-semibold flex items-center gap-2">
-                  <span>03</span>
-                  <span>PERSONALIZATION DETAILS</span>
-                </label>
+                <div className="flex items-center justify-between">
+                  <label className="font-mono text-xs text-[#C8C6C0] uppercase tracking-widest font-semibold flex items-center gap-2">
+                    <span>04</span>
+                    <span>PERSONALIZATION DETAILS</span>
+                  </label>
+                  <span className="text-[10px] font-mono text-[#8E8E98]">Auto-updates 3D card</span>
+                </div>
 
                 <div className="space-y-3.5">
                   <div>
-                    <label className="block text-[11px] font-mono text-[#8E8E98] uppercase tracking-wider mb-1">
-                      Cardholder Full Name
-                    </label>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-[11px] font-mono text-[#8E8E98] uppercase tracking-wider">
+                        Cardholder Full Name
+                      </label>
+                      <span className="text-[10px] font-mono text-[#6E6E7A]">
+                        {name.length}/26
+                      </span>
+                    </div>
                     <input
                       type="text"
+                      maxLength={26}
                       value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      onFocus={() => setCardFace("back")}
+                      onChange={(e) => {
+                        setName(e.target.value);
+                        setCardFace("back");
+                      }}
                       placeholder="e.g. Ritesh Martawar"
                       required
-                      className="w-full bg-[#121217] border border-white/10 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white font-cinzel tracking-wider focus:outline-none focus:border-white/40 transition-colors"
+                      className={cn(
+                        "w-full bg-[#121217] border border-white/10 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white tracking-wider focus:outline-none focus:border-white/40 transition-colors",
+                        fontStyle === "cinzel" && "font-cinzel",
+                        fontStyle === "sans" && "font-sans font-semibold",
+                        fontStyle === "mono" && "font-mono"
+                      )}
                     />
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div>
-                      <label className="block text-[11px] font-mono text-[#8E8E98] uppercase tracking-wider mb-1">
-                        Designation / Position
-                      </label>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-[11px] font-mono text-[#8E8E98] uppercase tracking-wider">
+                          Designation / Position
+                        </label>
+                        <span className="text-[10px] font-mono text-[#6E6E7A]">
+                          {designation.length}/32
+                        </span>
+                      </div>
                       <input
                         type="text"
+                        maxLength={32}
                         value={designation}
-                        onChange={(e) => setDesignation(e.target.value)}
+                        onFocus={() => setCardFace("back")}
+                        onChange={(e) => {
+                          setDesignation(e.target.value);
+                          setCardFace("back");
+                        }}
                         placeholder="e.g. Founder & CEO"
                         required
                         className="w-full bg-[#121217] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono tracking-wider focus:outline-none focus:border-white/40 transition-colors"
                       />
                     </div>
                     <div>
-                      <label className="block text-[11px] font-mono text-[#8E8E98] uppercase tracking-wider mb-1">
-                        Company Name
-                      </label>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-[11px] font-mono text-[#8E8E98] uppercase tracking-wider">
+                          Company Name
+                        </label>
+                        <span className="text-[10px] font-mono text-[#6E6E7A]">
+                          {company.length}/24
+                        </span>
+                      </div>
                       <input
                         type="text"
+                        maxLength={24}
                         value={company}
-                        onChange={(e) => setCompany(e.target.value)}
+                        onFocus={() => setCardFace("back")}
+                        onChange={(e) => {
+                          setCompany(e.target.value);
+                          setCardFace("back");
+                        }}
                         placeholder="e.g. NXC Verse"
                         className="w-full bg-[#121217] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white font-cinzel tracking-wider focus:outline-none focus:border-white/40 transition-colors"
                       />
@@ -336,32 +495,75 @@ function OrderPageContent() {
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     <div>
-                      <label className="block text-[11px] font-mono text-[#8E8E98] uppercase tracking-wider mb-1">
-                        Custom Serial / Monogram
-                      </label>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-[11px] font-mono text-[#8E8E98] uppercase tracking-wider">
+                          Custom Serial / Inscription
+                        </label>
+                        <span className="text-[10px] font-mono text-[#6E6E7A]">
+                          {engraving.length}/28
+                        </span>
+                      </div>
                       <input
                         type="text"
+                        maxLength={28}
                         value={engraving}
-                        onChange={(e) => setEngraving(e.target.value)}
+                        onFocus={() => setCardFace("back")}
+                        onChange={(e) => {
+                          setEngraving(e.target.value);
+                          setCardFace("back");
+                        }}
                         placeholder="e.g. EDITION NO. 001/100"
                         className="w-full bg-[#121217] border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono tracking-widest focus:outline-none focus:border-white/40 transition-colors"
                       />
+
+                      {/* Quick Monogram Presets */}
+                      <div className="flex items-center gap-1.5 flex-wrap pt-2">
+                        {[
+                          `${getInitials(name)} · 001/100`,
+                          `FOUNDER · 2026`,
+                          `EXECUTIVE NO. 042`,
+                        ].map((preset) => (
+                          <button
+                            key={preset}
+                            type="button"
+                            onClick={() => {
+                              setEngraving(preset);
+                              setCardFace("back");
+                            }}
+                            className="px-2 py-0.5 rounded bg-white/[0.03] hover:bg-white/[0.08] border border-white/10 text-[9px] font-mono text-[#A0A0AA] hover:text-white transition-colors"
+                          >
+                            {preset}
+                          </button>
+                        ))}
+                      </div>
                     </div>
                     <div>
-                      <label className="block text-[11px] font-mono text-[#8E8E98] uppercase tracking-wider mb-1">
-                        Permanent Digital Slug
-                      </label>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-[11px] font-mono text-[#8E8E98] uppercase tracking-wider">
+                          Permanent Digital Handle
+                        </label>
+                        <span className="text-[10px] font-mono text-[#25D366]">
+                          Live QR
+                        </span>
+                      </div>
                       <div className="flex items-center bg-[#121217] border border-white/10 rounded-xl px-3 py-2.5 focus-within:border-white/40 transition-colors">
                         <span className="font-mono text-xs text-[#6E6E7A] select-none">/@</span>
                         <input
                           type="text"
                           value={qrSlug}
-                          onChange={(e) => setQrSlug(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ""))}
+                          onFocus={() => setCardFace("back")}
+                          onChange={(e) => {
+                            setQrSlug(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ""));
+                            setCardFace("back");
+                          }}
                           placeholder="username"
                           required
                           className="w-full bg-transparent text-xs text-white font-mono focus:outline-none pl-1"
                         />
                       </div>
+                      <p className="font-mono text-[9px] text-[#6E6E7A] mt-1 truncate">
+                        URL: nxcverse.in/@{qrSlug || "username"}
+                      </p>
                     </div>
                   </div>
                 </div>

@@ -13,6 +13,9 @@ export interface HeroCardProps {
   interactive?: boolean;
   isHero?: boolean;
   showFlipButton?: boolean;
+  fontStyle?: "cinzel" | "sans" | "mono";
+  activeFace?: "front" | "back";
+  onFlipChange?: (isBack: boolean) => void;
 }
 
 export function HeroCardScene({
@@ -25,6 +28,9 @@ export function HeroCardScene({
   interactive = true,
   isHero = true,
   showFlipButton = true,
+  fontStyle = "cinzel",
+  activeFace,
+  onFlipChange,
 }: HeroCardProps) {
   return (
     <div className="relative w-full h-full flex flex-col items-center justify-center">
@@ -38,6 +44,9 @@ export function HeroCardScene({
         interactiveTilt={interactive}
         isHero={isHero}
         showFlipButton={showFlipButton}
+        fontStyle={fontStyle}
+        activeFace={activeFace}
+        onFlipChange={onFlipChange}
       />
     </div>
   );

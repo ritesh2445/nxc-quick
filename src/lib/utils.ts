@@ -23,7 +23,41 @@ export function formatCurrency(amount: number, currency: "INR" | "USD" = "INR"):
 export function formatDate(date: Date | number | string | null | undefined): string {
   if (!date) return "—";
   try {
-    const d = typeof date === "number" ? new Date(date) : date instanceof Date ? date : new Date(date);
+    let d: Date;
+    if (typeof date === "number") {
+      // If over-multiplied (e.g. ms multiplied by 1000)
+      if (date > 1e14) {
+        d = new Date(date / 1000);
+      } else if (date < 1e11) {
+        // Unix timestamp in seconds
+        d = new Date(date * 1000);
+      } else {
+        d = new Date(date);
+      }
+    } else if (date instanceof Date) {
+      if (date.getFullYear() > 3000) {
+        d = new Date(date.getTime() / 1000);
+      } else {
+        d = date;
+      }
+    } else {
+      const num = Number(date);
+      if (!isNaN(num) && num > 0) {
+        if (num > 1e14) {
+          d = new Date(num / 1000);
+        } else if (num < 1e11) {
+          d = new Date(num * 1000);
+        } else {
+          d = new Date(num);
+        }
+      } else {
+        d = new Date(date);
+        if (d.getFullYear() > 3000) {
+          d = new Date(d.getTime() / 1000);
+        }
+      }
+    }
+
     if (isNaN(d.getTime())) return "—";
     return new Intl.DateTimeFormat("en-US", {
       year: "numeric",

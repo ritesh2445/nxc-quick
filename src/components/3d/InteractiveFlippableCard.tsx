@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { RefreshCw } from "lucide-react";
 import QRCode from "qrcode";
 import { NXC_LOGO_DATA_URI } from "@/components/3d/nxcLogoDataUri";
+import { cn } from "@/lib/utils";
 
 export type CardFinish =
   | "silver"
@@ -30,6 +31,8 @@ export interface FlippableCardProps {
   showFlipButton?: boolean;
   interactiveTilt?: boolean;
   isHero?: boolean;
+  fontStyle?: "cinzel" | "sans" | "mono";
+  activeFace?: "front" | "back";
   onFlipChange?: (isBack: boolean) => void;
 }
 
@@ -43,9 +46,11 @@ export function InteractiveFlippableCard({
   showFlipButton = true,
   interactiveTilt = true,
   isHero = false,
+  fontStyle = "cinzel",
+  activeFace,
   onFlipChange,
 }: FlippableCardProps) {
-  const [isFlipped, setIsFlipped] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(activeFace === "back");
   const [isFlipping, setIsFlipping] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
@@ -186,6 +191,15 @@ export function InteractiveFlippableCard({
       setIsFlipping(false);
     }, 750);
   };
+
+  // Sync activeFace if controlled from parent
+  useEffect(() => {
+    if (activeFace === "back" && !isFlipped) {
+      toggleFlip();
+    } else if (activeFace === "front" && isFlipped) {
+      toggleFlip();
+    }
+  }, [activeFace]);
 
   // Touch drag for mobile interaction
   const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
@@ -488,7 +502,15 @@ export function InteractiveFlippableCard({
 
             {/* Top Bar: Company Name & NFC Chip UID */}
             <div className="relative flex items-center justify-between pb-2.5 sm:pb-3 border-b border-black/10 dark:border-white/10">
-              <span className={`font-cinzel text-[10px] sm:text-[11px] font-medium tracking-[0.2em] sm:tracking-[0.24em] uppercase truncate max-w-[160px] ${finishStyles.textPrimary}`}>
+              <span
+                className={cn(
+                  "text-[10px] sm:text-[11px] font-medium tracking-[0.2em] sm:tracking-[0.24em] uppercase truncate max-w-[160px]",
+                  fontStyle === "cinzel" && "font-cinzel",
+                  fontStyle === "sans" && "font-sans font-semibold tracking-[0.16em]",
+                  fontStyle === "mono" && "font-mono font-medium tracking-[0.18em]",
+                  finishStyles.textPrimary
+                )}
+              >
                 {company.toUpperCase()}
               </span>
               <span className={`font-mono text-[9px] sm:text-[10px] font-medium tracking-widest shrink-0 ${finishStyles.textSecondary}`}>
@@ -500,10 +522,26 @@ export function InteractiveFlippableCard({
             <div className="relative flex flex-col items-center text-center space-y-2.5 sm:space-y-3.5 my-auto">
               {/* Identity Personalization (Natural wrapping, max 2 lines) */}
               <div className="space-y-0.5 sm:space-y-1 max-w-[230px]">
-                <h3 className={`font-cinzel text-base min-[360px]:text-lg sm:text-xl font-medium tracking-[0.14em] uppercase leading-snug line-clamp-2 ${finishStyles.textPrimary}`}>
+                <h3
+                  className={cn(
+                    "text-base min-[360px]:text-lg sm:text-xl uppercase leading-snug line-clamp-2",
+                    fontStyle === "cinzel" && "font-cinzel font-medium tracking-[0.14em]",
+                    fontStyle === "sans" && "font-sans font-bold tracking-[0.06em]",
+                    fontStyle === "mono" && "font-mono font-semibold tracking-[0.12em]",
+                    finishStyles.textPrimary
+                  )}
+                >
                   {name}
                 </h3>
-                <p className={`font-sans text-[10px] sm:text-[11px] font-medium tracking-[0.18em] uppercase ${finishStyles.textSecondary}`}>
+                <p
+                  className={cn(
+                    "text-[10px] sm:text-[11px] uppercase",
+                    fontStyle === "cinzel" && "font-sans font-medium tracking-[0.18em]",
+                    fontStyle === "sans" && "font-sans font-medium tracking-[0.14em]",
+                    fontStyle === "mono" && "font-mono font-normal tracking-[0.16em]",
+                    finishStyles.textSecondary
+                  )}
+                >
                   {designation}
                 </p>
               </div>
@@ -529,8 +567,16 @@ export function InteractiveFlippableCard({
             </div>
 
             {/* Bottom: Custom Engraving / Serial Line */}
-            <div className="relative pt-2.5 sm:pt-3 border-t border-black/10 dark:border-white/10 flex items-center justify-center text-[9px] font-mono">
-              <span className={`tracking-[0.25em] uppercase truncate max-w-[220px] ${finishStyles.textSecondary}`}>
+            <div className="relative pt-2.5 sm:pt-3 border-t border-black/10 dark:border-white/10 flex items-center justify-center text-[9px]">
+              <span
+                className={cn(
+                  "uppercase truncate max-w-[220px]",
+                  fontStyle === "cinzel" && "font-mono tracking-[0.25em]",
+                  fontStyle === "sans" && "font-sans font-semibold tracking-[0.2em]",
+                  fontStyle === "mono" && "font-mono tracking-[0.22em]",
+                  finishStyles.textSecondary
+                )}
+              >
                 {engraving}
               </span>
             </div>
