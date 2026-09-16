@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 import { formatCurrency, cn } from "@/lib/utils";
+import { GOOGLE_LASER_FONTS, LaserFontOption } from "@/lib/fonts";
+import { LaserFontPicker } from "@/components/order/LaserFontPicker";
 
 type EditionTier = "classic" | "metal" | "atelier";
 
@@ -68,7 +70,7 @@ function OrderPageContent() {
   const [company, setCompany] = useState("NXC VERSE");
   const [engraving, setEngraving] = useState("EDITION NO. 001/100");
   const [qrSlug, setQrSlug] = useState("ritesh");
-  const [fontStyle, setFontStyle] = useState<"cinzel" | "sans" | "mono">("cinzel");
+  const [selectedFont, setSelectedFont] = useState<LaserFontOption>(() => GOOGLE_LASER_FONTS[0]);
   const [cardFace, setCardFace] = useState<"front" | "back">("front");
 
   const getInitials = (fullName: string) => {
@@ -130,6 +132,7 @@ function OrderPageContent() {
           company,
           engraving,
           qrSlug,
+          laserFont: selectedFont.name,
           amount: currentPrice,
           currency,
           customerName: customerName || name,
@@ -255,7 +258,8 @@ function OrderPageContent() {
                   company={company}
                   engraving={engraving}
                   qrSlug={qrSlug}
-                  fontStyle={fontStyle}
+                  fontFamily={selectedFont.family}
+                  fontStyle={selectedFont.name}
                   activeFace={cardFace}
                   onFlipChange={(isBack) => setCardFace(isBack ? "back" : "front")}
                   interactive={true}
@@ -341,69 +345,15 @@ function OrderPageContent() {
                 </div>
               </div>
 
-              {/* 3. Laser Typography Style Selector (New Feature) */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <label className="font-mono text-xs text-[#C8C6C0] uppercase tracking-widest font-semibold flex items-center gap-2">
-                    <span>03</span>
-                    <span>SELECT LASER TYPOGRAPHY</span>
-                  </label>
-                  <span className="text-[10px] font-mono text-[#8E8E98]">Deep CNC Laser Infill</span>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                  {[
-                    {
-                      id: "cinzel" as const,
-                      name: "Classic Roman",
-                      sub: "Cinzel Serif",
-                      badge: "TIMELUXE",
-                      sample: "RITESH MARTAWAR",
-                      fontClass: "font-cinzel",
-                    },
-                    {
-                      id: "sans" as const,
-                      name: "Modern Executive",
-                      sub: "Jakarta Sans",
-                      badge: "MINIMALIST",
-                      sample: "RITESH MARTAWAR",
-                      fontClass: "font-sans font-bold",
-                    },
-                    {
-                      id: "mono" as const,
-                      name: "Precision Monogram",
-                      sub: "JetBrains Mono",
-                      badge: "TECHNICAL",
-                      sample: "RITESH MARTAWAR",
-                      fontClass: "font-mono font-medium",
-                    },
-                  ].map((f) => (
-                    <button
-                      key={f.id}
-                      type="button"
-                      onClick={() => {
-                        setFontStyle(f.id);
-                        setCardFace("back");
-                      }}
-                      className={cn(
-                        "p-3 rounded-xl border text-left transition-all btn-interactive flex flex-col justify-between min-h-[72px]",
-                        fontStyle === f.id
-                          ? "bg-white/[0.09] border-white/50 shadow-sm"
-                          : "bg-white/[0.02] border-white/[0.06] hover:border-white/20"
-                      )}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-medium text-white">{f.name}</span>
-                        <span className="text-[9px] font-mono text-[#8E8E98] tracking-widest px-1.5 py-0.5 rounded bg-white/[0.04]">
-                          {f.badge}
-                        </span>
-                      </div>
-                      <div className={cn("text-xs text-white/90 truncate mt-2 tracking-wider", f.fontClass)}>
-                        {name || f.sample}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
+              {/* 3. Laser Typography Style Selector (26+ Google Fonts + Live Catalog) */}
+              <LaserFontPicker
+                selectedFont={selectedFont}
+                onSelectFont={(font) => {
+                  setSelectedFont(font);
+                  setCardFace("back");
+                }}
+                customerName={name}
+              />
 
               {/* 4. Card Engraving Personalization Form */}
               <form onSubmit={handleProceedToCheckout} className="space-y-4 pt-1">
@@ -435,13 +385,8 @@ function OrderPageContent() {
                         setCardFace("back");
                       }}
                       placeholder="e.g. Ritesh Martawar"
-                      required
-                      className={cn(
-                        "w-full bg-[#121217] border border-white/10 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white tracking-wider focus:outline-none focus:border-white/40 transition-colors",
-                        fontStyle === "cinzel" && "font-cinzel",
-                        fontStyle === "sans" && "font-sans font-semibold",
-                        fontStyle === "mono" && "font-mono"
-                      )}
+                      style={{ fontFamily: selectedFont.family }}
+                      className="w-full bg-[#121217] border border-white/10 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white tracking-wider focus:outline-none focus:border-white/40 transition-colors"
                     />
                   </div>
 
@@ -733,6 +678,10 @@ function OrderPageContent() {
                     <div className="flex justify-between py-1 border-b border-white/5">
                       <span className="text-[#8E8E98]">Engraving:</span>
                       <span className="text-white font-medium truncate max-w-[140px]">{name}</span>
+                    </div>
+                    <div className="flex justify-between py-1 border-b border-white/5">
+                      <span className="text-[#8E8E98]">Laser Typography:</span>
+                      <span className="text-white font-medium truncate max-w-[150px]">{selectedFont.name} ({selectedFont.badge})</span>
                     </div>
                     <div className="flex justify-between py-1 border-b border-white/5">
                       <span className="text-[#8E8E98]">Digital Profile:</span>

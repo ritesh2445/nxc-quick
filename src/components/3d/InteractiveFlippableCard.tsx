@@ -31,7 +31,8 @@ export interface FlippableCardProps {
   showFlipButton?: boolean;
   interactiveTilt?: boolean;
   isHero?: boolean;
-  fontStyle?: "cinzel" | "sans" | "mono";
+  fontStyle?: string;
+  fontFamily?: string;
   activeFace?: "front" | "back";
   onFlipChange?: (isBack: boolean) => void;
 }
@@ -47,6 +48,7 @@ export function InteractiveFlippableCard({
   interactiveTilt = true,
   isHero = false,
   fontStyle = "cinzel",
+  fontFamily,
   activeFace,
   onFlipChange,
 }: FlippableCardProps) {
@@ -55,6 +57,18 @@ export function InteractiveFlippableCard({
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [qrDataUrl, setQrDataUrl] = useState<string>("");
   const flipTimerRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  const resolvedFont = fontFamily || (
+    fontStyle === "cinzel"
+      ? "'Cinzel', serif"
+      : fontStyle === "sans"
+      ? "'Plus Jakarta Sans', sans-serif"
+      : fontStyle === "mono"
+      ? "'JetBrains Mono', monospace"
+      : fontStyle
+      ? `"${fontStyle}", sans-serif`
+      : undefined
+  );
 
   // Physics-based spring / lerp damping refs for phone gyroscope & touch
   const targetTiltRef = React.useRef({ x: 0, y: 0 });
@@ -514,11 +528,10 @@ export function InteractiveFlippableCard({
             {/* Top Bar: Company Name & NFC Chip UID */}
             <div className="relative flex items-center justify-between pb-2.5 sm:pb-3 border-b border-black/10 dark:border-white/10">
               <span
+                style={{ fontFamily: resolvedFont }}
                 className={cn(
                   "text-[10px] sm:text-[11px] font-medium tracking-[0.2em] sm:tracking-[0.24em] uppercase truncate max-w-[160px]",
-                  fontStyle === "cinzel" && "font-cinzel",
-                  fontStyle === "sans" && "font-sans font-semibold tracking-[0.16em]",
-                  fontStyle === "mono" && "font-mono font-medium tracking-[0.18em]",
+                  !resolvedFont && "font-cinzel",
                   finishStyles.textPrimary
                 )}
               >
@@ -534,22 +547,20 @@ export function InteractiveFlippableCard({
               {/* Identity Personalization (Natural wrapping, max 2 lines) */}
               <div className="space-y-0.5 sm:space-y-1 max-w-[230px]">
                 <h3
+                  style={{ fontFamily: resolvedFont }}
                   className={cn(
-                    "text-base min-[360px]:text-lg sm:text-xl uppercase leading-snug line-clamp-2",
-                    fontStyle === "cinzel" && "font-cinzel font-medium tracking-[0.14em]",
-                    fontStyle === "sans" && "font-sans font-bold tracking-[0.06em]",
-                    fontStyle === "mono" && "font-mono font-semibold tracking-[0.12em]",
+                    "text-base min-[360px]:text-lg sm:text-xl uppercase leading-snug line-clamp-2 tracking-[0.14em]",
+                    !resolvedFont && "font-cinzel font-medium",
                     finishStyles.textPrimary
                   )}
                 >
                   {name}
                 </h3>
                 <p
+                  style={{ fontFamily: resolvedFont }}
                   className={cn(
-                    "text-[10px] sm:text-[11px] uppercase",
-                    fontStyle === "cinzel" && "font-sans font-medium tracking-[0.18em]",
-                    fontStyle === "sans" && "font-sans font-medium tracking-[0.14em]",
-                    fontStyle === "mono" && "font-mono font-normal tracking-[0.16em]",
+                    "text-[10px] sm:text-[11px] uppercase tracking-[0.16em]",
+                    !resolvedFont && "font-sans",
                     finishStyles.textSecondary
                   )}
                 >
@@ -580,11 +591,10 @@ export function InteractiveFlippableCard({
             {/* Bottom: Custom Engraving / Serial Line */}
             <div className="relative pt-2.5 sm:pt-3 border-t border-black/10 dark:border-white/10 flex items-center justify-center text-[9px]">
               <span
+                style={{ fontFamily: resolvedFont }}
                 className={cn(
-                  "uppercase truncate max-w-[220px]",
-                  fontStyle === "cinzel" && "font-mono tracking-[0.25em]",
-                  fontStyle === "sans" && "font-sans font-semibold tracking-[0.2em]",
-                  fontStyle === "mono" && "font-mono tracking-[0.22em]",
+                  "uppercase truncate max-w-[220px] tracking-[0.22em]",
+                  !resolvedFont && "font-mono",
                   finishStyles.textSecondary
                 )}
               >

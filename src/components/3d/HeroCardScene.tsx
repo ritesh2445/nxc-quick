@@ -13,7 +13,8 @@ export interface HeroCardProps {
   interactive?: boolean;
   isHero?: boolean;
   showFlipButton?: boolean;
-  fontStyle?: "cinzel" | "sans" | "mono";
+  fontStyle?: string;
+  fontFamily?: string;
   activeFace?: "front" | "back";
   onFlipChange?: (isBack: boolean) => void;
 }
@@ -29,6 +30,7 @@ export function HeroCardScene({
   isHero = true,
   showFlipButton = true,
   fontStyle = "cinzel",
+  fontFamily,
   activeFace,
   onFlipChange,
 }: HeroCardProps) {
@@ -45,6 +47,7 @@ export function HeroCardScene({
         isHero={isHero}
         showFlipButton={showFlipButton}
         fontStyle={fontStyle}
+        fontFamily={fontFamily}
         activeFace={activeFace}
         onFlipChange={onFlipChange}
       />
