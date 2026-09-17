@@ -31,7 +31,7 @@ export function FooterContent() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-xl bg-[#0E0E12] border border-white/10 hover:border-white/30 text-[#9E9EA8] hover:text-white transition-all flex items-center justify-center btn-interactive"
-                aria-label="WhatsApp Concierge"
+                aria-label="WhatsApp Contact"
               >
                 <WhatsAppIcon className="w-4 h-4 text-[#25D366]" color="#25D366" />
               </a>

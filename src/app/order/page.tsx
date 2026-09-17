@@ -764,7 +764,7 @@ function OrderPageContent() {
                 className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/20 text-white font-sans font-medium text-xs tracking-wider uppercase flex items-center justify-center gap-2 btn-interactive"
               >
                 <WhatsAppIcon className="w-4 h-4 text-[#25D366]" color="#25D366" />
-                <span>Connect Concierge</span>
+                <span>WhatsApp Contact</span>
               </a>
 
               <Link href="/">

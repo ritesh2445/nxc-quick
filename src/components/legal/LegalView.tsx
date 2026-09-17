@@ -458,7 +458,7 @@ export function LegalView({ initialTab = "terms" }: LegalViewProps) {
                   You have a <strong className="text-white">2-hour window</strong> after placing your order on <span className="font-mono text-white">nxcverse.in/order</span> to modify engraving details, adjust spelling, or cancel your order for an immediate 100% full refund.
                 </p>
                 <p>
-                  To request an emergency change or cancellation, message our 24/7 WhatsApp Concierge directly at <a href="https://wa.me/919561248677" target="_blank" rel="noopener noreferrer" className="font-mono text-[#25D366] hover:underline">+91 9561248677</a> with your Order ID.
+                  To request an emergency change or cancellation, message our 24/7 WhatsApp Contact directly at <a href="https://wa.me/919561248677" target="_blank" rel="noopener noreferrer" className="font-mono text-[#25D366] hover:underline">+91 9561248677</a> with your Order ID.
                 </p>
               </section>
 
@@ -566,7 +566,7 @@ export function LegalView({ initialTab = "terms" }: LegalViewProps) {
               className="px-4 py-2.5 rounded-full bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/30 text-[#25D366] text-xs font-mono tracking-wider uppercase flex items-center gap-2 transition-all btn-interactive shadow-sm"
             >
               <WhatsAppIcon className="w-4 h-4 text-[#25D366]" color="#25D366" />
-              <span>WhatsApp Concierge</span>
+              <span>WhatsApp Contact</span>
             </a>
 
             <a

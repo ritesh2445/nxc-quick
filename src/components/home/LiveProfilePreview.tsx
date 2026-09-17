@@ -93,7 +93,7 @@ export function LiveProfilePreview() {
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/20 text-white text-xs font-sans font-medium tracking-wider transition-all min-h-[44px] btn-interactive"
             >
               <WhatsAppIcon className="w-4 h-4 text-[#25D366]" color="#25D366" />
-              <span>WhatsApp Concierge</span>
+              <span>WhatsApp Contact</span>
             </a>
           </div>
         </div>

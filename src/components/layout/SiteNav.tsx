@@ -201,7 +201,7 @@ export function SiteNav() {
               className="flex items-center justify-center gap-2 py-2 text-xs font-mono text-[#9E9EA8] hover:text-white tracking-wider transition-colors pt-1"
             >
               <WhatsAppIcon className="w-3.5 h-3.5 text-[#25D366]" color="#25D366" />
-              <span>Concierge: +91 9561248677</span>
+              <span>WhatsApp Contact: +91 9561248677</span>
             </a>
           </div>
         </div>

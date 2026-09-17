@@ -38,7 +38,7 @@ export function FinalCta() {
             className="min-h-[46px] px-6 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/20 text-white font-sans font-medium flex items-center gap-2 text-xs tracking-wider transition-all shadow-sm btn-interactive"
           >
             <WhatsAppIcon className="w-4 h-4 text-[#25D366]" color="#25D366" />
-            <span>WhatsApp Concierge</span>
+            <span>WhatsApp Contact</span>
           </a>
         </div>
 
