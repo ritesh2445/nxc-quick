@@ -79,7 +79,7 @@ export function FooterContent() {
             </h4>
             <ul className="space-y-2.5 text-xs font-sans text-[#9E9EA8]">
               <li><a href="mailto:nxcbadge@gmail.com" className="font-mono text-[#E2E0DC] hover:text-white transition-colors">nxcbadge@gmail.com</a></li>
-              <li><a href="https://wa.me/919561248677" target="_blank" rel="noopener noreferrer" className="font-mono text-[#25D366] hover:underline">+91 9561248677</a></li>
+              <li><a href="https://wa.me/919561248677" target="_blank" rel="noopener noreferrer" className="font-sans text-[#25D366] hover:underline">WhatsApp Contact</a></li>
               <li><a href="https://instagram.com/nxcverse.in" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">@nxcverse.in</a></li>
               <li><span className="text-[#62626E]">DPDP Act 2023 Compliant</span></li>
             </ul>

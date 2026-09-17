@@ -212,7 +212,7 @@ export function LiveProfilePreview() {
                   <span className="flex items-center gap-2">
                     <WhatsAppIcon className="w-3.5 h-3.5 text-[#25D366]" color="#25D366" /> WhatsApp
                   </span>
-                  <span className="font-mono text-[9px] text-[#62626E]">+91 9561248677</span>
+                  <span className="font-mono text-[9px] text-[#25D366]">Chat Direct</span>
                 </a>
               </div>
             </div>

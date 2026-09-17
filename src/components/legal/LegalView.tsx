@@ -403,7 +403,7 @@ export function LegalView({ initialTab = "terms" }: LegalViewProps) {
                 <div className="p-4 rounded-xl bg-white/[0.03] border border-white/10 space-y-1 font-mono text-xs text-[#B0B0C0]">
                   <div>Grievance Officer: NXC Legal & Data Protection Cell</div>
                   <div>Email: <a href="mailto:nxcbadge@gmail.com" className="text-white underline">nxcbadge@gmail.com</a></div>
-                  <div>Direct Concierge Desk: +91 9561248677</div>
+                  <div>Direct Contact: WhatsApp & Email Support</div>
                   <div>Operational Address: Maharashtra, India</div>
                   <div>Response Resolution Timeline: Within 48 business hours</div>
                 </div>
@@ -442,7 +442,7 @@ export function LegalView({ initialTab = "terms" }: LegalViewProps) {
                   </div>
                   <ol className="list-decimal pl-5 text-xs text-emerald-200/90 space-y-1">
                     <li>Inspect your card upon arrival from the tamper-evident luxury sleeve.</li>
-                    <li>Send a brief photo or video showing the defect to WhatsApp (+91 9561248677) or email (nxcbadge@gmail.com).</li>
+                    <li>Send a brief photo or video showing the defect to our WhatsApp Contact or email (nxcbadge@gmail.com).</li>
                     <li>Our team reviews and approves your replacement within 4 business hours.</li>
                     <li>A brand-new card is re-milled and shipped via express courier with instant tracking.</li>
                   </ol>
@@ -458,7 +458,7 @@ export function LegalView({ initialTab = "terms" }: LegalViewProps) {
                   You have a <strong className="text-white">2-hour window</strong> after placing your order on <span className="font-mono text-white">nxcverse.in/order</span> to modify engraving details, adjust spelling, or cancel your order for an immediate 100% full refund.
                 </p>
                 <p>
-                  To request an emergency change or cancellation, message our 24/7 WhatsApp Contact directly at <a href="https://wa.me/919561248677" target="_blank" rel="noopener noreferrer" className="font-mono text-[#25D366] hover:underline">+91 9561248677</a> with your Order ID.
+                  To request an emergency change or cancellation, message our 24/7 <a href="https://wa.me/919561248677" target="_blank" rel="noopener noreferrer" className="text-[#25D366] hover:underline font-medium">WhatsApp Contact</a> directly with your Order ID.
                 </p>
               </section>
 
