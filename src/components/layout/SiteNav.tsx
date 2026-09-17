@@ -22,13 +22,20 @@ export function SiteNav() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
-  // Hide SiteNav entirely on dashboard / admin / login / public digital profiles (@username)
+  // Hide SiteNav on dashboard, admin, login, and public digital profiles (@username)
+  const isLegalRoute =
+    pathname.startsWith("/legal") ||
+    pathname.startsWith("/terms") ||
+    pathname.startsWith("/privacy") ||
+    pathname.startsWith("/refund") ||
+    pathname.startsWith("/shipping");
+
   const isStandaloneRoute =
     pathname.startsWith("/dashboard") ||
     pathname.startsWith("/admin") ||
     pathname.startsWith("/login") ||
     pathname.startsWith("/@") ||
-    (pathname !== "/" && pathname !== "/order" && !pathname.startsWith("/api"));
+    (!isLegalRoute && pathname !== "/" && pathname !== "/order" && !pathname.startsWith("/api"));
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 15);

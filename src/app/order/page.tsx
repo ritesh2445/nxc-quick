@@ -702,7 +702,14 @@ function OrderPageContent() {
                     </span>
                   </div>
                   <p className="text-[10px] text-[#70707C] leading-relaxed">
-                    256-bit encrypted checkout. Includes lifetime profile hosting and 1-year hardware warranty.
+                    256-bit encrypted checkout. Includes lifetime profile hosting and 1-year hardware warranty. By completing your acquisition, you agree to our{" "}
+                    <Link href="/terms" target="_blank" className="text-[#A0A0AA] hover:text-white underline transition-colors">
+                      Terms & Conditions
+                    </Link>{" "}
+                    and{" "}
+                    <Link href="/refund" target="_blank" className="text-[#A0A0AA] hover:text-white underline transition-colors">
+                      Refund Policy
+                    </Link>.
                   </p>
                 </div>
               </div>
