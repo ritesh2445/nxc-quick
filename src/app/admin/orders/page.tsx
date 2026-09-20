@@ -160,7 +160,7 @@ export default function AdminOrdersPage() {
         {/* Filters & Search Control Bar */}
         <div className="p-4 rounded-2xl bg-[#0B0B0F] border border-white/[0.08] space-y-4">
           <div className="flex flex-col md:flex-row items-center gap-4 justify-between">
-            {/* Search Input */}
+            {/* Search Input with 1-Click Clear */}
             <form onSubmit={handleSearchSubmit} className="relative w-full md:max-w-md">
               <Search className="w-4 h-4 text-neutral-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
@@ -168,8 +168,26 @@ export default function AdminOrdersPage() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search by Order #, Holder Name, Email, or AWB..."
-                className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-xs font-mono focus:border-white/30 outline-none placeholder:text-neutral-500"
+                className="w-full pl-9 pr-9 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-xs font-mono focus:border-white/30 outline-none placeholder:text-neutral-500"
               />
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearch("");
+                    const params = new URLSearchParams();
+                    if (selectedStatus !== "all") params.set("status", selectedStatus);
+                    if (selectedTier !== "all") params.set("tier", selectedTier);
+                    fetch(`/api/admin/orders?${params.toString()}`)
+                      .then((res) => res.json())
+                      .then((d) => setOrders(d.orders || []));
+                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-white"
+                  title="Clear Search"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </form>
 
             {/* Tier Filter Pills */}
@@ -195,27 +213,33 @@ export default function AdminOrdersPage() {
             </div>
           </div>
 
-          {/* Status Filter Pipeline Tabs */}
+          {/* Status Filter Pipeline Tabs with Counts */}
           <div className="flex items-center gap-2 overflow-x-auto pt-2 border-t border-white/[0.05] pb-1">
             <span className="text-[11px] font-mono text-neutral-400 shrink-0">Status:</span>
             {[
-              { id: "all", label: "All Statuses" },
-              { id: "pending", label: "Queued" },
-              { id: "engraving", label: "Laser Milling" },
-              { id: "shipped", label: "Dispatched" },
-              { id: "delivered", label: "Delivered" },
-              { id: "cancelled", label: "Cancelled" },
+              { id: "all", label: "All Orders", count: orders.length },
+              { id: "pending", label: "Queued", count: orders.filter((o) => (o.orderStatus || "pending") === "pending").length },
+              { id: "engraving", label: "Laser Milling", count: orders.filter((o) => o.orderStatus === "engraving").length },
+              { id: "shipped", label: "Dispatched", count: orders.filter((o) => o.orderStatus === "shipped").length },
+              { id: "delivered", label: "Delivered", count: orders.filter((o) => o.orderStatus === "delivered").length },
             ].map((s) => (
               <button
                 key={s.id}
                 onClick={() => setSelectedStatus(s.id)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all shrink-0 ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all shrink-0 flex items-center gap-1.5 ${
                   selectedStatus === s.id
                     ? "bg-white text-black font-semibold shadow-sm"
                     : "bg-white/[0.03] text-neutral-400 border border-white/[0.05] hover:text-white"
                 }`}
               >
-                {s.label}
+                <span>{s.label}</span>
+                <span
+                  className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
+                    selectedStatus === s.id ? "bg-black/15 text-black" : "bg-white/10 text-neutral-300"
+                  }`}
+                >
+                  {s.count}
+                </span>
               </button>
             ))}
           </div>
@@ -260,7 +284,7 @@ export default function AdminOrdersPage() {
                     >
                       {/* Order Number */}
                       <td className="py-4 px-4 font-semibold text-white whitespace-nowrap">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1.5">
                           <span className="text-neutral-100 group-hover:underline">
                             {ord.orderNumber}
                           </span>
@@ -311,22 +335,53 @@ export default function AdminOrdersPage() {
                       </td>
 
                       {/* Status */}
-                      <td className="py-4 px-4 whitespace-nowrap">
-                        <span
-                          className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] uppercase font-medium ${
-                            ord.orderStatus === "delivered"
-                              ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                              : ord.orderStatus === "shipped"
-                              ? "bg-white/10 text-white border border-white/20"
-                              : ord.orderStatus === "engraving"
-                              ? "bg-white/[0.06] text-neutral-300 border border-white/15"
-                              : ord.orderStatus === "cancelled"
-                              ? "bg-rose-500/10 text-rose-400 border border-rose-500/20"
-                              : "bg-white/[0.02] text-neutral-400 border border-white/[0.06]"
-                          }`}
-                        >
-                          {ord.orderStatus || "pending"}
-                        </span>
+                      <td className="py-4 px-4 whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] uppercase font-medium ${
+                              ord.orderStatus === "delivered"
+                                ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                                : ord.orderStatus === "shipped"
+                                ? "bg-white/10 text-white border border-white/20"
+                                : ord.orderStatus === "engraving"
+                                ? "bg-white/[0.06] text-neutral-300 border border-white/15"
+                                : ord.orderStatus === "cancelled"
+                                ? "bg-rose-500/10 text-rose-400 border border-rose-500/20"
+                                : "bg-white/[0.02] text-neutral-400 border border-white/[0.06]"
+                            }`}
+                          >
+                            {ord.orderStatus || "pending"}
+                          </span>
+
+                          {/* Quick advance button */}
+                          {(!ord.orderStatus || ord.orderStatus === "pending") && (
+                            <button
+                              onClick={(e) => handleQuickStatus(ord.id, "engraving", e)}
+                              className="text-[9px] px-1.5 py-0.5 rounded bg-white/[0.06] hover:bg-white/[0.12] text-neutral-300 hover:text-white border border-white/10 transition-colors"
+                              title="Advance to Laser Milling"
+                            >
+                              Engrave ➔
+                            </button>
+                          )}
+                          {ord.orderStatus === "engraving" && (
+                            <button
+                              onClick={(e) => handleQuickStatus(ord.id, "shipped", e)}
+                              className="text-[9px] px-1.5 py-0.5 rounded bg-white/[0.06] hover:bg-white/[0.12] text-neutral-300 hover:text-white border border-white/10 transition-colors"
+                              title="Advance to Dispatched"
+                            >
+                              Dispatch ➔
+                            </button>
+                          )}
+                          {ord.orderStatus === "shipped" && (
+                            <button
+                              onClick={(e) => handleQuickStatus(ord.id, "delivered", e)}
+                              className="text-[9px] px-1.5 py-0.5 rounded bg-white/[0.06] hover:bg-white/[0.12] text-neutral-300 hover:text-white border border-white/10 transition-colors"
+                              title="Mark Delivered"
+                            >
+                              Delivered ➔
+                            </button>
+                          )}
+                        </div>
                       </td>
 
                       {/* Logistics */}

@@ -17,7 +17,14 @@ import {
   ShieldCheck,
   Save,
   MessageCircle,
+  Copy,
+  Check,
+  RotateCw,
+  QrCode,
+  Wifi,
 } from "lucide-react";
+import QRCode from "qrcode";
+import { NXC_LOGO_DATA_URI } from "@/components/3d/nxcLogoDataUri";
 
 interface OrderDetailDrawerProps {
   order: any | null;
@@ -41,6 +48,9 @@ export function OrderDetailDrawer({
   const [courierPartner, setCourierPartner] = useState<string>("Blue Dart Express");
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [previewFace, setPreviewFace] = useState<"front" | "back">("front");
+  const [qrDataUrl, setQrDataUrl] = useState<string>("");
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   useEffect(() => {
     if (order) {
@@ -48,32 +58,137 @@ export function OrderDetailDrawer({
       setTrackingNumber(order.trackingNumber || "");
       setCourierPartner(order.courierPartner || "Blue Dart Express");
       setSaveSuccess(false);
+
+      const qrSlug = order.qrSlug || order.username || "ritesh";
+      const profileUrl = `https://nxcverse.in/@${qrSlug}`;
+      QRCode.toDataURL(profileUrl, {
+        width: 256,
+        margin: 1,
+        color: {
+          dark: "#000000",
+          light: "#FFFFFF",
+        },
+      })
+        .then((uri) => setQrDataUrl(uri))
+        .catch((err) => console.error("Failed to generate QR in drawer:", err));
     }
   }, [order]);
 
+  // Keyboard shortcut: Escape to close drawer
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen || !order) return null;
 
-  // Google Font URL injection for dynamic preview
-  const laserFont = order.laserFont || "Cinzel";
+  const rawFont = order.laserFont || "Cinzel";
+  const laserFont = rawFont;
   const fontUrl = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(
     laserFont
   )}:wght@400;600;700;800&display=swap`;
 
-  const getFinishStyles = (finish: string) => {
-    switch (finish) {
-      case "pitch_black":
-        return "bg-gradient-to-tr from-neutral-950 via-[#111115] to-neutral-950 text-neutral-100 border-neutral-800 shadow-[0_10px_30px_rgba(0,0,0,0.8)]";
-      case "silver":
-        return "bg-gradient-to-tr from-neutral-300 via-neutral-100 to-neutral-400 text-neutral-900 border-white shadow-[0_10px_30px_rgba(255,255,255,0.1)]";
-      case "gold":
-        return "bg-gradient-to-tr from-amber-600 via-amber-200 to-amber-700 text-neutral-950 border-amber-300 shadow-[0_10px_30px_rgba(245,158,11,0.2)]";
-      case "royal_red":
-        return "bg-gradient-to-tr from-rose-950 via-red-900 to-rose-950 text-rose-100 border-rose-800 shadow-[0_10px_30px_rgba(244,63,94,0.2)]";
-      case "cobalt_blue":
-        return "bg-gradient-to-tr from-blue-950 via-slate-900 to-sky-950 text-sky-100 border-sky-800 shadow-[0_10px_30px_rgba(14,165,233,0.2)]";
-      default:
-        return "bg-gradient-to-tr from-neutral-950 via-neutral-900 to-neutral-950 text-white border-neutral-800";
-    }
+  const rawFinish = (order.finish || "pitch_black").toLowerCase();
+  const normalizedFinish: "silver" | "gold" | "royal_red" | "pitch_black" | "cobalt_blue" =
+    rawFinish === "mirror" || rawFinish === "titanium" || rawFinish === "silver"
+      ? "silver"
+      : rawFinish === "champagne" || rawFinish === "gold"
+      ? "gold"
+      : rawFinish === "royal_red"
+      ? "royal_red"
+      : rawFinish === "midnight" || rawFinish === "carbon" || rawFinish === "matte_black" || rawFinish === "cobalt_blue"
+      ? "cobalt_blue"
+      : "pitch_black";
+
+  // Real Authentic Finish Styles
+  const finishStyles = {
+    silver: {
+      name: "Silver Chromium",
+      bg: "bg-[#B8C2D1]",
+      border: "border-[#7E8B9E]/70",
+      textPrimary: "text-[#000000] drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)] font-semibold",
+      textSecondary: "text-[#1A1E26] font-medium",
+      gradient: "from-[#7E8899] via-[#E2E8F2] via-[#A2ADC0] via-[#FFFFFF] via-[#C8D1E0] to-[#8E98AA]",
+      shimmer: "rgba(255, 255, 255, 0.75)",
+      glow: "shadow-[0_12px_36px_rgba(0,0,0,0.5),inset_0_2px_3px_rgba(255,255,255,0.9),inset_0_-2px_3px_rgba(0,0,0,0.3)]",
+      glaze: "from-white/[0.5] via-transparent to-black/[0.15]",
+      logoFilter: "brightness-0 opacity-100",
+      logoBlend: "multiply" as const,
+      qrBezel: "border-[#687588] bg-[#F2F5F9]",
+      divider: "border-black/20",
+    },
+    gold: {
+      name: "24K Champagne Gold",
+      bg: "bg-[#181002]",
+      border: "border-[#F5D061]/80",
+      textPrimary: "text-[#FFFFFF] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] font-normal",
+      textSecondary: "text-[#ECC968] font-normal",
+      gradient: "from-[#1C1202] via-[#483006] via-[#94721A] via-[#ECC968] via-[#5A3F0C] via-[#1A1002] to-[#382607]",
+      shimmer: "rgba(245, 208, 97, 0.45)",
+      glow: "shadow-[0_12px_36px_rgba(0,0,0,0.8),inset_0_2px_3px_rgba(255,240,180,0.7),inset_0_-2px_3px_rgba(0,0,0,0.9)]",
+      glaze: "from-[#FFF2CC]/[0.35] via-transparent to-[#D8B466]/[0.2]",
+      logoFilter: "sepia-[0.7] brightness-135 contrast-120 drop-shadow-[0_0_12px_rgba(245,208,97,0.5)]",
+      logoBlend: "screen" as const,
+      qrBezel: "border-[#ECC968] bg-[#FFFDF5]",
+      divider: "border-[#ECC968]/30",
+    },
+    royal_red: {
+      name: "Royal Red PVD",
+      bg: "bg-[#180004]",
+      border: "border-[#FF2A55]/80",
+      textPrimary: "text-[#FFFFFF] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] font-normal",
+      textSecondary: "text-[#FF8099] font-normal",
+      gradient: "from-[#1C0005] via-[#4E020E] via-[#9E1026] via-[#F0264B] via-[#580312] via-[#180004] to-[#35010A]",
+      shimmer: "rgba(255, 42, 85, 0.45)",
+      glow: "shadow-[0_12px_36px_rgba(0,0,0,0.8),inset_0_2px_3px_rgba(255,180,195,0.7),inset_0_-2px_3px_rgba(0,0,0,0.9)]",
+      glaze: "from-white/[0.3] via-transparent to-[#FF2A55]/[0.25]",
+      logoFilter: "brightness-120 contrast-110 drop-shadow-[0_0_12px_rgba(255,100,130,0.5)]",
+      logoBlend: "screen" as const,
+      qrBezel: "border-[#FF2A55]/80 bg-[#FFFFFF]",
+      divider: "border-[#FF2A55]/30",
+    },
+    pitch_black: {
+      name: "Pitch Black PVD",
+      bg: "bg-[#000000]",
+      border: "border-white/25",
+      textPrimary: "text-[#FFFFFF] drop-shadow-sm font-normal",
+      textSecondary: "text-[#D0D0DC] font-normal",
+      gradient: "from-[#000000] via-[#050508] to-[#000000]",
+      shimmer: "rgba(255, 255, 255, 0.35)",
+      glow: "shadow-[0_12px_36px_rgba(0,0,0,0.95),inset_0_1.5px_2px_rgba(255,255,255,0.35),inset_0_-2px_3px_rgba(0,0,0,0.95)]",
+      glaze: "from-white/[0.16] via-transparent to-white/[0.04]",
+      logoFilter: "brightness-115 contrast-105 drop-shadow-[0_0_14px_rgba(255,255,255,0.5)]",
+      logoBlend: "screen" as const,
+      qrBezel: "border-white/30 bg-[#FFFFFF]",
+      divider: "border-white/15",
+    },
+    cobalt_blue: {
+      name: "Cobalt Blue PVD",
+      bg: "bg-[#030B1C]",
+      border: "border-[#0077EE]/80",
+      textPrimary: "text-[#FFFFFF] drop-shadow-[0_2px_4px_rgba(0,0,0,0.95)] font-normal",
+      textSecondary: "text-[#7EB5F0] font-normal",
+      gradient: "from-[#020A18] via-[#08224E] via-[#0C387C] via-[#1457B8] via-[#0A2656] via-[#020A18] to-[#051630]",
+      shimmer: "rgba(0, 120, 240, 0.45)",
+      glow: "shadow-[0_12px_36px_rgba(0,0,0,0.8),inset_0_2px_3px_rgba(100,180,255,0.6),inset_0_-2px_3px_rgba(0,0,0,0.9)]",
+      glaze: "from-white/[0.28] via-transparent to-[#0088FF]/[0.22]",
+      logoFilter: "brightness-120 contrast-110 drop-shadow-[0_0_12px_rgba(100,180,255,0.5)]",
+      logoBlend: "screen" as const,
+      qrBezel: "border-[#0088FF]/80 bg-[#FFFFFF]",
+      divider: "border-[#0088FF]/30",
+    },
+  }[normalizedFinish];
+
+  const handleCopy = (text: string, key: string) => {
+    if (!text) return;
+    navigator.clipboard.writeText(text);
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey(null), 2000);
   };
 
   const handleSave = async () => {
@@ -112,10 +227,16 @@ export function OrderDetailDrawer({
     const rawPhone = order.customerPhone || "";
     const cleanPhone = rawPhone.replace(/[^\d+]/g, "");
     const msg = encodeURIComponent(
-      `Greetings ${order.customerName || "Customer"}, your NXC Atelier custom metal card (Order #${order.orderNumber}) has been precision-engraved and prepared for dispatch via ${courierPartner}${trackingNumber ? ` (Tracking AWB: ${trackingNumber})` : ""}. Thank you for choosing NXCVERSE.`
+      `Hello ${order.customerName || "Customer"}, your custom NXC Verse metal card (Order #${order.orderNumber}) has been precision-engraved on our fiber laser rig and prepared for dispatch via ${courierPartner}${trackingNumber ? ` (AWB Tracking: ${trackingNumber})` : ""}. Thank you for choosing NXC Verse!`
     );
     window.open(`https://wa.me/${cleanPhone}?text=${msg}`, "_blank");
   };
+
+  const holderName = (order.engravingName || order.customerName || "RITESH MARTAWAR").toUpperCase();
+  const holderTitle = (order.engravingTitle || order.customerDesignation || "FOUNDER & CEO").toUpperCase();
+  const companyName = (order.company || order.customerCompany || "NXC VERSE").toUpperCase();
+  const serialText = (order.customEngraving || "EDITION NO. 001/100 · ATELIER BESPOKE").toUpperCase();
+  const chipUid = order.nfcUid ? order.nfcUid.slice(0, 14) : "04:A2:8F:E1:99";
 
   return (
     <>
@@ -137,6 +258,17 @@ export function OrderDetailDrawer({
                   <span className="font-cinzel text-lg font-bold text-white tracking-wide">
                     {order.orderNumber}
                   </span>
+                  <button
+                    onClick={() => handleCopy(order.orderNumber, "ordNo")}
+                    className="p-1 rounded hover:bg-white/10 text-neutral-400 hover:text-white transition-colors"
+                    title="Copy Order Number"
+                  >
+                    {copiedKey === "ordNo" ? (
+                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" />
+                    )}
+                  </button>
                   <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-white/[0.06] text-white border border-white/10 font-semibold">
                     {order.tier || "metal"}
                   </span>
@@ -154,7 +286,7 @@ export function OrderDetailDrawer({
                     title="Print 1:1 Scale Card Design & Vector Mask"
                   >
                     <Printer className="w-3.5 h-3.5" />
-                    <span className="hidden sm:inline">Print Card Design</span>
+                    <span className="hidden sm:inline">Print 1:1 Card</span>
                   </button>
                 )}
                 {onOpenLaserSpec && (
@@ -170,6 +302,7 @@ export function OrderDetailDrawer({
                 <button
                   onClick={onClose}
                   className="p-2 rounded-xl bg-white/[0.04] border border-white/10 text-neutral-400 hover:text-white transition-all"
+                  title="Close (Esc)"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -178,72 +311,183 @@ export function OrderDetailDrawer({
 
             {/* Drawer Scrollable Content */}
             <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
-              {/* Card Physical Preview */}
+              {/* Card Physical Preview with Real Face Toggles */}
               <div>
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-xs font-mono uppercase tracking-wider text-neutral-400 flex items-center gap-2">
                     <Sparkles className="w-3.5 h-3.5 text-white" />
-                    Physical Engraving Preview
+                    Authentic NXC Metal Card Preview
                   </span>
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs font-mono text-neutral-300">
-                      Font: {laserFont}
-                    </span>
-                    {onOpenPrintDesign && (
-                      <button
-                        onClick={() => onOpenPrintDesign(order)}
-                        className="text-xs font-mono text-neutral-400 hover:text-white flex items-center gap-1 underline underline-offset-4"
-                      >
-                        <Printer className="w-3 h-3" />
-                        <span>Print 1:1 Scale</span>
-                      </button>
+
+                  {/* Front/Back Flip Toggle */}
+                  <div className="flex items-center bg-white/[0.04] border border-white/10 rounded-xl p-0.5 text-xs font-mono">
+                    <button
+                      type="button"
+                      onClick={() => setPreviewFace("front")}
+                      className={`px-2.5 py-1 rounded-lg transition-colors ${
+                        previewFace === "front"
+                          ? "bg-white text-black font-semibold shadow-sm"
+                          : "text-neutral-400 hover:text-white"
+                      }`}
+                    >
+                      Front (Phoenix Crest)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPreviewFace("back")}
+                      className={`px-2.5 py-1 rounded-lg transition-colors ${
+                        previewFace === "back"
+                          ? "bg-white text-black font-semibold shadow-sm"
+                          : "text-neutral-400 hover:text-white"
+                      }`}
+                    >
+                      Back (Engraving & QR)
+                    </button>
+                  </div>
+                </div>
+
+                {/* Real Physical Card Aspect Container */}
+                <div className="flex justify-center p-4 rounded-2xl bg-[#060609] border border-white/5">
+                  <div
+                    className={`relative rounded-[16px] border transition-all duration-300 overflow-hidden flex flex-col justify-between ${
+                      finishStyles.bg
+                    } ${finishStyles.border} ${finishStyles.glow} bg-gradient-to-br ${
+                      finishStyles.gradient
+                    }`}
+                    style={{
+                      width: "230px",
+                      height: "365px",
+                      padding: "16px 14px",
+                    }}
+                  >
+                    {/* Metallic Texture & Glaze */}
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-tr ${finishStyles.glaze} pointer-events-none rounded-[16px]`}
+                    />
+                    <div
+                      className="absolute inset-0 pointer-events-none opacity-20 mix-blend-overlay rounded-[16px]"
+                      style={{
+                        backgroundImage:
+                          "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.08) 2px, rgba(255,255,255,0.08) 4px)",
+                      }}
+                    />
+
+                    {previewFace === "front" ? (
+                      /* FRONT FACE: NXC Phoenix Emblem */
+                      <>
+                        <div className="relative flex items-center justify-between z-10">
+                          <span
+                            className={`font-cinzel text-[10px] font-semibold tracking-[0.32em] uppercase ${finishStyles.textPrimary}`}
+                          >
+                            NXC VERSE
+                          </span>
+                          <div className={finishStyles.textSecondary}>
+                            <svg className="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24">
+                              <path d="M12 4c4.418 0 8 3.582 8 8s-3.582 8-8 8" strokeWidth="2.2" strokeLinecap="round" />
+                              <path d="M12 8c2.209 0 4 1.791 4 4s-1.791 4-4 4" strokeWidth="2.2" strokeLinecap="round" />
+                              <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+                            </svg>
+                          </div>
+                        </div>
+
+                        {/* Center: Official Winged Phoenix Logo */}
+                        <div className="relative my-auto flex items-center justify-center z-10 w-full flex-1 p-2">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={NXC_LOGO_DATA_URI}
+                            alt="NXC Verse Official Phoenix Crest"
+                            style={{
+                              mixBlendMode: finishStyles.logoBlend,
+                              maxHeight: "180px",
+                            }}
+                            className={`max-w-full object-contain pointer-events-none select-none ${finishStyles.logoFilter}`}
+                          />
+                        </div>
+                      </>
+                    ) : (
+                      /* BACK FACE: Real QR & Engraved Identity */
+                      <>
+                        {/* Top Bar: Company & Chip UID */}
+                        <div
+                          className={`relative flex items-center justify-between pb-2 border-b ${finishStyles.divider} z-10`}
+                        >
+                          <span
+                            className={`text-[9px] font-medium tracking-[0.2em] uppercase truncate max-w-[120px] ${finishStyles.textPrimary}`}
+                            style={{ fontFamily: `'${laserFont}', sans-serif` }}
+                          >
+                            {companyName}
+                          </span>
+                          <span
+                            className={`font-mono text-[8px] font-medium tracking-widest shrink-0 ${finishStyles.textSecondary}`}
+                          >
+                            {chipUid}
+                          </span>
+                        </div>
+
+                        {/* Center: Name, Title & Real Scannable QR */}
+                        <div className="relative flex flex-col items-center text-center space-y-1.5 my-auto z-10 py-1">
+                          <div className="space-y-0.5 max-w-[190px]">
+                            <h3
+                              style={{ fontFamily: `'${laserFont}', sans-serif` }}
+                              className={`text-xs uppercase leading-snug tracking-[0.14em] font-bold ${finishStyles.textPrimary}`}
+                            >
+                              {holderName}
+                            </h3>
+                            <p
+                              style={{ fontFamily: `'${laserFont}', sans-serif` }}
+                              className={`text-[8px] uppercase tracking-[0.16em] ${finishStyles.textSecondary}`}
+                            >
+                              {holderTitle}
+                            </p>
+                          </div>
+
+                          {/* Recessed CNC-Milled Bezel with REAL QR Code */}
+                          <div className="relative flex flex-col items-center pt-1">
+                            <div className={`p-1.5 rounded-[8px] border ${finishStyles.qrBezel} relative`}>
+                              <div className="w-[84px] h-[84px] relative flex items-center justify-center">
+                                {qrDataUrl ? (
+                                  // eslint-disable-next-line @next/next/no-img-element
+                                  <img
+                                    src={qrDataUrl}
+                                    alt="Live Scannable QR"
+                                    className="w-full h-full object-contain rounded-[2px]"
+                                  />
+                                ) : (
+                                  <div className="w-full h-full bg-black/10 animate-pulse rounded" />
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Bottom: Custom Serial Engraving */}
+                        <div
+                          className={`relative pt-1.5 border-t ${finishStyles.divider} flex items-center justify-center text-[7px] z-10`}
+                        >
+                          <span
+                            style={{ fontFamily: `'${laserFont}', sans-serif` }}
+                            className={`uppercase truncate tracking-[0.2em] ${finishStyles.textSecondary}`}
+                          >
+                            {serialText}
+                          </span>
+                        </div>
+                      </>
                     )}
                   </div>
                 </div>
 
-                <div
-                  className={`w-full aspect-[1.586] rounded-2xl p-6 border relative overflow-hidden flex flex-col justify-between transition-all duration-300 ${getFinishStyles(
-                    order.finish
-                  )}`}
-                >
-                  {/* Sheen effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -skew-x-12 pointer-events-none opacity-40" />
-
-                  {/* Card Top */}
-                  <div className="flex items-center justify-between z-10">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-md bg-white/20 border border-white/30 flex items-center justify-center font-bold text-[10px]">
-                        N
-                      </div>
-                      <span className="font-cinzel text-xs tracking-widest font-bold">NXC ATELIER</span>
-                    </div>
-                    <div className="text-[10px] font-mono tracking-widest uppercase opacity-70">
-                      NTAG216 NFC
-                    </div>
-                  </div>
-
-                  {/* Card Bottom: Engraved Customer Name and Title in Selected Google Font */}
-                  <div className="z-10 mt-auto">
-                    <div
-                      className="text-lg sm:text-xl font-bold tracking-wider uppercase truncate drop-shadow-md"
-                      style={{ fontFamily: `'${laserFont}', sans-serif` }}
-                    >
-                      {order.engravingName || "EXECUTIVE HOLDER"}
-                    </div>
-                    {order.engravingTitle && (
-                      <div
-                        className="text-xs tracking-widest uppercase opacity-85 mt-0.5 truncate"
-                        style={{ fontFamily: `'${laserFont}', sans-serif` }}
-                      >
-                        {order.engravingTitle}
-                      </div>
-                    )}
-                    {order.customEngraving && (
-                      <div className="text-[9px] font-mono opacity-60 tracking-wider mt-2">
-                        {order.customEngraving}
-                      </div>
-                    )}
-                  </div>
+                {/* Live Public Profile Fast Link */}
+                <div className="pt-2 flex items-center justify-between text-xs font-mono">
+                  <span className="text-neutral-400">Public NFC Link:</span>
+                  <a
+                    href={`/p/${order.qrSlug || order.username || "ritesh"}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 text-neutral-300 hover:text-white underline underline-offset-4"
+                  >
+                    <span>/p/{order.qrSlug || order.username || "ritesh"}</span>
+                    <ExternalLink className="w-3 h-3 text-neutral-400" />
+                  </a>
                 </div>
               </div>
 
@@ -283,9 +527,22 @@ export function OrderDetailDrawer({
                     Logistics & Courier Assignment
                   </span>
                   {trackingNumber && (
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/10 text-neutral-300 border border-white/15">
-                      AWB Active
-                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/10 text-neutral-300 border border-white/15">
+                        AWB: {trackingNumber}
+                      </span>
+                      <button
+                        onClick={() => handleCopy(trackingNumber, "awb")}
+                        className="p-1 rounded hover:bg-white/10 text-neutral-400 hover:text-white transition-colors"
+                        title="Copy AWB"
+                      >
+                        {copiedKey === "awb" ? (
+                          <Check className="w-3 h-3 text-emerald-400" />
+                        ) : (
+                          <Copy className="w-3 h-3" />
+                        )}
+                      </button>
+                    </div>
                   )}
                 </div>
 
@@ -327,9 +584,10 @@ export function OrderDetailDrawer({
                   <button
                     onClick={handleWhatsAppDispatch}
                     disabled={!order.customerPhone}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.04] text-neutral-300 border border-white/10 hover:bg-white/[0.08] hover:text-white transition-all text-xs font-medium"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.04] text-neutral-300 border border-white/10 hover:bg-white/[0.08] hover:text-white transition-all text-xs font-medium disabled:opacity-40"
+                    title={order.customerPhone ? `Send WhatsApp message to ${order.customerPhone}` : "No phone number registered"}
                   >
-                    <MessageCircle className="w-4 h-4" />
+                    <MessageCircle className="w-4 h-4 text-emerald-400" />
                     <span>Notify Customer via WhatsApp</span>
                   </button>
 
@@ -368,20 +626,68 @@ export function OrderDetailDrawer({
 
                   <div>
                     <div className="text-neutral-400 font-mono text-[10px]">Email Dispatch</div>
-                    <div className="text-neutral-200 mt-0.5 truncate">{order.customerEmail || "N/A"}</div>
+                    <div className="text-neutral-200 mt-0.5 truncate flex items-center gap-1.5">
+                      <span>{order.customerEmail || "N/A"}</span>
+                      {order.customerEmail && (
+                        <button
+                          onClick={() => handleCopy(order.customerEmail, "email")}
+                          className="text-neutral-400 hover:text-white"
+                          title="Copy Email"
+                        >
+                          {copiedKey === "email" ? (
+                            <Check className="w-3 h-3 text-emerald-400" />
+                          ) : (
+                            <Copy className="w-3 h-3" />
+                          )}
+                        </button>
+                      )}
+                    </div>
                   </div>
 
                   <div>
-                    <div className="text-neutral-400 font-mono text-[10px]">Contact Channel</div>
-                    <div className="text-neutral-200 mt-0.5">
-                      {order.customerPhone ? "WhatsApp Verified" : "Direct Email"}
+                    <div className="text-neutral-400 font-mono text-[10px]">Contact Phone</div>
+                    <div className="text-neutral-200 mt-0.5 flex items-center gap-1.5">
+                      <span>{order.customerPhone || "Direct Email Only"}</span>
+                      {order.customerPhone && (
+                        <button
+                          onClick={() => handleCopy(order.customerPhone, "phone")}
+                          className="text-neutral-400 hover:text-white"
+                          title="Copy Phone"
+                        >
+                          {copiedKey === "phone" ? (
+                            <Check className="w-3 h-3 text-emerald-400" />
+                          ) : (
+                            <Copy className="w-3 h-3" />
+                          )}
+                        </button>
+                      )}
                     </div>
                   </div>
 
                   <div className="sm:col-span-2">
-                    <div className="text-neutral-400 font-mono text-[10px] flex items-center gap-1.5">
-                      <MapPin className="w-3 h-3 text-neutral-400" />
-                      Physical Destination Address
+                    <div className="flex items-center justify-between text-neutral-400 font-mono text-[10px]">
+                      <span className="flex items-center gap-1.5">
+                        <MapPin className="w-3 h-3 text-neutral-400" />
+                        Physical Destination Address
+                      </span>
+                      {order.shippingAddress && (
+                        <button
+                          onClick={() => handleCopy(order.shippingAddress, "addr")}
+                          className="inline-flex items-center gap-1 text-neutral-400 hover:text-white"
+                        >
+                          {copiedKey === "addr" ? (
+                            <>
+                              <Check className="w-3 h-3 text-emerald-400" />
+                              <span className="text-emerald-400">Copied!</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-3 h-3" />
+                              <span>Copy Address</span>
+                            </>
+                          )}
+                        </button>
+                      )}
                     </div>
                     <div className="text-neutral-200 mt-1 leading-relaxed bg-neutral-900/60 p-3 rounded-xl border border-white/5">
                       {order.shippingAddress || "Client delivery address registered on checkout"}

@@ -54,6 +54,16 @@ export function PrintCardDesignModal({
   const qrSlug = item?.qrSlug || item?.username || "ritesh";
   const nfcUid = item?.nfcUid || "04:A2:8F:E1:99:3B:80";
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    if (isOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
   // Generate real scannable QR Code URL
   useEffect(() => {
     if (!isOpen) return;

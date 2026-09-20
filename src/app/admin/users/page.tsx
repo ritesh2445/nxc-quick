@@ -14,6 +14,10 @@ import {
   CheckCircle2,
   AlertCircle,
   RefreshCw,
+  Copy,
+  Check,
+  X,
+  MessageSquare,
 } from "lucide-react";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { UserDetailDrawer } from "@/components/admin/UserDetailDrawer";
@@ -26,12 +30,21 @@ export default function AdminUsersPage() {
   const [verifiedFilter, setVerifiedFilter] = useState("all");
   const [roleFilter, setRoleFilter] = useState("all");
   const [activeDrawerUser, setActiveDrawerUser] = useState<any | null>(null);
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
-  const fetchUsers = async () => {
+  const handleCopy = (text: string, key: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(text);
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey(null), 2000);
+  };
+
+  const fetchUsers = async (customSearch?: string) => {
     try {
       setRefreshing(true);
       const params = new URLSearchParams();
-      if (search) params.set("search", search);
+      const s = typeof customSearch === "string" ? customSearch : search;
+      if (s) params.set("search", s);
       if (verifiedFilter !== "all") params.set("verified", verifiedFilter);
       if (roleFilter !== "all") params.set("role", roleFilter);
 
@@ -55,6 +68,11 @@ export default function AdminUsersPage() {
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     fetchUsers();
+  };
+
+  const handleClearSearch = () => {
+    setSearch("");
+    fetchUsers("");
   };
 
   const handleToggleVerify = async (userId: string, currentStatus: boolean, e: React.MouseEvent) => {
@@ -136,27 +154,46 @@ export default function AdminUsersPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by Name, Username, Email, Company..."
-              className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-neutral-900 border border-white/10 text-white text-xs font-mono focus:border-white/40 outline-none"
+              className="w-full pl-9 pr-8 py-2.5 rounded-xl bg-neutral-900 border border-white/10 text-white text-xs font-mono focus:border-white/40 outline-none"
             />
+            {search && (
+              <button
+                type="button"
+                onClick={handleClearSearch}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-white transition-colors"
+                title="Clear search"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
           </form>
 
           <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto">
             <span className="text-[11px] font-mono text-neutral-400 shrink-0">Verification:</span>
             {[
-              { id: "all", label: "All" },
-              { id: "true", label: "Verified Only" },
-              { id: "false", label: "Unverified" },
+              { id: "all", label: "All", count: users.length },
+              { id: "true", label: "Verified Only", count: verifiedCount },
+              { id: "false", label: "Unverified", count: Math.max(0, users.length - verifiedCount) },
             ].map((vf) => (
               <button
                 key={vf.id}
                 onClick={() => setVerifiedFilter(vf.id)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all shrink-0 ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono transition-all shrink-0 ${
                   verifiedFilter === vf.id
                     ? "bg-white text-black font-semibold shadow-sm"
                     : "bg-white/[0.04] text-neutral-400 border border-white/5 hover:text-white"
                 }`}
               >
-                {vf.label}
+                <span>{vf.label}</span>
+                <span
+                  className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                    verifiedFilter === vf.id
+                      ? "bg-black/15 text-black font-bold"
+                      : "bg-white/10 text-neutral-400"
+                  }`}
+                >
+                  {vf.count}
+                </span>
               </button>
             ))}
           </div>
@@ -173,7 +210,7 @@ export default function AdminUsersPage() {
                   <th className="py-3.5 px-4 font-medium">Digital Card Handle</th>
                   <th className="py-3.5 px-4 font-medium">Hardware Cards</th>
                   <th className="py-3.5 px-4 font-medium">VIP Checkmark</th>
-                  <th className="py-3.5 px-4 font-medium text-right">Dossier</th>
+                  <th className="py-3.5 px-4 font-medium text-right">Actions</th>
                 </tr>
               </thead>
 
@@ -191,86 +228,123 @@ export default function AdminUsersPage() {
                     </td>
                   </tr>
                 ) : (
-                  users.map((u) => (
-                    <tr
-                      key={u.id}
-                      onClick={() => setActiveDrawerUser(u)}
-                      className="hover:bg-neutral-900/60 transition-colors cursor-pointer group"
-                    >
-                      {/* Name & Email */}
-                      <td className="py-4 px-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center font-bold text-xs text-white font-cinzel shrink-0">
-                            {u.fullName ? u.fullName.slice(0, 2).toUpperCase() : "US"}
-                          </div>
-                          <div>
-                            <div className="flex items-center gap-1.5">
-                              <span className="text-white font-medium font-sans group-hover:text-neutral-200 transition-colors">
-                                {u.fullName}
-                              </span>
-                              {u.isVerified && (
-                                <ShieldCheck className="w-3.5 h-3.5 text-[#E4C8A6] shrink-0" />
-                              )}
+                  users.map((u) => {
+                    const cleanPhone = u.phone?.replace(/[^0-9]/g, "") || "";
+                    const whatsappLink = cleanPhone
+                      ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(
+                          `Hello ${u.fullName || "Valued Member"}, this is NXC Verse Atelier Concierge regarding your account (@${u.username}).`
+                        )}`
+                      : `https://wa.me/?text=${encodeURIComponent(
+                          `Hello ${u.fullName || "Valued Member"}, this is NXC Verse Atelier Concierge.`
+                        )}`;
+
+                    return (
+                      <tr
+                        key={u.id}
+                        onClick={() => setActiveDrawerUser(u)}
+                        className="hover:bg-neutral-900/60 transition-colors cursor-pointer group"
+                      >
+                        {/* Name & Email with Copy */}
+                        <td className="py-4 px-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center font-bold text-xs text-white font-cinzel shrink-0">
+                              {u.fullName ? u.fullName.slice(0, 2).toUpperCase() : "US"}
                             </div>
-                            <span className="text-[11px] text-neutral-400 block truncate max-w-[200px]">
-                              {u.email}
-                            </span>
+                            <div>
+                              <div className="flex items-center gap-1.5">
+                                <span className="text-white font-medium font-sans group-hover:text-neutral-200 transition-colors">
+                                  {u.fullName}
+                                </span>
+                                {u.isVerified && (
+                                  <ShieldCheck className="w-3.5 h-3.5 text-[#E4C8A6] shrink-0" />
+                                )}
+                              </div>
+                              <div className="flex items-center gap-1 mt-0.5">
+                                <span className="text-[11px] text-neutral-400 block truncate max-w-[180px]">
+                                  {u.email}
+                                </span>
+                                <button
+                                  onClick={(e) => handleCopy(u.email, `email-${u.id}`, e)}
+                                  className="p-0.5 rounded text-neutral-500 hover:text-white transition-colors"
+                                  title="Copy Email"
+                                >
+                                  {copiedKey === `email-${u.id}` ? (
+                                    <Check className="w-3 h-3 text-emerald-400" />
+                                  ) : (
+                                    <Copy className="w-3 h-3" />
+                                  )}
+                                </button>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </td>
+                        </td>
 
-                      {/* Professional Role */}
-                      <td className="py-4 px-4 font-sans">
-                        <div className="text-neutral-200 text-xs">{u.designation || "Executive"}</div>
-                        <div className="text-[11px] text-neutral-500">{u.company || "NXC Ecosystem"}</div>
-                      </td>
+                        {/* Professional Role */}
+                        <td className="py-4 px-4 font-sans">
+                          <div className="text-neutral-200 text-xs">{u.designation || "Executive"}</div>
+                          <div className="text-[11px] text-neutral-500">{u.company || "NXC Ecosystem"}</div>
+                        </td>
 
-                      {/* Handle */}
-                      <td className="py-4 px-4" onClick={(e) => e.stopPropagation()}>
-                        <a
-                          href={`/p/${u.username}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-1 text-neutral-300 hover:text-white font-sans group/link"
-                        >
-                          <span>/p/{u.username}</span>
-                          <ExternalLink className="w-3 h-3 text-neutral-500 group-hover/link:text-white" />
-                        </a>
-                      </td>
+                        {/* Handle */}
+                        <td className="py-4 px-4" onClick={(e) => e.stopPropagation()}>
+                          <a
+                            href={`/p/${u.username}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 text-neutral-300 hover:text-white font-sans group/link"
+                          >
+                            <span>/p/{u.username}</span>
+                            <ExternalLink className="w-3 h-3 text-neutral-500 group-hover/link:text-white" />
+                          </a>
+                        </td>
 
-                      {/* Cards Count */}
-                      <td className="py-4 px-4 whitespace-nowrap">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/5 text-neutral-300 text-[11px]">
-                          <CreditCard className="w-3 h-3 text-neutral-300" />
-                          <span>{u.cardsCount || 0} Linked</span>
-                        </span>
-                      </td>
+                        {/* Cards Count */}
+                        <td className="py-4 px-4 whitespace-nowrap">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/5 text-neutral-300 text-[11px]">
+                            <CreditCard className="w-3 h-3 text-neutral-300" />
+                            <span>{u.cardsCount || 0} Linked</span>
+                          </span>
+                        </td>
 
-                      {/* Verification Toggle */}
-                      <td className="py-4 px-4" onClick={(e) => e.stopPropagation()}>
-                        <button
-                          onClick={(e) => handleToggleVerify(u.id, Boolean(u.isVerified), e)}
-                          className={`px-3 py-1 rounded-full text-[10px] uppercase font-semibold transition-all border ${
-                            u.isVerified
-                              ? "bg-white/10 text-white border-white/20 hover:bg-white/20"
-                              : "bg-neutral-900 text-neutral-400 border-white/5 hover:text-white"
-                          }`}
-                        >
-                          {u.isVerified ? "Verified VIP" : "Standard"}
-                        </button>
-                      </td>
+                        {/* Verification Toggle */}
+                        <td className="py-4 px-4" onClick={(e) => e.stopPropagation()}>
+                          <button
+                            onClick={(e) => handleToggleVerify(u.id, Boolean(u.isVerified), e)}
+                            className={`px-3 py-1 rounded-full text-[10px] uppercase font-semibold transition-all border ${
+                              u.isVerified
+                                ? "bg-white/10 text-white border-white/20 hover:bg-white/20"
+                                : "bg-neutral-900 text-neutral-400 border-white/5 hover:text-white"
+                            }`}
+                          >
+                            {u.isVerified ? "Verified VIP" : "Standard"}
+                          </button>
+                        </td>
 
-                      {/* Actions */}
-                      <td className="py-4 px-4 text-right">
-                        <button
-                          onClick={() => setActiveDrawerUser(u)}
-                          className="p-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-neutral-400 hover:text-white border border-white/5 transition-colors"
-                        >
-                          <Eye className="w-3.5 h-3.5" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))
+                        {/* Actions: WhatsApp Quick Link & Dossier Drawer */}
+                        <td className="py-4 px-4 text-right" onClick={(e) => e.stopPropagation()}>
+                          <div className="flex items-center justify-end gap-1.5">
+                            <a
+                              href={whatsappLink}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="p-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 transition-colors"
+                              title="Chat on WhatsApp"
+                            >
+                              <MessageSquare className="w-3.5 h-3.5" />
+                            </a>
+
+                            <button
+                              onClick={() => setActiveDrawerUser(u)}
+                              className="p-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-neutral-400 hover:text-white border border-white/5 transition-colors"
+                              title="Open Dossier"
+                            >
+                              <Eye className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>

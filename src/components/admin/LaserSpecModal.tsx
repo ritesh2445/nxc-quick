@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { X, Printer, Cpu, Crosshair, Sparkles, CheckCircle2 } from "lucide-react";
 import { NXC_LOGO_DATA_URI } from "@/components/3d/nxcLogoDataUri";
 
@@ -11,6 +11,16 @@ interface LaserSpecModalProps {
 }
 
 export function LaserSpecModal({ order, isOpen, onClose }: LaserSpecModalProps) {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    if (isOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+    }
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen || !order) return null;
 
   const laserFont = order.laserFont || "Cinzel";
