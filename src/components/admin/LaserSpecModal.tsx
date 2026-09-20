@@ -2,6 +2,7 @@
 
 import React from "react";
 import { X, Printer, Cpu, Crosshair, Sparkles, CheckCircle2 } from "lucide-react";
+import { NXC_LOGO_DATA_URI } from "@/components/3d/nxcLogoDataUri";
 
 interface LaserSpecModalProps {
   order: any | null;
@@ -99,31 +100,48 @@ export function LaserSpecModal({ order, isOpen, onClose }: LaserSpecModalProps) 
               />
 
               <div className="flex justify-between items-center z-10">
-                <div className="border border-white/20 px-2 py-1 rounded text-[10px] text-neutral-300 print:text-black print:border-neutral-400">
-                  LOGO [X: 12.0mm, Y: 12.0mm]
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded border border-white/20 p-1 flex items-center justify-center bg-white/5">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={NXC_LOGO_DATA_URI}
+                      alt="NXC Official Emblem"
+                      className="max-w-full max-h-full object-contain filter invert opacity-90"
+                    />
+                  </div>
+                  <div>
+                    <span className="font-cinzel text-[10px] font-bold tracking-widest text-white print:text-black block">
+                      NXC VERSE
+                    </span>
+                    <span className="text-[8px] text-neutral-400 font-mono">
+                      MILLING X: 12mm, Y: 12mm
+                    </span>
+                  </div>
                 </div>
-                <div className="border border-white/20 px-2 py-1 rounded text-[10px] text-neutral-300 print:text-black print:border-neutral-400">
-                  NFC COIL CAVITY
+
+                <div className="border border-white/20 px-2 py-1 rounded text-[9px] text-neutral-300 print:text-black print:border-neutral-400 font-mono text-right">
+                  <span>NTAG216 RF CAVITY</span>
+                  <span className="text-[7px] text-neutral-500 block">13.56 MHz ANTENNA</span>
                 </div>
               </div>
 
               <div className="z-10 mt-auto">
-                <div className="text-xs text-neutral-300 print:text-neutral-700 mb-1">
-                  PRIMARY ENGRAVING [X: 12.0mm, Y: 38.5mm, FONT: {laserFont}]
+                <div className="text-[10px] text-neutral-400 print:text-neutral-700 mb-1 font-mono">
+                  LASER ENGRAVING COORD [X: 12.0mm, Y: 38.5mm, FONT: {laserFont}]
                 </div>
                 <div
                   className="text-lg sm:text-2xl font-bold tracking-wider uppercase text-white print:text-black border-l-2 border-white pl-3"
                   style={{ fontFamily: `'${laserFont}', sans-serif` }}
                 >
-                  {order.engravingName || "EXECUTIVE HOLDER"}
+                  {order.engravingName || order.customerName || "RITESH MARTAWAR"}
                 </div>
 
-                {order.engravingTitle && (
+                {(order.engravingTitle || order.customerDesignation) && (
                   <div
                     className="text-xs tracking-widest uppercase text-neutral-300 print:text-neutral-700 pl-3 mt-1"
                     style={{ fontFamily: `'${laserFont}', sans-serif` }}
                   >
-                    {order.engravingTitle}
+                    {order.engravingTitle || order.customerDesignation}
                   </div>
                 )}
 
