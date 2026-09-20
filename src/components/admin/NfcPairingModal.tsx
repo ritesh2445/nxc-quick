@@ -93,7 +93,7 @@ export function NfcPairingModal({ card, isOpen, onClose, onSuccess }: NfcPairing
         {/* Header */}
         <div className="p-5 border-b border-white/10 flex items-center justify-between bg-neutral-950/80">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+            <div className="p-2 rounded-xl bg-white/[0.06] text-white border border-white/10">
               <Cpu className="w-4 h-4" />
             </div>
             <div>
@@ -130,9 +130,9 @@ export function NfcPairingModal({ card, isOpen, onClose, onSuccess }: NfcPairing
               <button
                 type="button"
                 onClick={handleEmulateScan}
-                className="text-[11px] font-mono text-cyan-400 hover:text-cyan-300 flex items-center gap-1"
+                className="text-[11px] font-mono text-neutral-300 hover:text-white flex items-center gap-1"
               >
-                <Zap className="w-3 h-3" />
+                <Zap className="w-3 h-3 text-neutral-400" />
                 <span>Emulate NFC Tap</span>
               </button>
             </div>
@@ -141,7 +141,7 @@ export function NfcPairingModal({ card, isOpen, onClose, onSuccess }: NfcPairing
               value={nfcUid}
               onChange={(e) => setNfcUid(e.target.value)}
               placeholder="04:A2:8F:E1:99:3B:80"
-              className="w-full px-4 py-3 rounded-xl bg-neutral-900/90 border border-white/10 text-white font-mono text-sm tracking-wider focus:border-cyan-400 outline-none uppercase"
+              className="w-full px-4 py-3 rounded-xl bg-neutral-900/90 border border-white/10 text-white font-mono text-sm tracking-wider focus:border-white/40 outline-none uppercase"
             />
             <p className="text-[11px] text-neutral-300 font-mono mt-1.5">
               Hold the physical titanium card over your USB NFC reader or tap &apos;Emulate NFC Tap&apos;.
@@ -157,7 +157,7 @@ export function NfcPairingModal({ card, isOpen, onClose, onSuccess }: NfcPairing
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-xl bg-neutral-900 border border-white/10 text-white text-xs font-mono focus:border-cyan-400 outline-none"
+                className="w-full px-3 py-2.5 rounded-xl bg-neutral-900 border border-white/10 text-white text-xs font-mono focus:border-white/40 outline-none"
               >
                 <option value="active">Active (Ready)</option>
                 <option value="inactive">Inactive</option>
@@ -177,7 +177,7 @@ export function NfcPairingModal({ card, isOpen, onClose, onSuccess }: NfcPairing
                 <div
                   className={`w-4 h-4 rounded flex items-center justify-center border ${
                     isActivated
-                      ? "bg-cyan-500 border-cyan-400 text-black"
+                      ? "bg-white border-white text-black"
                       : "border-neutral-600 bg-neutral-800"
                   }`}
                 >
@@ -190,7 +190,7 @@ export function NfcPairingModal({ card, isOpen, onClose, onSuccess }: NfcPairing
           {/* Linked Target */}
           <div className="p-3.5 rounded-xl bg-neutral-900/50 border border-white/5 text-xs font-mono">
             <span className="text-neutral-400 block text-[10px]">TAP REDIRECT TARGET</span>
-            <span className="text-amber-400 mt-0.5 block truncate">
+            <span className="text-white mt-0.5 block truncate">
               https://nxcverse.in/p/{card.qrSlug || "unassigned"}
             </span>
           </div>
@@ -207,7 +207,7 @@ export function NfcPairingModal({ card, isOpen, onClose, onSuccess }: NfcPairing
             <button
               type="submit"
               disabled={loading}
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-black font-semibold text-xs hover:opacity-95 transition-all shadow-lg shadow-cyan-500/20 active:scale-95 disabled:opacity-50"
+              className="px-5 py-2.5 rounded-xl bg-white text-black font-semibold text-xs hover:bg-neutral-200 transition-all shadow-sm active:scale-95 disabled:opacity-50"
             >
               {loading ? "Pairing..." : "Pair Hardware UID"}
             </button>

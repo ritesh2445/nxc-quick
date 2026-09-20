@@ -30,7 +30,7 @@ export function LaserSpecModal({ order, isOpen, onClose }: LaserSpecModalProps) 
           {/* Top Bar (Hidden on print) */}
           <div className="p-4 px-6 border-b border-white/10 flex items-center justify-between bg-neutral-950/80 print:hidden">
             <div className="flex items-center gap-2">
-              <Cpu className="w-4 h-4 text-amber-400" />
+              <Cpu className="w-4 h-4 text-white" />
               <span className="font-cinzel text-sm font-bold tracking-wider">
                 WORKSHOP LASER JOB SPECIFICATION
               </span>
@@ -38,7 +38,7 @@ export function LaserSpecModal({ order, isOpen, onClose }: LaserSpecModalProps) 
             <div className="flex items-center gap-2">
               <button
                 onClick={handlePrint}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-500 text-black font-semibold text-xs hover:bg-amber-400 transition-all"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white text-black font-semibold text-xs hover:bg-neutral-200 transition-all shadow-sm"
               >
                 <Printer className="w-3.5 h-3.5" />
                 <span>Print Job Ticket</span>
@@ -69,7 +69,7 @@ export function LaserSpecModal({ order, isOpen, onClose }: LaserSpecModalProps) 
               </div>
 
               <div className="text-right">
-                <span className="px-2.5 py-1 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-semibold uppercase print:border-neutral-400 print:text-black">
+                <span className="px-2.5 py-1 rounded bg-white/10 text-white border border-white/20 text-xs font-semibold uppercase print:border-neutral-400 print:text-black">
                   {order.tier || "METAL"} EDITION
                 </span>
                 <div className="text-[11px] text-neutral-400 print:text-neutral-600 mt-2">
@@ -82,7 +82,7 @@ export function LaserSpecModal({ order, isOpen, onClose }: LaserSpecModalProps) 
             <div className="relative w-full aspect-[1.586] max-w-xl mx-auto rounded-xl border border-dashed border-white/20 bg-neutral-950 p-6 flex flex-col justify-between overflow-hidden print:border-neutral-400 print:bg-neutral-50">
               {/* Coordinates markings */}
               <div className="absolute top-2 left-2 text-[9px] text-neutral-500 flex items-center gap-1">
-                <Crosshair className="w-3 h-3 text-amber-500" />
+                <Crosshair className="w-3 h-3 text-neutral-400" />
                 (0.00, 0.00) ORIGIN
               </div>
               <div className="absolute bottom-2 right-2 text-[9px] text-neutral-500">
@@ -108,11 +108,11 @@ export function LaserSpecModal({ order, isOpen, onClose }: LaserSpecModalProps) 
               </div>
 
               <div className="z-10 mt-auto">
-                <div className="text-xs text-amber-400 print:text-neutral-700 mb-1">
+                <div className="text-xs text-neutral-300 print:text-neutral-700 mb-1">
                   PRIMARY ENGRAVING [X: 12.0mm, Y: 38.5mm, FONT: {laserFont}]
                 </div>
                 <div
-                  className="text-lg sm:text-2xl font-bold tracking-wider uppercase text-white print:text-black border-l-2 border-amber-400 pl-3"
+                  className="text-lg sm:text-2xl font-bold tracking-wider uppercase text-white print:text-black border-l-2 border-white pl-3"
                   style={{ fontFamily: `'${laserFont}', sans-serif` }}
                 >
                   {order.engravingName || "EXECUTIVE HOLDER"}

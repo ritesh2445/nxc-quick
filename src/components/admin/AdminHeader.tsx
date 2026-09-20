@@ -9,7 +9,6 @@ import {
   CheckCircle2,
   Sparkles,
   Command,
-  Flame,
 } from "lucide-react";
 
 interface AdminHeaderProps {
@@ -29,10 +28,8 @@ export function AdminHeader({
   isRefreshing = false,
   actions,
 }: AdminHeaderProps) {
-  const [copiedNotification, setCopiedNotification] = useState(false);
-
   return (
-    <header className="sticky top-0 z-20 w-full bg-[#07070B]/90 backdrop-blur-xl border-b border-white/10 px-6 py-4">
+    <header className="sticky top-0 z-20 w-full bg-[#08080C]/90 backdrop-blur-xl border-b border-white/[0.08] px-6 py-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         {/* Left: Title, badge, and breadcrumb */}
         <div>
@@ -41,14 +38,14 @@ export function AdminHeader({
               {title}
             </h1>
             {badge && (
-              <span className="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold tracking-wider">
+              <span className="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded-full bg-white/[0.06] text-neutral-300 border border-white/10 font-medium tracking-wider">
                 {badge}
               </span>
             )}
           </div>
           {subtitle && (
             <p className="text-xs text-neutral-400 mt-0.5 tracking-wide flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+              <span className="w-1.5 h-1.5 rounded-full bg-neutral-500" />
               {subtitle}
             </p>
           )}
@@ -57,15 +54,15 @@ export function AdminHeader({
         {/* Right: Edge telemetry, fast actions & refresh */}
         <div className="flex items-center gap-3">
           {/* Edge Node Telemetry Badge */}
-          <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-neutral-900/90 border border-white/10 text-xs font-mono">
+          <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/[0.03] border border-white/[0.08] text-xs font-mono">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
             </span>
             <span className="text-neutral-400">Node:</span>
             <span className="text-white font-medium">BOM-IN-01</span>
             <span className="text-neutral-600">|</span>
-            <span className="text-emerald-400 font-medium">18ms</span>
+            <span className="text-neutral-300 font-medium">18ms</span>
           </div>
 
           {/* Quick Refresh Button */}
@@ -73,11 +70,11 @@ export function AdminHeader({
             <button
               onClick={onRefresh}
               disabled={isRefreshing}
-              className="p-2 rounded-xl bg-neutral-900/80 border border-white/10 text-neutral-300 hover:text-white hover:border-white/20 transition-all active:scale-95 disabled:opacity-50"
+              className="p-2 rounded-xl bg-white/[0.03] border border-white/[0.08] text-neutral-300 hover:text-white hover:border-white/20 transition-all active:scale-95 disabled:opacity-50"
               title="Refresh Live Data"
             >
               <RefreshCw
-                className={`w-4 h-4 ${isRefreshing ? "animate-spin text-amber-400" : ""}`}
+                className={`w-4 h-4 ${isRefreshing ? "animate-spin text-white" : ""}`}
               />
             </button>
           )}

@@ -91,62 +91,52 @@ export default function AdminInventoryPage() {
       <div className="p-6 md:p-8 space-y-8 max-w-7xl w-full mx-auto">
         {/* KPI Strip */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="p-4 rounded-2xl bg-[#0C0C12] border border-white/10 flex items-center justify-between">
+          <div className="p-4 rounded-2xl bg-[#0B0B0F] border border-white/[0.08] flex items-center justify-between">
             <div>
               <span className="text-[10px] font-mono text-neutral-400 uppercase">Available Metal Blanks</span>
               <div className="text-2xl font-bold font-cinzel text-white mt-0.5">{totalBlanks} Units</div>
               <p className="text-[11px] text-neutral-500 font-mono mt-0.5">Across 5 PVD Finishes</p>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <div className="p-2.5 rounded-xl bg-white/[0.04] text-neutral-200 border border-white/10">
               <Layers className="w-5 h-5" />
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#0C0C12] border border-white/10 flex items-center justify-between">
+          <div className="p-4 rounded-2xl bg-[#0B0B0F] border border-white/[0.08] flex items-center justify-between">
             <div>
               <span className="text-[10px] font-mono text-neutral-400 uppercase">Reserved in Production</span>
-              <div className="text-2xl font-bold font-mono text-cyan-400 mt-0.5">{reservedBlanks} Units</div>
+              <div className="text-2xl font-bold font-mono text-white mt-0.5">{reservedBlanks} Units</div>
               <p className="text-[11px] text-neutral-500 font-mono mt-0.5">Allocated to Active Orders</p>
             </div>
-            <div className="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+            <div className="p-2.5 rounded-xl bg-white/[0.04] text-neutral-200 border border-white/10">
               <Boxes className="w-5 h-5" />
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#0C0C12] border border-white/10 flex items-center justify-between">
+          <div className="p-4 rounded-2xl bg-[#0B0B0F] border border-white/[0.08] flex items-center justify-between">
             <div>
               <span className="text-[10px] font-mono text-neutral-400 uppercase">Re-Order Alerts</span>
-              <div
-                className={`text-2xl font-bold font-mono mt-0.5 ${
-                  lowStockBlanks.length > 0 ? "text-amber-400" : "text-emerald-400"
-                }`}
-              >
+              <div className="text-2xl font-bold font-mono text-white mt-0.5">
                 {lowStockBlanks.length === 0 ? "Optimal Stock" : `${lowStockBlanks.length} Low Finishes`}
               </div>
               <p className="text-[11px] text-neutral-500 font-mono mt-0.5">Threshold Automated Watch</p>
             </div>
-            <div
-              className={`p-2.5 rounded-xl border ${
-                lowStockBlanks.length > 0
-                  ? "bg-amber-500/10 text-amber-400 border-amber-500/20"
-                  : "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-              }`}
-            >
+            <div className="p-2.5 rounded-xl bg-white/[0.04] text-neutral-200 border border-white/10">
               {lowStockBlanks.length > 0 ? (
-                <AlertTriangle className="w-5 h-5" />
+                <AlertTriangle className="w-5 h-5 text-neutral-300" />
               ) : (
-                <CheckCircle2 className="w-5 h-5" />
+                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
               )}
             </div>
           </div>
         </div>
 
         {/* Metal Blanks Inventory Matrix */}
-        <div className="bg-[#0A0A10] border border-white/10 rounded-2xl p-6 space-y-4 shadow-xl">
+        <div className="bg-[#0B0B0F] border border-white/[0.08] rounded-2xl p-6 space-y-4 shadow-xl">
           <div className="flex items-center justify-between pb-3 border-b border-white/5">
             <div>
               <h3 className="font-cinzel text-base font-bold text-white tracking-wide flex items-center gap-2">
-                <Layers className="w-4 h-4 text-amber-400" />
+                <Layers className="w-4 h-4 text-neutral-200" />
                 Surgical Steel & Alloy Metal Blanks
               </h3>
               <p className="text-xs text-neutral-400 font-mono mt-0.5">
@@ -164,7 +154,7 @@ export default function AdminInventoryPage() {
               return (
                 <div
                   key={item.id}
-                  className="p-5 rounded-xl bg-[#0E0E16] border border-white/5 hover:border-white/20 transition-all space-y-4 shadow-md"
+                  className="p-5 rounded-xl bg-[#111116] border border-white/[0.06] hover:border-white/20 transition-all space-y-4 shadow-md"
                 >
                   <div className="flex items-start justify-between">
                     <div>
@@ -177,7 +167,7 @@ export default function AdminInventoryPage() {
                       className={`text-[9px] font-mono uppercase px-2 py-0.5 rounded font-semibold ${
                         isLow
                           ? "bg-rose-500/15 text-rose-400 border border-rose-500/30"
-                          : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                          : "bg-white/[0.06] text-neutral-300 border border-white/10"
                       }`}
                     >
                       {isLow ? "Low Stock" : "In Stock"}
@@ -206,7 +196,7 @@ export default function AdminInventoryPage() {
                       <button
                         onClick={() => handleStockDelta("metalBlanks", item.id, 10)}
                         disabled={adjustingId === item.id}
-                        className="p-1.5 rounded-lg text-neutral-400 hover:text-amber-400 hover:bg-neutral-800 transition-colors"
+                        className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors"
                         title="Add 10 units"
                       >
                         <Plus className="w-3.5 h-3.5" />
@@ -227,11 +217,11 @@ export default function AdminInventoryPage() {
         {/* NFC Components & Packaging Stock */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* NFC Hardware Reels */}
-          <div className="bg-[#0A0A10] border border-white/10 rounded-2xl p-6 space-y-4 shadow-xl">
+          <div className="bg-[#0B0B0F] border border-white/[0.08] rounded-2xl p-6 space-y-4 shadow-xl">
             <div className="flex items-center justify-between pb-3 border-b border-white/5">
               <div>
                 <h3 className="font-cinzel text-base font-bold text-white tracking-wide flex items-center gap-2">
-                  <Cpu className="w-4 h-4 text-cyan-400" />
+                  <Cpu className="w-4 h-4 text-neutral-200" />
                   NFC Chips & Ferrite Shields
                 </h3>
                 <p className="text-xs text-neutral-400 font-mono mt-0.5">
@@ -244,7 +234,7 @@ export default function AdminInventoryPage() {
               {nfcComponents.map((c: any) => (
                 <div
                   key={c.id}
-                  className="p-4 rounded-xl bg-[#0E0E16] border border-white/5 flex items-center justify-between"
+                  className="p-4 rounded-xl bg-[#111116] border border-white/[0.06] flex items-center justify-between"
                 >
                   <div>
                     <h4 className="text-xs font-semibold text-white">{c.name}</h4>
@@ -253,7 +243,7 @@ export default function AdminInventoryPage() {
 
                   <div className="flex items-center gap-3">
                     <div className="text-right">
-                      <div className="text-base font-bold font-mono text-cyan-400">
+                      <div className="text-base font-bold font-mono text-white">
                         {c.inStock} {c.unit}
                       </div>
                       <span className="text-[10px] font-mono text-neutral-500">
@@ -270,7 +260,7 @@ export default function AdminInventoryPage() {
                       </button>
                       <button
                         onClick={() => handleStockDelta("nfcComponents", c.id, 50)}
-                        className="p-1 rounded text-neutral-400 hover:text-cyan-400"
+                        className="p-1 rounded text-neutral-400 hover:text-white"
                       >
                         <Plus className="w-3 h-3" />
                       </button>
@@ -282,11 +272,11 @@ export default function AdminInventoryPage() {
           </div>
 
           {/* Luxury Atelier Packaging */}
-          <div className="bg-[#0A0A10] border border-white/10 rounded-2xl p-6 space-y-4 shadow-xl">
+          <div className="bg-[#0B0B0F] border border-white/[0.08] rounded-2xl p-6 space-y-4 shadow-xl">
             <div className="flex items-center justify-between pb-3 border-b border-white/5">
               <div>
                 <h3 className="font-cinzel text-base font-bold text-white tracking-wide flex items-center gap-2">
-                  <Package className="w-4 h-4 text-amber-400" />
+                  <Package className="w-4 h-4 text-neutral-200" />
                   Luxury Packaging & Sleeves
                 </h3>
                 <p className="text-xs text-neutral-400 font-mono mt-0.5">
@@ -299,7 +289,7 @@ export default function AdminInventoryPage() {
               {packaging.map((p: any) => (
                 <div
                   key={p.id}
-                  className="p-4 rounded-xl bg-[#0E0E16] border border-white/5 flex items-center justify-between"
+                  className="p-4 rounded-xl bg-[#111116] border border-white/[0.06] flex items-center justify-between"
                 >
                   <div>
                     <h4 className="text-xs font-semibold text-white">{p.name}</h4>
@@ -308,7 +298,7 @@ export default function AdminInventoryPage() {
 
                   <div className="flex items-center gap-3">
                     <div className="text-right">
-                      <div className="text-base font-bold font-mono text-amber-400">
+                      <div className="text-base font-bold font-mono text-white">
                         {p.inStock} {p.unit}
                       </div>
                       <span className="text-[10px] font-mono text-neutral-500">
@@ -325,7 +315,7 @@ export default function AdminInventoryPage() {
                       </button>
                       <button
                         onClick={() => handleStockDelta("packaging", p.id, 25)}
-                        className="p-1 rounded text-neutral-400 hover:text-amber-400"
+                        className="p-1 rounded text-neutral-400 hover:text-white"
                       >
                         <Plus className="w-3 h-3" />
                       </button>

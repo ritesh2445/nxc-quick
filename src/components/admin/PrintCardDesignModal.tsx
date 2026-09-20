@@ -61,8 +61,8 @@ export function PrintCardDesignModal({
           border: "border-neutral-800",
           text: "text-neutral-100",
           subtext: "text-neutral-400",
-          accent: "text-amber-400 border-amber-400/40",
-          chip: "border-amber-400/30 bg-amber-400/10 text-amber-300",
+          accent: "text-neutral-200 border-neutral-700",
+          chip: "border-neutral-700 bg-white/5 text-neutral-200",
         };
       case "silver":
         return {
@@ -106,7 +106,7 @@ export function PrintCardDesignModal({
           border: "border-neutral-800",
           text: "text-white",
           subtext: "text-neutral-400",
-          accent: "text-amber-400 border-amber-400",
+          accent: "text-neutral-200 border-neutral-700",
           chip: "border-white/20 bg-white/10 text-white",
         };
     }
@@ -169,7 +169,7 @@ export function PrintCardDesignModal({
           {/* Top Control Bar (Hidden during printing) */}
           <div className="no-print p-4 px-6 border-b border-white/10 flex flex-wrap items-center justify-between gap-3 bg-neutral-950/90">
             <div className="flex items-center gap-2.5">
-              <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20">
+              <div className="p-1.5 rounded-lg bg-white/[0.06] text-white border border-white/10">
                 <Printer className="w-4 h-4" />
               </div>
               <div>
@@ -194,7 +194,7 @@ export function PrintCardDesignModal({
                   onClick={() => setColorStyle("realistic")}
                   className={`px-2.5 py-1 rounded-lg transition-colors ${
                     colorStyle === "realistic"
-                      ? "bg-amber-500 text-black font-semibold"
+                      ? "bg-white text-black font-semibold shadow-sm"
                       : "text-neutral-400 hover:text-white"
                   }`}
                 >
@@ -205,7 +205,7 @@ export function PrintCardDesignModal({
                   onClick={() => setColorStyle("vectorMask")}
                   className={`px-2.5 py-1 rounded-lg transition-colors ${
                     colorStyle === "vectorMask"
-                      ? "bg-white text-black font-semibold"
+                      ? "bg-white text-black font-semibold shadow-sm"
                       : "text-neutral-400 hover:text-white"
                   }`}
                 >
@@ -253,7 +253,7 @@ export function PrintCardDesignModal({
               {/* Print CTA */}
               <button
                 onClick={handlePrint}
-                className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-amber-500 text-black font-semibold text-xs hover:bg-amber-400 transition-all shadow-lg shadow-amber-500/20 active:scale-95"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white text-black font-semibold text-xs hover:bg-neutral-200 transition-all shadow-sm active:scale-95"
               >
                 <Printer className="w-3.5 h-3.5" />
                 <span>Print Design</span>
@@ -280,7 +280,7 @@ export function PrintCardDesignModal({
                   {name}
                 </div>
                 <div className="text-xs font-mono text-neutral-400 print:text-neutral-600">
-                  {orderNum} · Finish: <strong className="text-white print:text-black uppercase">{finish.replace(/_/g, " ")}</strong> · Font: <strong className="text-amber-400 print:text-black">{laserFont}</strong>
+                  {orderNum} · Finish: <strong className="text-white print:text-black uppercase">{finish.replace(/_/g, " ")}</strong> · Font: <strong className="text-white print:text-black">{laserFont}</strong>
                 </div>
               </div>
 
@@ -301,7 +301,7 @@ export function PrintCardDesignModal({
                 <div>
                   <div className="flex items-center justify-between text-xs font-mono text-neutral-400 mb-2 print:text-neutral-600">
                     <span className="flex items-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5 text-amber-400 print:text-black" />
+                      <Sparkles className="w-3.5 h-3.5 text-neutral-300 print:text-black" />
                       FRONT DESIGN (OBVERSE) · 1:1 ACTUAL SIZE (85.60 × 53.98 mm)
                     </span>
                     <span className="text-[10px]">CORNER RADIUS: 3.18 mm</span>
@@ -393,7 +393,7 @@ export function PrintCardDesignModal({
                 <div>
                   <div className="flex items-center justify-between text-xs font-mono text-neutral-400 mb-2 print:text-neutral-600">
                     <span className="flex items-center gap-1.5">
-                      <QrCode className="w-3.5 h-3.5 text-cyan-400 print:text-black" />
+                      <QrCode className="w-3.5 h-3.5 text-neutral-300 print:text-black" />
                       BACK DESIGN (REVERSE) · NFC ANTENNA & LASER QR CODE
                     </span>
                     <span className="text-[10px]">ISO ID-1 REVERSE</span>
@@ -433,7 +433,7 @@ export function PrintCardDesignModal({
                         <p className={`text-[6.5px] font-mono leading-tight ${isVectorMask ? "text-neutral-800" : scheme.subtext}`}>
                           Tap physical card or scan laser QR for instant sovereign digital profile. Non-transferable atelier hardware.
                         </p>
-                        <div className={`text-[7px] font-mono text-amber-400 print:text-black font-semibold pt-0.5`}>
+                        <div className={`text-[7px] font-mono text-neutral-300 print:text-black font-semibold pt-0.5`}>
                           https://nxcverse.in/p/{qrSlug}
                         </div>
                       </div>
@@ -459,7 +459,7 @@ export function PrintCardDesignModal({
 
             {/* Print Calibration Checklist & Instructions (Hidden in 1:1 if needed, but helpful for printing) */}
             <div className="p-4 rounded-xl bg-neutral-900/70 border border-white/5 print:border-neutral-300 print:bg-white text-xs font-mono space-y-2 text-neutral-300 print:text-neutral-800">
-              <div className="flex items-center gap-1.5 text-amber-400 print:text-black font-semibold">
+              <div className="flex items-center gap-1.5 text-white print:text-black font-semibold">
                 <CheckCircle2 className="w-4 h-4" />
                 <span>Printer Calibration Instructions:</span>
               </div>

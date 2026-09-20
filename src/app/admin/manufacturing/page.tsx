@@ -72,7 +72,7 @@ export default function WorkshopManufacturingPage() {
       id: "pending",
       title: "1. Queue & Material Prep",
       badge: "INTAKE",
-      color: "border-amber-500/30 text-amber-400 bg-amber-500/5",
+      color: "border-white/10 text-neutral-300 bg-white/[0.04]",
       nextStage: "engraving",
       nextLabel: "Start Milling",
     },
@@ -80,7 +80,7 @@ export default function WorkshopManufacturingPage() {
       id: "engraving",
       title: "2. CNC & Fiber Laser",
       badge: "ACTIVE RIG",
-      color: "border-rose-500/30 text-rose-400 bg-rose-500/5",
+      color: "border-white/20 text-white bg-white/[0.08]",
       nextStage: "shipped",
       nextLabel: "Pass QC & Dispatch",
     },
@@ -88,7 +88,7 @@ export default function WorkshopManufacturingPage() {
       id: "shipped",
       title: "3. Dispatched & In Transit",
       badge: "COURIER",
-      color: "border-cyan-500/30 text-cyan-400 bg-cyan-500/5",
+      color: "border-white/10 text-neutral-300 bg-white/[0.04]",
       nextStage: "delivered",
       nextLabel: "Confirm Delivered",
     },
@@ -96,7 +96,7 @@ export default function WorkshopManufacturingPage() {
       id: "delivered",
       title: "4. Delivered & Active",
       badge: "COMPLETED",
-      color: "border-emerald-500/30 text-emerald-400 bg-emerald-500/5",
+      color: "border-emerald-500/20 text-emerald-400 bg-emerald-500/5",
       nextStage: null,
       nextLabel: null,
     },
@@ -115,29 +115,29 @@ export default function WorkshopManufacturingPage() {
       <div className="p-6 md:p-8 space-y-6 max-w-7xl w-full mx-auto">
         {/* Telemetry Hardware Strip */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="p-4 rounded-2xl bg-[#0C0C12] border border-white/10 flex items-center justify-between">
+          <div className="p-4 rounded-2xl bg-[#0B0B0F] border border-white/[0.08] flex items-center justify-between">
             <div>
               <span className="text-[10px] font-mono text-neutral-400 uppercase">MOPA Fiber Source</span>
-              <div className="text-base font-bold font-mono text-emerald-400 mt-0.5">50W Calibrated</div>
+              <div className="text-base font-bold font-mono text-white mt-0.5">50W Calibrated</div>
               <p className="text-[11px] text-neutral-500 mt-0.5">49.8W output · 35kHz Pulse</p>
             </div>
-            <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <div className="p-2.5 rounded-xl bg-white/[0.04] text-neutral-200 border border-white/10">
               <Flame className="w-5 h-5" />
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#0C0C12] border border-white/10 flex items-center justify-between">
+          <div className="p-4 rounded-2xl bg-[#0B0B0F] border border-white/[0.08] flex items-center justify-between">
             <div>
               <span className="text-[10px] font-mono text-neutral-400 uppercase">Diamond CNC Mill Bit</span>
-              <div className="text-base font-bold font-mono text-cyan-400 mt-0.5">0.2mm Precision Tip</div>
+              <div className="text-base font-bold font-mono text-white mt-0.5">0.2mm Precision Tip</div>
               <p className="text-[11px] text-neutral-500 mt-0.5">92% Wear Life Remaining</p>
             </div>
-            <div className="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+            <div className="p-2.5 rounded-xl bg-white/[0.04] text-neutral-200 border border-white/10">
               <Wrench className="w-5 h-5" />
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#0C0C12] border border-white/10 flex items-center justify-between">
+          <div className="p-4 rounded-2xl bg-[#0B0B0F] border border-white/[0.08] flex items-center justify-between">
             <div>
               <span className="text-[10px] font-mono text-neutral-400 uppercase">Active Workshop Queue</span>
               <div className="text-base font-bold font-cinzel text-white mt-0.5">
@@ -145,7 +145,7 @@ export default function WorkshopManufacturingPage() {
               </div>
               <p className="text-[11px] text-neutral-500 mt-0.5">Real-time Stage Progression</p>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <div className="p-2.5 rounded-xl bg-white/[0.04] text-neutral-200 border border-white/10">
               <Cpu className="w-5 h-5" />
             </div>
           </div>
@@ -159,7 +159,7 @@ export default function WorkshopManufacturingPage() {
             return (
               <div
                 key={col.id}
-                className="bg-[#0A0A10] border border-white/10 rounded-2xl p-4 flex flex-col min-h-[550px] shadow-lg"
+                className="bg-[#0B0B0F] border border-white/[0.08] rounded-2xl p-4 flex flex-col min-h-[550px] shadow-lg"
               >
                 {/* Column Header */}
                 <div className="flex items-center justify-between pb-3 border-b border-white/5 mb-3">
@@ -186,11 +186,11 @@ export default function WorkshopManufacturingPage() {
                     colOrders.map((ord) => (
                       <div
                         key={ord.id}
-                        className="p-4 rounded-xl bg-[#0E0E16] border border-white/5 hover:border-white/20 transition-all space-y-3 group shadow-md"
+                        className="p-4 rounded-xl bg-[#111116] border border-white/[0.06] hover:border-white/20 transition-all space-y-3 group shadow-md"
                       >
                         {/* Order No & Tier */}
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-mono font-bold text-amber-400">
+                          <span className="text-xs font-mono font-bold text-white">
                             {ord.orderNumber}
                           </span>
                           <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-white/5 text-neutral-400">
@@ -213,7 +213,7 @@ export default function WorkshopManufacturingPage() {
                         {/* Finish & Font Swatches */}
                         <div className="pt-1 flex items-center justify-between text-[10px] font-mono text-neutral-400 border-t border-white/5">
                           <span className="uppercase">{ord.finish?.replace(/_/g, " ")}</span>
-                          <span className="text-amber-300">Font: {ord.laserFont || "Cinzel"}</span>
+                          <span className="text-neutral-300">Font: {ord.laserFont || "Cinzel"}</span>
                         </div>
 
                         {/* Actions */}
@@ -221,21 +221,21 @@ export default function WorkshopManufacturingPage() {
                           <div className="flex items-center gap-1">
                             <button
                               onClick={() => setSelectedPrintDesignOrder(ord)}
-                              className="p-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-neutral-400 hover:text-amber-400 border border-white/5"
+                              className="p-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-neutral-400 hover:text-white border border-white/5 transition-colors"
                               title="Print 1:1 Scale Card Design & Vector Mask"
                             >
                               <Sparkles className="w-3 h-3" />
                             </button>
                             <button
                               onClick={() => setSelectedSpecOrder(ord)}
-                              className="p-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-neutral-400 hover:text-amber-400 border border-white/5"
+                              className="p-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-neutral-400 hover:text-white border border-white/5 transition-colors"
                               title="Print Laser Spec Blueprint"
                             >
                               <Printer className="w-3 h-3" />
                             </button>
                             <button
                               onClick={() => setSelectedDrawerOrder(ord)}
-                              className="p-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-neutral-400 hover:text-white border border-white/5"
+                              className="p-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-neutral-400 hover:text-white border border-white/5 transition-colors"
                               title="Inspect Card Details"
                             >
                               <Eye className="w-3 h-3" />
@@ -245,7 +245,7 @@ export default function WorkshopManufacturingPage() {
                           {col.nextStage && (
                             <button
                               onClick={() => moveOrderStage(ord.id, col.nextStage)}
-                              className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/20 text-[10px] font-mono font-semibold transition-colors"
+                              className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white/[0.08] hover:bg-white/[0.14] text-white border border-white/10 hover:border-white/20 text-[10px] font-mono font-semibold transition-all"
                             >
                               <span>{col.nextLabel}</span>
                               <ArrowRight className="w-3 h-3" />

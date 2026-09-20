@@ -90,7 +90,7 @@ export function UserDetailDrawer({
           {/* Drawer Header */}
           <div className="p-6 border-b border-white/10 flex items-center justify-between bg-neutral-950/70">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500/20 to-neutral-800 border border-amber-500/30 flex items-center justify-center font-bold text-base text-amber-400 font-cinzel">
+              <div className="w-12 h-12 rounded-2xl bg-white/[0.06] border border-white/10 flex items-center justify-center font-bold text-base text-white font-cinzel">
                 {user.fullName ? user.fullName.slice(0, 2).toUpperCase() : "US"}
               </div>
               <div>
@@ -99,7 +99,7 @@ export function UserDetailDrawer({
                     {user.fullName}
                   </h3>
                   {isVerified && (
-                    <ShieldCheck className="w-4 h-4 text-amber-400" title="Verified Sovereign Profile" />
+                    <ShieldCheck className="w-4 h-4 text-[#E4C8A6]" title="Verified Sovereign Profile" />
                   )}
                 </div>
                 <p className="text-xs text-neutral-400 font-mono mt-0.5">
@@ -122,13 +122,13 @@ export function UserDetailDrawer({
             <div className="grid grid-cols-3 gap-3">
               <div className="p-3.5 rounded-xl bg-neutral-900/80 border border-white/5">
                 <span className="text-[10px] font-mono text-neutral-400 uppercase block">Total Spend</span>
-                <span className="text-base font-bold font-cinzel text-amber-400 mt-1 block">
+                <span className="text-base font-bold font-cinzel text-white mt-1 block">
                   ₹{user.totalSpent?.toLocaleString("en-IN") || 0}
                 </span>
               </div>
               <div className="p-3.5 rounded-xl bg-neutral-900/80 border border-white/5">
                 <span className="text-[10px] font-mono text-neutral-400 uppercase block">Hardware Cards</span>
-                <span className="text-base font-bold font-cinzel text-cyan-400 mt-1 block">
+                <span className="text-base font-bold font-cinzel text-neutral-300 mt-1 block">
                   {user.cardsCount || 0} Linked
                 </span>
               </div>
@@ -145,18 +145,18 @@ export function UserDetailDrawer({
               <div className="flex items-center justify-between">
                 <div>
                   <span className="text-xs font-mono uppercase tracking-wider text-white font-semibold flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                    <Sparkles className="w-3.5 h-3.5 text-white" />
                     Sovereign Verification Checkmark
                   </span>
                   <p className="text-[11px] text-neutral-400 mt-1">
-                    Enables the official gold Atelier verification badge on their public digital card.
+                    Enables the official luxury Atelier verification badge on their public digital card.
                   </p>
                 </div>
                 <button
                   onClick={() => setIsVerified(!isVerified)}
                   className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-semibold transition-all border ${
                     isVerified
-                      ? "bg-amber-500/20 text-amber-400 border-amber-500/40 shadow-[0_0_15px_rgba(245,158,11,0.2)]"
+                      ? "bg-white text-black border-white shadow-sm"
                       : "bg-neutral-900 text-neutral-400 border-white/10 hover:text-white"
                   }`}
                 >
@@ -205,7 +205,7 @@ export function UserDetailDrawer({
                 <button
                   onClick={handleSave}
                   disabled={isSaving}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 text-black font-semibold text-xs hover:bg-amber-400 transition-all active:scale-95 disabled:opacity-50"
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-black font-semibold text-xs hover:bg-neutral-200 transition-all active:scale-95 disabled:opacity-50 shadow-sm"
                 >
                   <Save className="w-3.5 h-3.5" />
                   <span>{isSaving ? "Saving..." : saveSuccess ? "Saved!" : "Save Changes"}</span>
@@ -245,9 +245,9 @@ export function UserDetailDrawer({
                   href={`/p/${user.username}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-neutral-900 border border-white/10 hover:border-amber-400/40 text-neutral-300 hover:text-white transition-all text-xs font-mono"
+                  className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-neutral-900 border border-white/10 hover:border-white/30 text-neutral-300 hover:text-white transition-all text-xs font-mono"
                 >
-                  <ExternalLink className="w-3.5 h-3.5 text-amber-400" />
+                  <ExternalLink className="w-3.5 h-3.5 text-neutral-400" />
                   <span>Launch Live Public Card (/p/{user.username})</span>
                 </a>
               </div>

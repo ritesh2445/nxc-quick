@@ -5,7 +5,7 @@ import { AdminSidebar } from "@/components/admin/AdminSidebar";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-[#060609] text-white flex flex-col md:flex-row antialiased select-none selection:bg-amber-500/30 selection:text-amber-200">
+    <div className="min-h-screen bg-[#060609] text-white flex flex-col md:flex-row antialiased select-none selection:bg-white/20 selection:text-white">
       {/* Executive Dark Luxury Sidebar */}
       <AdminSidebar pendingOrdersCount={2} unassignedCardsCount={2} />
 

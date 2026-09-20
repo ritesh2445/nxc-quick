@@ -91,44 +91,44 @@ export default function AdminUsersPage() {
       <div className="p-6 md:p-8 space-y-6 max-w-7xl w-full mx-auto">
         {/* KPI Strip */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="p-4 rounded-2xl bg-[#0C0C12] border border-white/10 flex items-center justify-between">
+          <div className="p-4 rounded-2xl bg-[#0B0B0F] border border-white/[0.08] flex items-center justify-between">
             <div>
               <span className="text-[10px] font-mono text-neutral-400 uppercase">Registered Customers</span>
               <div className="text-xl font-bold font-cinzel text-white mt-0.5">{users.length} Identities</div>
               <p className="text-[11px] text-neutral-500 font-mono mt-0.5">100% Sovereign Accounts</p>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <div className="p-2.5 rounded-xl bg-white/[0.04] text-neutral-200 border border-white/10">
               <Users className="w-5 h-5" />
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#0C0C12] border border-white/10 flex items-center justify-between">
+          <div className="p-4 rounded-2xl bg-[#0B0B0F] border border-white/[0.08] flex items-center justify-between">
             <div>
               <span className="text-[10px] font-mono text-neutral-400 uppercase">Sovereign Verified</span>
-              <div className="text-xl font-bold font-mono text-amber-400 mt-0.5">{verifiedCount} Verified</div>
+              <div className="text-xl font-bold font-mono text-white mt-0.5">{verifiedCount} Verified</div>
               <p className="text-[11px] text-neutral-500 font-mono mt-0.5">Atelier VIP Checkmarks Active</p>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20">
-              <ShieldCheck className="w-5 h-5" />
+            <div className="p-2.5 rounded-xl bg-white/[0.04] text-neutral-200 border border-white/10">
+              <ShieldCheck className="w-5 h-5 text-[#E4C8A6]" />
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#0C0C12] border border-white/10 flex items-center justify-between">
+          <div className="p-4 rounded-2xl bg-[#0B0B0F] border border-white/[0.08] flex items-center justify-between">
             <div>
               <span className="text-[10px] font-mono text-neutral-400 uppercase">Hardware Card Holders</span>
-              <div className="text-xl font-bold font-mono text-cyan-400 mt-0.5">
+              <div className="text-xl font-bold font-mono text-neutral-300 mt-0.5">
                 {users.filter((u) => u.cardsCount > 0).length} Holders
               </div>
               <p className="text-[11px] text-neutral-500 font-mono mt-0.5">Physical Metal Card Linked</p>
             </div>
-            <div className="p-2.5 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+            <div className="p-2.5 rounded-xl bg-white/[0.04] text-neutral-200 border border-white/10">
               <CreditCard className="w-5 h-5" />
             </div>
           </div>
         </div>
 
         {/* Search & Filter Bar */}
-        <div className="p-4 rounded-2xl bg-[#0B0B10] border border-white/10 flex flex-col md:flex-row items-center gap-4 justify-between">
+        <div className="p-4 rounded-2xl bg-[#0B0B0F] border border-white/[0.08] flex flex-col md:flex-row items-center gap-4 justify-between">
           <form onSubmit={handleSearchSubmit} className="relative w-full md:max-w-md">
             <Search className="w-4 h-4 text-neutral-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
@@ -136,7 +136,7 @@ export default function AdminUsersPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by Name, Username, Email, Company..."
-              className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-neutral-900 border border-white/10 text-white text-xs font-mono focus:border-amber-400 outline-none"
+              className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-neutral-900 border border-white/10 text-white text-xs font-mono focus:border-white/40 outline-none"
             />
           </form>
 
@@ -152,8 +152,8 @@ export default function AdminUsersPage() {
                 onClick={() => setVerifiedFilter(vf.id)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all shrink-0 ${
                   verifiedFilter === vf.id
-                    ? "bg-amber-500/20 text-amber-400 border border-amber-500/40 font-semibold"
-                    : "bg-neutral-900 text-neutral-400 border border-white/5 hover:text-white"
+                    ? "bg-white text-black font-semibold shadow-sm"
+                    : "bg-white/[0.04] text-neutral-400 border border-white/5 hover:text-white"
                 }`}
               >
                 {vf.label}
@@ -163,7 +163,7 @@ export default function AdminUsersPage() {
         </div>
 
         {/* Users Table */}
-        <div className="bg-[#0A0A10] border border-white/10 rounded-2xl overflow-hidden shadow-xl">
+        <div className="bg-[#0B0B0F] border border-white/[0.08] rounded-2xl overflow-hidden shadow-xl">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
@@ -200,16 +200,16 @@ export default function AdminUsersPage() {
                       {/* Name & Email */}
                       <td className="py-4 px-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-500/20 to-neutral-800 border border-amber-500/30 flex items-center justify-center font-bold text-xs text-amber-400 font-cinzel shrink-0">
+                          <div className="w-9 h-9 rounded-xl bg-white/[0.06] border border-white/10 flex items-center justify-center font-bold text-xs text-white font-cinzel shrink-0">
                             {u.fullName ? u.fullName.slice(0, 2).toUpperCase() : "US"}
                           </div>
                           <div>
                             <div className="flex items-center gap-1.5">
-                              <span className="text-white font-medium font-sans group-hover:text-amber-400 transition-colors">
+                              <span className="text-white font-medium font-sans group-hover:text-neutral-200 transition-colors">
                                 {u.fullName}
                               </span>
                               {u.isVerified && (
-                                <ShieldCheck className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                                <ShieldCheck className="w-3.5 h-3.5 text-[#E4C8A6] shrink-0" />
                               )}
                             </div>
                             <span className="text-[11px] text-neutral-400 block truncate max-w-[200px]">
@@ -231,17 +231,17 @@ export default function AdminUsersPage() {
                           href={`/p/${u.username}`}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex items-center gap-1 text-neutral-300 hover:text-amber-400 font-sans group/link"
+                          className="inline-flex items-center gap-1 text-neutral-300 hover:text-white font-sans group/link"
                         >
                           <span>/p/{u.username}</span>
-                          <ExternalLink className="w-3 h-3 text-neutral-500 group-hover/link:text-amber-400" />
+                          <ExternalLink className="w-3 h-3 text-neutral-500 group-hover/link:text-white" />
                         </a>
                       </td>
 
                       {/* Cards Count */}
                       <td className="py-4 px-4 whitespace-nowrap">
                         <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/5 text-neutral-300 text-[11px]">
-                          <CreditCard className="w-3 h-3 text-cyan-400" />
+                          <CreditCard className="w-3 h-3 text-neutral-300" />
                           <span>{u.cardsCount || 0} Linked</span>
                         </span>
                       </td>
@@ -252,7 +252,7 @@ export default function AdminUsersPage() {
                           onClick={(e) => handleToggleVerify(u.id, Boolean(u.isVerified), e)}
                           className={`px-3 py-1 rounded-full text-[10px] uppercase font-semibold transition-all border ${
                             u.isVerified
-                              ? "bg-amber-500/15 text-amber-400 border-amber-500/30 hover:bg-amber-500/25"
+                              ? "bg-white/10 text-white border-white/20 hover:bg-white/20"
                               : "bg-neutral-900 text-neutral-400 border-white/5 hover:text-white"
                           }`}
                         >

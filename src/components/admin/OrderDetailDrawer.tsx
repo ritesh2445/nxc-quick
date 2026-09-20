@@ -137,7 +137,7 @@ export function OrderDetailDrawer({
                   <span className="font-cinzel text-lg font-bold text-white tracking-wide">
                     {order.orderNumber}
                   </span>
-                  <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold">
+                  <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-white/[0.06] text-white border border-white/10 font-semibold">
                     {order.tier || "metal"}
                   </span>
                 </div>
@@ -150,7 +150,7 @@ export function OrderDetailDrawer({
                 {onOpenPrintDesign && (
                   <button
                     onClick={() => onOpenPrintDesign(order)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-xs text-amber-400 hover:bg-amber-500/25 transition-all font-mono font-medium"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white text-black hover:bg-neutral-200 transition-all font-mono font-semibold text-xs shadow-sm"
                     title="Print 1:1 Scale Card Design & Vector Mask"
                   >
                     <Printer className="w-3.5 h-3.5" />
@@ -160,7 +160,7 @@ export function OrderDetailDrawer({
                 {onOpenLaserSpec && (
                   <button
                     onClick={() => onOpenLaserSpec(order)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-neutral-900 border border-white/10 text-xs text-neutral-300 hover:text-amber-400 hover:border-amber-400/40 transition-all font-mono"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 text-xs text-neutral-300 hover:text-white hover:border-white/20 transition-all font-mono"
                     title="Print Laser Spec Blueprint"
                   >
                     <Printer className="w-3.5 h-3.5" />
@@ -169,7 +169,7 @@ export function OrderDetailDrawer({
                 )}
                 <button
                   onClick={onClose}
-                  className="p-2 rounded-xl bg-neutral-900 border border-white/10 text-neutral-400 hover:text-white transition-all"
+                  className="p-2 rounded-xl bg-white/[0.04] border border-white/10 text-neutral-400 hover:text-white transition-all"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -182,17 +182,17 @@ export function OrderDetailDrawer({
               <div>
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-xs font-mono uppercase tracking-wider text-neutral-400 flex items-center gap-2">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                    <Sparkles className="w-3.5 h-3.5 text-white" />
                     Physical Engraving Preview
                   </span>
                   <div className="flex items-center gap-3">
-                    <span className="text-xs font-mono text-amber-400">
+                    <span className="text-xs font-mono text-neutral-300">
                       Font: {laserFont}
                     </span>
                     {onOpenPrintDesign && (
                       <button
                         onClick={() => onOpenPrintDesign(order)}
-                        className="text-xs font-mono text-neutral-400 hover:text-amber-400 flex items-center gap-1 underline underline-offset-4"
+                        className="text-xs font-mono text-neutral-400 hover:text-white flex items-center gap-1 underline underline-offset-4"
                       >
                         <Printer className="w-3 h-3" />
                         <span>Print 1:1 Scale</span>
@@ -248,7 +248,7 @@ export function OrderDetailDrawer({
               </div>
 
               {/* Status Pipeline Selection */}
-              <div className="p-4 rounded-2xl bg-[#0E0E16] border border-white/10 space-y-3">
+              <div className="p-4 rounded-2xl bg-[#0B0B0F] border border-white/[0.08] space-y-3">
                 <span className="text-xs font-mono uppercase tracking-wider text-neutral-400 block">
                   Manufacturing & Fulfillment Pipeline
                 </span>
@@ -265,8 +265,8 @@ export function OrderDetailDrawer({
                       onClick={() => setCurrentStatus(s.id)}
                       className={`px-3 py-2 rounded-xl text-xs font-mono font-medium transition-all text-center ${
                         currentStatus === s.id
-                          ? "bg-amber-500 text-black font-semibold shadow-lg shadow-amber-500/20"
-                          : "bg-neutral-900 text-neutral-300 hover:text-white border border-white/5 hover:border-white/20"
+                          ? "bg-white text-black font-semibold shadow-sm"
+                          : "bg-white/[0.03] text-neutral-400 hover:text-white border border-white/[0.05] hover:border-white/20"
                       }`}
                     >
                       {s.label}
@@ -276,14 +276,14 @@ export function OrderDetailDrawer({
               </div>
 
               {/* Logistics & Tracking Controls */}
-              <div className="p-5 rounded-2xl bg-[#0E0E16] border border-white/10 space-y-4">
+              <div className="p-5 rounded-2xl bg-[#0B0B0F] border border-white/[0.08] space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-mono uppercase tracking-wider text-neutral-400 flex items-center gap-2">
-                    <Truck className="w-4 h-4 text-cyan-400" />
+                    <Truck className="w-4 h-4 text-neutral-300" />
                     Logistics & Courier Assignment
                   </span>
                   {trackingNumber && (
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/10 text-neutral-300 border border-white/15">
                       AWB Active
                     </span>
                   )}
@@ -297,7 +297,7 @@ export function OrderDetailDrawer({
                     <select
                       value={courierPartner}
                       onChange={(e) => setCourierPartner(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-neutral-900 border border-white/10 text-white text-xs font-mono focus:border-amber-400 outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-xs font-mono focus:border-white/30 outline-none"
                     >
                       <option value="Blue Dart Express">Blue Dart Express</option>
                       <option value="Delhivery Air">Delhivery Air</option>
@@ -317,7 +317,7 @@ export function OrderDetailDrawer({
                       value={trackingNumber}
                       onChange={(e) => setTrackingNumber(e.target.value)}
                       placeholder="e.g. BD9928172901"
-                      className="w-full px-3.5 py-2.5 rounded-xl bg-neutral-900 border border-white/10 text-white text-xs font-mono focus:border-amber-400 outline-none"
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-white/[0.03] border border-white/10 text-white text-xs font-mono focus:border-white/30 outline-none"
                     />
                   </div>
                 </div>
@@ -327,7 +327,7 @@ export function OrderDetailDrawer({
                   <button
                     onClick={handleWhatsAppDispatch}
                     disabled={!order.customerPhone}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/25 transition-all text-xs font-medium"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.04] text-neutral-300 border border-white/10 hover:bg-white/[0.08] hover:text-white transition-all text-xs font-medium"
                   >
                     <MessageCircle className="w-4 h-4" />
                     <span>Notify Customer via WhatsApp</span>
@@ -336,7 +336,7 @@ export function OrderDetailDrawer({
                   <button
                     onClick={handleSave}
                     disabled={isSaving}
-                    className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 text-black font-semibold hover:bg-amber-400 transition-all text-xs active:scale-95 disabled:opacity-60 shadow-lg shadow-amber-500/15"
+                    className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-white text-black font-semibold hover:bg-neutral-200 transition-all text-xs active:scale-95 disabled:opacity-60 shadow-sm"
                   >
                     <Save className="w-4 h-4" />
                     <span>{isSaving ? "Saving..." : saveSuccess ? "Saved!" : "Save Changes"}</span>
@@ -380,7 +380,7 @@ export function OrderDetailDrawer({
 
                   <div className="sm:col-span-2">
                     <div className="text-neutral-400 font-mono text-[10px] flex items-center gap-1.5">
-                      <MapPin className="w-3 h-3 text-amber-400" />
+                      <MapPin className="w-3 h-3 text-neutral-400" />
                       Physical Destination Address
                     </div>
                     <div className="text-neutral-200 mt-1 leading-relaxed bg-neutral-900/60 p-3 rounded-xl border border-white/5">
