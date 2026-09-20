@@ -99,9 +99,9 @@ export function NfcPairingModal({ card, isOpen, onClose, onSuccess }: NfcPairing
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm select-none">
-      <div className="relative w-full max-w-lg bg-[#0A0A10] border border-white/10 rounded-2xl overflow-hidden shadow-2xl text-white">
+      <div className="relative w-full max-w-lg max-h-[92vh] flex flex-col bg-[#0A0A10] border border-white/10 rounded-2xl overflow-hidden shadow-2xl text-white">
         {/* Header */}
-        <div className="p-5 border-b border-white/10 flex items-center justify-between bg-neutral-950/80">
+        <div className="p-5 border-b border-white/10 flex items-center justify-between bg-neutral-950/80 shrink-0">
           <div className="flex items-center gap-2.5">
             <div className="p-2 rounded-xl bg-white/[0.06] text-white border border-white/10">
               <Cpu className="w-4 h-4" />
@@ -123,7 +123,7 @@ export function NfcPairingModal({ card, isOpen, onClose, onSuccess }: NfcPairing
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+        <form onSubmit={handleSubmit} className="p-6 space-y-5 overflow-y-auto custom-scrollbar flex-1">
           {error && (
             <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />

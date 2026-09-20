@@ -251,13 +251,13 @@ export function PrintCardDesignModal({
         }}
       />
 
-      <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-black/85 backdrop-blur-md select-none print:p-0 print:bg-white print:static">
+      <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md select-none print:p-0 print:bg-white print:static">
         <div
           id="printable-card-design-root"
-          className="relative w-full max-w-4xl bg-[#09090E] border border-white/10 rounded-2xl overflow-hidden shadow-2xl text-white print:border-0 print:bg-white print:text-black print:rounded-none"
+          className="relative w-full max-w-4xl max-h-[92vh] flex flex-col bg-[#09090E] border border-white/10 rounded-2xl overflow-hidden shadow-2xl text-white print:border-0 print:bg-white print:text-black print:rounded-none print:max-h-none"
         >
           {/* Top Control Bar (Hidden during printing) */}
-          <div className="no-print p-4 px-6 border-b border-white/10 flex flex-wrap items-center justify-between gap-3 bg-neutral-950/90">
+          <div className="no-print p-4 px-6 border-b border-white/10 flex flex-wrap items-center justify-between gap-3 bg-neutral-950/90 shrink-0 sticky top-0 z-30">
             <div className="flex items-center gap-2.5">
               <div className="p-1.5 rounded-lg bg-white/[0.06] text-white border border-white/10">
                 <Printer className="w-4 h-4" />
@@ -387,7 +387,7 @@ export function PrintCardDesignModal({
           </div>
 
           {/* Printable Layout Sheet */}
-          <div className="p-6 sm:p-8 space-y-6 print:p-4 print:space-y-4">
+          <div className="p-6 sm:p-8 space-y-6 print:p-4 print:space-y-4 overflow-y-auto custom-scrollbar flex-1">
             {/* Header info in print sheet */}
             <div className="flex justify-between items-start border-b border-white/10 pb-4 print:border-neutral-300">
               <div>

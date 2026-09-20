@@ -41,7 +41,7 @@ export function HeroSection() {
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/assets/logos/nxc card black.png"
+          src="/assets/logos/nxc-card-black.webp"
           alt="NXC Verse Obsidian Metal Card on Volcanic Rock"
           className="w-full h-full object-cover object-center lg:object-right filter brightness-95 contrast-105"
         />
