@@ -221,17 +221,17 @@ export default function WorkshopManufacturingPage() {
                           <div className="flex items-center gap-1">
                             <button
                               onClick={() => setSelectedPrintDesignOrder(ord)}
-                              className="p-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-neutral-400 hover:text-white border border-white/5 transition-colors"
+                              className="p-1.5 rounded-lg bg-white text-black hover:bg-neutral-200 border border-white/20 transition-all shadow-sm"
                               title="Print 1:1 Scale Card Design & Vector Mask"
                             >
-                              <Sparkles className="w-3 h-3" />
+                              <Printer className="w-3 h-3" />
                             </button>
                             <button
                               onClick={() => setSelectedSpecOrder(ord)}
                               className="p-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-neutral-400 hover:text-white border border-white/5 transition-colors"
-                              title="Print Laser Spec Blueprint"
+                              title="MOPA Laser Job Ticket & CNC Calibration"
                             >
-                              <Printer className="w-3 h-3" />
+                              <Cpu className="w-3 h-3" />
                             </button>
                             <button
                               onClick={() => setSelectedDrawerOrder(ord)}

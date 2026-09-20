@@ -293,9 +293,9 @@ export function OrderDetailDrawer({
                   <button
                     onClick={() => onOpenLaserSpec(order)}
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 text-xs text-neutral-300 hover:text-white hover:border-white/20 transition-all font-mono"
-                    title="Print Laser Spec Blueprint"
+                    title="MOPA Fiber Laser Job Ticket & CNC Calibration"
                   >
-                    <Printer className="w-3.5 h-3.5" />
+                    <Cpu className="w-3.5 h-3.5" />
                     <span className="hidden sm:inline">Laser Job Spec</span>
                   </button>
                 )}

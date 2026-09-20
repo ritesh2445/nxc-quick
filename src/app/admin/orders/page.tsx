@@ -17,6 +17,7 @@ import {
   RefreshCw,
   Eye,
   SlidersHorizontal,
+  Cpu,
 } from "lucide-react";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { OrderDetailDrawer } from "@/components/admin/OrderDetailDrawer";
@@ -405,24 +406,24 @@ export default function AdminOrdersPage() {
                         <div className="flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => setActivePrintDesignOrder(ord)}
-                            className="p-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] text-neutral-300 hover:text-white border border-white/[0.06] transition-colors"
-                            title="Print 1:1 Scale Card Design (Front/Back/Vector Mask)"
-                          >
-                            <Sparkles className="w-3.5 h-3.5" />
-                          </button>
-
-                          <button
-                            onClick={() => setActiveSpecOrder(ord)}
-                            className="p-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] text-neutral-300 hover:text-white border border-white/[0.06] transition-colors"
-                            title="Print Laser Spec Blueprint"
+                            className="p-1.5 rounded-lg bg-white text-black hover:bg-neutral-200 border border-white/20 transition-all shadow-sm"
+                            title="Print 1:1 Scale Physical Card Design & Vector Mask"
                           >
                             <Printer className="w-3.5 h-3.5" />
                           </button>
 
                           <button
+                            onClick={() => setActiveSpecOrder(ord)}
+                            className="p-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-neutral-300 hover:text-white border border-white/[0.08] transition-colors"
+                            title="MOPA Fiber Laser Job Ticket & CNC Calibration"
+                          >
+                            <Cpu className="w-3.5 h-3.5" />
+                          </button>
+
+                          <button
                             onClick={() => setActiveDrawerOrder(ord)}
-                            className="p-1.5 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] text-neutral-300 hover:text-white border border-white/[0.06] transition-colors"
-                            title="Inspect Metallic Card"
+                            className="p-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-neutral-300 hover:text-white border border-white/[0.08] transition-colors"
+                            title="Inspect Order Details & Card Preview"
                           >
                             <Eye className="w-3.5 h-3.5" />
                           </button>
