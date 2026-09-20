@@ -25,6 +25,7 @@ interface OrderDetailDrawerProps {
   onClose: () => void;
   onUpdateOrder: (updatedOrder: any) => void;
   onOpenLaserSpec?: (order: any) => void;
+  onOpenPrintDesign?: (order: any) => void;
 }
 
 export function OrderDetailDrawer({
@@ -33,6 +34,7 @@ export function OrderDetailDrawer({
   onClose,
   onUpdateOrder,
   onOpenLaserSpec,
+  onOpenPrintDesign,
 }: OrderDetailDrawerProps) {
   const [currentStatus, setCurrentStatus] = useState<string>("");
   const [trackingNumber, setTrackingNumber] = useState<string>("");
@@ -145,6 +147,16 @@ export function OrderDetailDrawer({
               </div>
 
               <div className="flex items-center gap-2">
+                {onOpenPrintDesign && (
+                  <button
+                    onClick={() => onOpenPrintDesign(order)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-xs text-amber-400 hover:bg-amber-500/25 transition-all font-mono font-medium"
+                    title="Print 1:1 Scale Card Design & Vector Mask"
+                  >
+                    <Printer className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">Print Card Design</span>
+                  </button>
+                )}
                 {onOpenLaserSpec && (
                   <button
                     onClick={() => onOpenLaserSpec(order)}
@@ -173,9 +185,20 @@ export function OrderDetailDrawer({
                     <Sparkles className="w-3.5 h-3.5 text-amber-400" />
                     Physical Engraving Preview
                   </span>
-                  <span className="text-xs font-mono text-amber-400">
-                    Font: {laserFont}
-                  </span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs font-mono text-amber-400">
+                      Font: {laserFont}
+                    </span>
+                    {onOpenPrintDesign && (
+                      <button
+                        onClick={() => onOpenPrintDesign(order)}
+                        className="text-xs font-mono text-neutral-400 hover:text-amber-400 flex items-center gap-1 underline underline-offset-4"
+                      >
+                        <Printer className="w-3 h-3" />
+                        <span>Print 1:1 Scale</span>
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 <div

@@ -21,6 +21,7 @@ import {
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { OrderDetailDrawer } from "@/components/admin/OrderDetailDrawer";
 import { LaserSpecModal } from "@/components/admin/LaserSpecModal";
+import { PrintCardDesignModal } from "@/components/admin/PrintCardDesignModal";
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -32,6 +33,7 @@ export default function AdminOrdersPage() {
 
   const [activeDrawerOrder, setActiveDrawerOrder] = useState<any | null>(null);
   const [activeSpecOrder, setActiveSpecOrder] = useState<any | null>(null);
+  const [activePrintDesignOrder, setActivePrintDesignOrder] = useState<any | null>(null);
 
   const fetchOrders = async () => {
     try {
@@ -347,6 +349,14 @@ export default function AdminOrdersPage() {
                       <td className="py-4 px-4 text-right whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
                         <div className="flex items-center justify-end gap-1.5">
                           <button
+                            onClick={() => setActivePrintDesignOrder(ord)}
+                            className="p-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-neutral-400 hover:text-amber-400 border border-white/5 transition-colors"
+                            title="Print 1:1 Scale Card Design (Front/Back/Vector Mask)"
+                          >
+                            <Sparkles className="w-3.5 h-3.5" />
+                          </button>
+
+                          <button
                             onClick={() => setActiveSpecOrder(ord)}
                             className="p-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-neutral-400 hover:text-amber-400 border border-white/5 transition-colors"
                             title="Print Laser Spec Blueprint"
@@ -382,6 +392,7 @@ export default function AdminOrdersPage() {
           setOrders((prev) => prev.map((o) => (o.id === updated.id ? updated : o)));
         }}
         onOpenLaserSpec={(ord) => setActiveSpecOrder(ord)}
+        onOpenPrintDesign={(ord) => setActivePrintDesignOrder(ord)}
       />
 
       {/* Laser Spec Modal */}
@@ -389,6 +400,13 @@ export default function AdminOrdersPage() {
         order={activeSpecOrder}
         isOpen={Boolean(activeSpecOrder)}
         onClose={() => setActiveSpecOrder(null)}
+      />
+
+      {/* 1:1 Scale Printable Card Design Modal */}
+      <PrintCardDesignModal
+        cardOrOrder={activePrintDesignOrder}
+        isOpen={Boolean(activePrintDesignOrder)}
+        onClose={() => setActivePrintDesignOrder(null)}
       />
     </div>
   );

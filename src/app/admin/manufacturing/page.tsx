@@ -19,6 +19,7 @@ import {
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { LaserSpecModal } from "@/components/admin/LaserSpecModal";
 import { OrderDetailDrawer } from "@/components/admin/OrderDetailDrawer";
+import { PrintCardDesignModal } from "@/components/admin/PrintCardDesignModal";
 
 export default function WorkshopManufacturingPage() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -26,6 +27,7 @@ export default function WorkshopManufacturingPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [selectedSpecOrder, setSelectedSpecOrder] = useState<any | null>(null);
   const [selectedDrawerOrder, setSelectedDrawerOrder] = useState<any | null>(null);
+  const [selectedPrintDesignOrder, setSelectedPrintDesignOrder] = useState<any | null>(null);
 
   const fetchOrders = async () => {
     try {
@@ -218,6 +220,13 @@ export default function WorkshopManufacturingPage() {
                         <div className="pt-2 flex items-center justify-between gap-2 border-t border-white/5">
                           <div className="flex items-center gap-1">
                             <button
+                              onClick={() => setSelectedPrintDesignOrder(ord)}
+                              className="p-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-neutral-400 hover:text-amber-400 border border-white/5"
+                              title="Print 1:1 Scale Card Design & Vector Mask"
+                            >
+                              <Sparkles className="w-3 h-3" />
+                            </button>
+                            <button
                               onClick={() => setSelectedSpecOrder(ord)}
                               className="p-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 text-neutral-400 hover:text-amber-400 border border-white/5"
                               title="Print Laser Spec Blueprint"
@@ -270,6 +279,14 @@ export default function WorkshopManufacturingPage() {
           fetchOrders();
         }}
         onOpenLaserSpec={(ord) => setSelectedSpecOrder(ord)}
+        onOpenPrintDesign={(ord) => setSelectedPrintDesignOrder(ord)}
+      />
+
+      {/* 1:1 Scale Printable Card Design Modal */}
+      <PrintCardDesignModal
+        cardOrOrder={selectedPrintDesignOrder}
+        isOpen={Boolean(selectedPrintDesignOrder)}
+        onClose={() => setSelectedPrintDesignOrder(null)}
       />
     </div>
   );

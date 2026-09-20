@@ -14,9 +14,11 @@ import {
   RefreshCw,
   QrCode,
   Layers,
+  Printer,
 } from "lucide-react";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { NfcPairingModal } from "@/components/admin/NfcPairingModal";
+import { PrintCardDesignModal } from "@/components/admin/PrintCardDesignModal";
 
 export default function AdminCardsPage() {
   const [cards, setCards] = useState<any[]>([]);
@@ -25,6 +27,7 @@ export default function AdminCardsPage() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [pairingCard, setPairingCard] = useState<any | null>(null);
+  const [printingCard, setPrintingCard] = useState<any | null>(null);
 
   const fetchCards = async () => {
     try {
@@ -254,12 +257,22 @@ export default function AdminCardsPage() {
 
                       {/* Actions */}
                       <td className="py-4 px-4 text-right">
-                        <button
-                          onClick={() => setPairingCard(card)}
-                          className="px-3 py-1.5 rounded-xl bg-neutral-900 border border-white/10 hover:border-cyan-400/40 text-cyan-400 hover:text-white text-xs transition-all font-mono"
-                        >
-                          {card.nfcUid ? "Re-Flash UID" : "Pair Hardware"}
-                        </button>
+                        <div className="flex items-center justify-end gap-2">
+                          <button
+                            onClick={() => setPrintingCard(card)}
+                            className="p-1.5 rounded-xl bg-neutral-900 border border-white/10 hover:border-amber-400/40 text-neutral-400 hover:text-amber-400 text-xs transition-all"
+                            title="Print 1:1 Scale Card Design & Vector Mask"
+                          >
+                            <Printer className="w-3.5 h-3.5" />
+                          </button>
+
+                          <button
+                            onClick={() => setPairingCard(card)}
+                            className="px-3 py-1.5 rounded-xl bg-neutral-900 border border-white/10 hover:border-cyan-400/40 text-cyan-400 hover:text-white text-xs transition-all font-mono"
+                          >
+                            {card.nfcUid ? "Re-Flash UID" : "Pair Hardware"}
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -278,6 +291,13 @@ export default function AdminCardsPage() {
         onSuccess={(updated) => {
           setCards((prev) => prev.map((c) => (c.id === updated.id ? updated : c)));
         }}
+      />
+
+      {/* 1:1 Scale Printable Card Design Modal */}
+      <PrintCardDesignModal
+        cardOrOrder={printingCard}
+        isOpen={Boolean(printingCard)}
+        onClose={() => setPrintingCard(null)}
       />
     </div>
   );
