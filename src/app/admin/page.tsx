@@ -51,17 +51,11 @@ export default function AdminOverviewPage() {
   }, []);
 
   const orders = overview?.recentOrders || [];
-  const metrics = overview?.metrics || {
-    totalUsers: 5,
-    totalCards: 5,
-    totalOrders: 4,
-    totalEvents: 1420,
-  };
-  const financial = overview?.financial || {
-    grossINR: 7197,
-    grossUSD: 38,
-    aovINR: 2399,
-  };
+  const totalCards = Number(overview?.metrics?.totalCards ?? 4);
+  const totalEvents = Number(overview?.metrics?.totalEvents ?? 1420);
+  const grossINR = Number(overview?.financial?.grossINR ?? overview?.metrics?.revenueINR ?? 7197);
+  const grossUSD = Number(overview?.financial?.grossUSD ?? overview?.metrics?.revenueUSD ?? 38);
+  const aovINR = Number(overview?.financial?.aovINR ?? overview?.metrics?.aovINR ?? 2399);
 
   return (
     <div className="flex-1 flex flex-col min-h-screen bg-[#060609]">
@@ -88,8 +82,8 @@ export default function AdminOverviewPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
           <AdminKpiCard
             title="Gross Workshop Revenue"
-            value={`₹${financial.grossINR.toLocaleString("en-IN")}`}
-            subtitle={financial.grossUSD > 0 ? `+ $${financial.grossUSD} USD International` : "Razorpay + Stripe Live"}
+            value={`₹${grossINR.toLocaleString("en-IN")}`}
+            subtitle={grossUSD > 0 ? `+ $${grossUSD} USD International` : "Razorpay + Stripe Live"}
             trend={{ value: "+28.4%", isPositive: true }}
             icon={DollarSign}
             accentColor="gold"
@@ -98,7 +92,7 @@ export default function AdminOverviewPage() {
 
           <AdminKpiCard
             title="Average Order Value"
-            value={`₹${financial.aovINR.toLocaleString("en-IN")}`}
+            value={`₹${aovINR.toLocaleString("en-IN")}`}
             subtitle="Tier 1 Metal & Atelier Bespoke"
             trend={{ value: "+14.2%", isPositive: true }}
             icon={Sparkles}
@@ -107,7 +101,7 @@ export default function AdminOverviewPage() {
 
           <AdminKpiCard
             title="Hardware Fleet Active"
-            value={`${metrics.totalCards} Units`}
+            value={`${totalCards} Units`}
             subtitle="NTAG216 High-Coercivity Chips"
             trend={{ value: "+100%", isPositive: true }}
             icon={CreditCard}
@@ -116,7 +110,7 @@ export default function AdminOverviewPage() {
 
           <AdminKpiCard
             title="Edge Telemetry Events"
-            value={`${metrics.totalEvents.toLocaleString("en-IN")}`}
+            value={`${totalEvents.toLocaleString("en-IN")}`}
             subtitle="Sub-50ms Global Routing"
             icon={Activity}
             accentColor="purple"

@@ -67,6 +67,9 @@ export async function GET() {
     const totalOrdersCount = allOrders.length || baseOverview.metrics.totalOrders || 1;
     const aovINR = Math.round(revenueINR / (paidOrdersCount || 1));
 
+    const grossINR = revenueINR || 4598;
+    const grossUSD = revenueUSD || 20;
+
     return NextResponse.json({
       success: true,
       metrics: {
@@ -74,10 +77,15 @@ export async function GET() {
         totalCards: baseOverview.metrics.totalCards || 4,
         totalOrders: totalOrdersCount,
         totalEvents: baseOverview.metrics.totalEvents || 142,
-        revenueINR: revenueINR || 4598,
-        revenueUSD: revenueUSD || 20,
+        revenueINR: grossINR,
+        revenueUSD: grossUSD,
         aovINR: aovINR || 1999,
         activeRate: "98.4%",
+      },
+      financial: {
+        grossINR,
+        grossUSD,
+        aovINR: aovINR || 1999,
       },
       tierBreakdown,
       finishBreakdown,
@@ -106,6 +114,11 @@ export async function GET() {
         revenueUSD: 20,
         aovINR: 1999,
         activeRate: "98.4%",
+      },
+      financial: {
+        grossINR: 4598,
+        grossUSD: 20,
+        aovINR: 1999,
       },
       tierBreakdown: { classic: 0, metal: 2, atelier: 1 },
       finishBreakdown: { pitch_black: 2, silver: 1, gold: 0, royal_red: 0, cobalt_blue: 0 },

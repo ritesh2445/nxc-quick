@@ -48,6 +48,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark scroll-smooth overflow-x-hidden max-w-full" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+        />
+      </head>
       <body
         className="bg-[#0A0A0B] text-[#F2F0EC] antialiased min-h-screen flex flex-col justify-between selection:bg-accent-silver/20 selection:text-white overflow-x-hidden w-full max-w-full relative"
         suppressHydrationWarning
